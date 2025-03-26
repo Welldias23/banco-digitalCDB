@@ -8,4 +8,6 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
+	Boolean existsByCpf(String cpf);
+
 }

@@ -1,5 +1,7 @@
 package com.well.banco_digital_CDBW.entity;
 
+import com.well.banco_digital_CDBW.dto.EnderecoDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,10 +24,24 @@ public class Endereco {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String cep;
+	
+	//receber os dados e verificar o cep em outra api
+	private String cidade;
+	private String estado;
 	private String rua; 
 	private Integer numero;
 	private String complemento;
 	private String bairro;
 
+	
+	public Endereco(EnderecoDto endereco) {
+		this.cep = endereco.cep();
+		this.cidade = endereco.cidade();
+		this.estado = endereco.estado();
+		this.rua = endereco.rua();
+		this.numero = endereco.numero();
+		this.complemento = endereco.complemento();
+		this.bairro = endereco.bairro();
+	}
 }
 

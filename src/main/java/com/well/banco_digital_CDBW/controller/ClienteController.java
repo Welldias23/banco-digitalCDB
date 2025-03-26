@@ -16,8 +16,11 @@ import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.entity.Endereco;
+import com.well.banco_digital_CDBW.exception.CpfJaExistenteException;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
+import com.well.banco_digital_CDBW.service.ClienteService;
 
 import jakarta.validation.Valid;
 
@@ -28,18 +31,26 @@ public class ClienteController {
 	@Autowired
 	private ClienteRepository repository;
 	
-	//@Autowired
-	//private EnderecoRepository enderecoRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<ClienteDto> cadastrar(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
+		
+		if(clienteService.cpfExiste(clienteReq.cpf())) {
+			throw new CpfJaExistenteException("CPF já cadastrado");
+		}
+		
 		var cliente = new Cliente(clienteReq);
 		
 		repository.save(cliente);
 		
-		//if(cliente.getEndereco() != null) {
-			//enderecoRepository.save(cliente.getEndereco());
-		//}
+		if(cliente.getEndereco() != null) {
+			enderecoRepository.save(cliente.getEndereco());
+		}
 		
 		var uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
 		

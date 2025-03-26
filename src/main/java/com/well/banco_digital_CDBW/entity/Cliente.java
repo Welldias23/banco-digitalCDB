@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,11 +28,11 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long cpf;
+	private String cpf;
 	private String nome;
 	private String senha;
 	private LocalDate dataNascimento;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 	
 	
@@ -40,6 +41,12 @@ public class Cliente {
 		this.nome = clienteReq.nome();
 		this.senha = clienteReq.senha();
 		this.dataNascimento = clienteReq.dataNascimento();
+		
+		if (clienteReq.endereco() != null) {
+			this.endereco = new Endereco(clienteReq.endereco());
+					
+		}
+		
 	}
 
 
@@ -53,6 +60,7 @@ public class Cliente {
 		if (clienteAtualizar.dataNascimento() != null) {
 			this.dataNascimento = clienteAtualizar.dataNascimento();
 		}
+
 		
 	}
 
