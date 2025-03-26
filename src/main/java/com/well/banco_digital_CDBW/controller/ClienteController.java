@@ -17,6 +17,7 @@ import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
+import com.well.banco_digital_CDBW.repository.EnderecoRepository;
 
 import jakarta.validation.Valid;
 
@@ -26,12 +27,19 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository repository;
+	
+	//@Autowired
+	//private EnderecoRepository enderecoRepository;
 
 	@PostMapping("/cadastrar")
-	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<ClienteDto> cadastrar(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
 		var cliente = new Cliente(clienteReq);
 		
 		repository.save(cliente);
+		
+		//if(cliente.getEndereco() != null) {
+			//enderecoRepository.save(cliente.getEndereco());
+		//}
 		
 		var uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
 		
@@ -39,7 +47,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity dadosCliente(@PathVariable Long id) {
+	public ResponseEntity dados(@PathVariable Long id) {
 		var cliente = repository.findById(id);
 		
 		//REFATORAR ESSA PARTE, O CLIENTE DEVE DEVOLVER UM DTO
@@ -47,7 +55,7 @@ public class ClienteController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity atualizarCliente(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
+	public ResponseEntity atualizar(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
 		var cliente = repository.getReferenceById(id);
 		cliente.atualizarDados(clienteAtualizar);
 		
