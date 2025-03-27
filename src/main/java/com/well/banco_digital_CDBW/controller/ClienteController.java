@@ -29,59 +29,33 @@ import jakarta.validation.Valid;
 public class ClienteController {
 	
 	@Autowired
-	private ClienteRepository repository;
-	
-	@Autowired
-	private EnderecoRepository enderecoRepository;
-	
-	@Autowired
 	private ClienteService clienteService;
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<ClienteDto> cadastrar(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
 		
-		if(clienteService.cpfExiste(clienteReq.cpf())) {
-			throw new CpfJaExistenteException();
-		}
-		
-		clienteService.deMaior(clienteReq.dataNascimento());
-		
-		var cliente = new Cliente(clienteReq);
-		
-		repository.save(cliente);
-		
-		if(cliente.getEndereco() != null) {
-			enderecoRepository.save(cliente.getEndereco());
-		}
-		
+		var cliente = clienteService.cadastrar(clienteReq);
 		var uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
-		
 		return ResponseEntity.created(uri).body(new ClienteDto(cliente));
+		
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity dados(@PathVariable Long id) {
-		var cliente = repository.findById(id);
-		
-		//REFATORAR ESSA PARTE, O CLIENTE DEVE DEVOLVER UM DTO
+		var cliente = clienteService.detalhar(id);
+		//REFATORAR ESSA PARTE, O CLIENTE DEVE DEVOLVER UM DTO,E ELA DEVE RETORNAR O CLIENTE LOGADO
 		return ResponseEntity.ok(cliente);	
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity atualizar(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
-		var cliente = repository.getReferenceById(id);
-		cliente.atualizarDados(clienteAtualizar);
-		
-		repository.save(cliente);
-		
+		var cliente = clienteService.atualizar(clienteAtualizar, id);
 		return ResponseEntity.ok(new ClienteDto(cliente));
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity excluir(@PathVariable Long id) {
-		var cliente = repository.getReferenceById(id);
-		repository.deleteById(id);
-		
+		clienteService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}
 	
