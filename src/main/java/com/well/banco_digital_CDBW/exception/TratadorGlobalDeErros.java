@@ -1,0 +1,24 @@
+package com.well.banco_digital_CDBW.exception;
+
+import java.time.Instant;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+@RestControllerAdvice
+public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler{
+	
+	@ExceptionHandler(CpfJaExistenteException.class)
+	ProblemDetail tratadorCpfJaExistenteException(CpfJaExistenteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.ALREADY_REPORTED, ex.getLocalizedMessage());
+		problemDetail.setTitle("Cpf ja existe no banco de dados.");
+		problemDetail.setDetail("É preciso informar um cpf não cadastrado.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+
+}

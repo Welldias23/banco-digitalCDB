@@ -41,7 +41,7 @@ public class ClienteController {
 	public ResponseEntity<ClienteDto> cadastrar(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
 		
 		if(clienteService.cpfExiste(clienteReq.cpf())) {
-			throw new CpfJaExistenteException("CPF já cadastrado");
+			throw new CpfJaExistenteException();
 		}
 		
 		var cliente = new Cliente(clienteReq);
