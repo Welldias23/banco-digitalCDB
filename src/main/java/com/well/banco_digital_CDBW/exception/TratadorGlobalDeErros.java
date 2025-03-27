@@ -20,5 +20,15 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler{
 		
 		return problemDetail;
 	}
+	
+	@ExceptionHandler(MenorDeIdadeException.class)
+	ProblemDetail tratadorMenorDeIdadeException(MenorDeIdadeException ex) {
+		ProblemDetail problemDatail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDatail.setTitle("O cliente é menor de 18 anos.");
+		problemDatail.setDetail("É preciso ser maior de 18 anos para se cadastrar.");
+		problemDatail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDatail;
+	}
 
 }

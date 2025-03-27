@@ -44,6 +44,8 @@ public class ClienteController {
 			throw new CpfJaExistenteException();
 		}
 		
+		clienteService.deMaior(clienteReq.dataNascimento());
+		
 		var cliente = new Cliente(clienteReq);
 		
 		repository.save(cliente);
