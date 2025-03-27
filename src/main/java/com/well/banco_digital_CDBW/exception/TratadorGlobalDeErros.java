@@ -30,5 +30,14 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler{
 		
 		return problemDatail;
 	}
+	
+	@ExceptionHandler(ClienteIdNaoExisteException.class)
+	ProblemDetail tratadorClienteIdNaoExisteException(ClienteIdNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O id do cliente não existe no banco de dados.");
+		problemDetail.setDetail("É preciso informar um id valido na url.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		return problemDetail;
+	}
 
 }
