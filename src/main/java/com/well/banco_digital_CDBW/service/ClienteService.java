@@ -11,7 +11,7 @@ import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
-import com.well.banco_digital_CDBW.exception.CpfJaExistenteException;
+import com.well.banco_digital_CDBW.exception.CpfUnicoException;
 import com.well.banco_digital_CDBW.exception.MenorDeIdadeException;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
@@ -26,24 +26,20 @@ public class ClienteService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
-	public Cliente cadastrar(ClienteRequest clienteReq) {
-		
+	public Cliente cadastrar(ClienteRequest clienteReq) {		
 		cpfUnico(clienteReq.cpf());		
 		deMaior(clienteReq.dataNascimento());
-		
 		var cliente = new Cliente(clienteReq);
-		
 		clienteRepository.save(cliente);
-		
 		if(cliente.getEndereco() != null) {
 			enderecoRepository.save(cliente.getEndereco());
 		}
-		
 		return cliente;
 	}
 	
-	public Optional<Cliente> detalhar(Long id) {
-		var cliente = clienteRepository.findById(id);
+	public Cliente detalhar(Long id) {
+		idExiste(id);
+		var cliente = clienteRepository.getReferenceById(id);
 		return cliente;
 	}
 	
@@ -62,18 +58,16 @@ public class ClienteService {
 
 	private void cpfUnico(String cpf) {
 		if(clienteRepository.existsByCpf(cpf)) {
-			throw new CpfJaExistenteException();
+			throw new CpfUnicoException();
 		}
 	}
 
 	private void deMaior(LocalDate dataNascimento) {
 		var agora = LocalDate.now();
 		var periodo = Period.between(dataNascimento, agora);
-		
 		if(periodo.getYears() < 18) {
 			throw new MenorDeIdadeException();
-		}
-		
+		}		
 	}
 	
 	private void idExiste(Long id) {

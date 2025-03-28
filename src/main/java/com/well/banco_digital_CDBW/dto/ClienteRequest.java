@@ -13,7 +13,7 @@ public record ClienteRequest(
 		@NotBlank(message = "O campo cpf é obrigatorio.")
 		@CPF
 		String cpf,
-		@NotBlank(message = "O campo ome é obrigatorio.")
+		@NotBlank(message = "O campo nome é obrigatorio.")
 		@Size(min = 2, max = 200, message = "o campo nome deve conter no mínimo 2 caracteres e máximo de 100 caracteres.")
 		@Pattern(regexp = "^[a-zA-ZÀ-ú ]+$", message = "O campo nome deve conter apenas letras.")
 		String nome,

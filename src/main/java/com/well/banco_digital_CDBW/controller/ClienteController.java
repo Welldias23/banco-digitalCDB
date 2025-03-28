@@ -17,7 +17,7 @@ import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Endereco;
-import com.well.banco_digital_CDBW.exception.CpfJaExistenteException;
+import com.well.banco_digital_CDBW.exception.CpfUnicoException;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
 import com.well.banco_digital_CDBW.service.ClienteService;
@@ -41,14 +41,14 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity dados(@PathVariable Long id) {
+	public ResponseEntity<ClienteDto> dados(@PathVariable Long id) {
 		var cliente = clienteService.detalhar(id);
 		//REFATORAR ESSA PARTE, O CLIENTE DEVE DEVOLVER UM DTO,E ELA DEVE RETORNAR O CLIENTE LOGADO
-		return ResponseEntity.ok(cliente);	
+		return ResponseEntity.ok(new ClienteDto(cliente));	
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity atualizar(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
+	public ResponseEntity<ClienteDto> atualizar(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
 		var cliente = clienteService.atualizar(clienteAtualizar, id);
 		return ResponseEntity.ok(new ClienteDto(cliente));
 	}

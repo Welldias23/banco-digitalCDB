@@ -6,10 +6,13 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 public record ClienteDto(
 		Long id,
 		String nome,
-		LocalDate dataNascimento) {
+		LocalDate dataNascimento,
+		EnderecoDto endereco) {
 
 	public ClienteDto(Cliente cliente) {
-		this(cliente.getId(), cliente.getNome(),cliente.getDataNascimento());
+		this(cliente.getId(), cliente.getNome(), cliente.getDataNascimento(), new EnderecoDto(cliente.getEndereco()));
 	}
+
+
 
 }
