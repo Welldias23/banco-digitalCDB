@@ -2,10 +2,17 @@ package com.well.banco_digital_CDBW.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.well.banco_digital_CDBW.dto.LoginDto;
+import com.well.banco_digital_CDBW.dto.TokenJWTDto;
+import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.service.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -13,8 +20,18 @@ import jakarta.validation.Valid;
 @RequestMapping("/login")
 public class AutheticationController {
 	
-	//@PostMapping
-	//public ResponseEntity longin(@ResponseBody @Valid LoginDto login) {
+	@Autowired
+	private AuthenticationManager manager;
+	
+	@Autowired 
+	private TokenService tokenService;
+	
+	@PostMapping
+	public ResponseEntity<TokenJWTDto> longin(@RequestBody @Valid LoginDto login) {
+		var authenticationToken = new UsernamePasswordAuthenticationToken(login.cpf(), login.senha());
+		var authetication = manager.authenticate(authenticationToken);
+		var tokenJWT = tokenService.gerarToken((Cliente) authetication.getPrincipal());
 		
-	//}
+		return ResponseEntity.ok(new TokenJWTDto(tokenJWT));
+	}
 }

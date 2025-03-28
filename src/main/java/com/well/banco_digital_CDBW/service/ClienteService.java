@@ -51,6 +51,12 @@ public class ClienteService {
 		return cliente;
 	}
 	
+
+	public Cliente clienteCpf(String cpf) {
+		var cliente = clienteRepository.getReferenceByCpf(cpf);
+		return null;
+	}
+	
 	public void excluir(Long id) {
 		idExiste(id);
 		clienteRepository.deleteById(id);	
@@ -75,5 +81,6 @@ public class ClienteService {
 			throw new ClienteIdNaoExisteException();
 		}
 	}
+
 
 }

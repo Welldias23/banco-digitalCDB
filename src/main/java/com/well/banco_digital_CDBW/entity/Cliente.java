@@ -1,6 +1,12 @@
 package com.well.banco_digital_CDBW.entity;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
@@ -23,7 +29,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Cliente {
+public class Cliente implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +68,24 @@ public class Cliente {
 		}
 
 		
+	}
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+
+	@Override
+	public String getUsername() {
+		return cpf;
 	}
 
 }

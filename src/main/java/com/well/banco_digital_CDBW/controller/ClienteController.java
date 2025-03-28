@@ -15,11 +15,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
-import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.entity.Endereco;
-import com.well.banco_digital_CDBW.exception.CpfUnicoException;
-import com.well.banco_digital_CDBW.repository.ClienteRepository;
-import com.well.banco_digital_CDBW.repository.EnderecoRepository;
 import com.well.banco_digital_CDBW.service.ClienteService;
 
 import jakarta.validation.Valid;
