@@ -1,5 +1,6 @@
 package com.well.banco_digital_CDBW.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
@@ -10,12 +11,15 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
+import com.well.banco_digital_CDBW.entity.CategoriaCliente;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CpfUnicoException;
 import com.well.banco_digital_CDBW.exception.MenorDeIdadeException;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
+
+import jakarta.validation.constraints.NotNull;
 
 
 @Service
@@ -52,6 +56,7 @@ public class ClienteService {
 		idExiste(id);
 		var cliente = clienteRepository.getReferenceById(id);
 		cliente.atualizarDados(clienteAtualizar);
+		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
 		return cliente;
 	}
@@ -85,6 +90,18 @@ public class ClienteService {
 		if(!clienteRepository.existsById(id)) {
 			throw new ClienteIdNaoExisteException();
 		}
+	}
+
+	public CategoriaCliente categoria(BigDecimal rendaMensal) {
+		CategoriaCliente categoria;
+		if(rendaMensal.doubleValue() <= 1.512) {
+			categoria = CategoriaCliente.COMUM;
+		}else if (rendaMensal.doubleValue() <= 3.000) {
+			categoria = CategoriaCliente.SUPER;
+		} else {
+			categoria = CategoriaCliente.PREMIU;
+		}
+		return categoria;
 	}
 
 

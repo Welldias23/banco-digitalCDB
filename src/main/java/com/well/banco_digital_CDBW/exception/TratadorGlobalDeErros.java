@@ -47,9 +47,9 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
-	@ExceptionHandler(TokenInvalido.class)
-	public ProblemDetail tratadorTokenInvalido(TokenInvalido ex) {
-		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.DESTINATION_LOCKED, ex.getLocalizedMessage());
+	@ExceptionHandler(TokenInvalidoExcepition.class)
+	public ProblemDetail tratadorTokenInvalido(TokenInvalidoExcepition ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
 		problemDetail.setTitle("O Token é invalido.");
 		problemDetail.setDetail("É preciso estar logado para acessar essa url.");
 		problemDetail.setProperty("TimesTemp", Instant.now());

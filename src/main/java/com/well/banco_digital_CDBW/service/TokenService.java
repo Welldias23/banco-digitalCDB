@@ -11,7 +11,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.exception.TokenInvalido;
+import com.well.banco_digital_CDBW.exception.TokenInvalidoExcepition;
 
 @Service
 public class TokenService {
@@ -29,7 +29,7 @@ public class TokenService {
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
 		} catch (JWTVerificationException ex) {
-			throw new TokenInvalido();
+			throw new TokenInvalidoExcepition();
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException ex) {
-        	throw new TokenInvalido();
+        	throw new TokenInvalidoExcepition();
         }
     }
 	

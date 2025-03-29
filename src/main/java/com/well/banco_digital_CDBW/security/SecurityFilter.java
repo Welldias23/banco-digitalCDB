@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.well.banco_digital_CDBW.exception.TokenInvalidoExcepition;
 import com.well.banco_digital_CDBW.service.ClienteService;
 import com.well.banco_digital_CDBW.service.TokenService;
 
@@ -35,7 +36,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 		if(tokenJWT != null) {
 			var clienteCpf = tokenService.getSubject(tokenJWT);
 			var cliente = clienteService.clienteCpf(clienteCpf);
-			System.out.println(cliente);
 			var authetication = new UsernamePasswordAuthenticationToken(cliente, null, cliente.getAuthorities());
 			
 			SecurityContextHolder.getContext().setAuthentication(authetication);
@@ -46,7 +46,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 	private String recuperarToken(HttpServletRequest request) {
 		var authorizationHeader = request.getHeader("Authorization");
-		
 		if(authorizationHeader != null) {
 			return authorizationHeader.replace("Bearer ", "");
 		}

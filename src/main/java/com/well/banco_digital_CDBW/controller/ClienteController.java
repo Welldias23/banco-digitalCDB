@@ -49,7 +49,7 @@ public class ClienteController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity excluir(@PathVariable Long id) {
+	public ResponseEntity<ClienteDto> excluir(@PathVariable Long id) {
 		clienteService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}

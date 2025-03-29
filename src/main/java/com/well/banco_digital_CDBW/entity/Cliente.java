@@ -1,15 +1,18 @@
 package com.well.banco_digital_CDBW.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteRequest;
+import com.well.banco_digital_CDBW.service.ClienteService;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -32,22 +35,31 @@ import lombok.Setter;
 @Setter
 public class Cliente implements UserDetails{
 	
+	@Autowired
+	private ClienteService clienteService; 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String cpf;
 	private String nome;
+	private String cpf;
+	private String email;
 	private String senha;
 	private LocalDate dataNascimento;
+	private BigDecimal rendaMensal;
+	private CategoriaCliente categoria;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 	
 	
 	public Cliente(ClienteRequest clienteReq) {
-		this.cpf = clienteReq.cpf();
 		this.nome = clienteReq.nome();
+		this.cpf = clienteReq.cpf();
+		this.email = clienteReq.email();
 		this.senha = clienteReq.senha();
 		this.dataNascimento = clienteReq.dataNascimento();
+		this.rendaMensal = clienteReq.rendaMensal();
+		this.categoria = ;
 		
 		if (clienteReq.endereco() != null) {
 			this.endereco = new Endereco(clienteReq.endereco());
