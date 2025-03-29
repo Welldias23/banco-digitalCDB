@@ -20,6 +20,7 @@ public class TokenService {
 	private String secret;
 	
 	public String gerarToken(Cliente cliente) {
+
 		try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()

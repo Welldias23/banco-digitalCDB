@@ -5,6 +5,7 @@ import java.time.Period;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
@@ -26,10 +27,14 @@ public class ClienteService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	public Cliente cadastrar(ClienteRequest clienteReq) {		
 		cpfUnico(clienteReq.cpf());		
 		deMaior(clienteReq.dataNascimento());
 		var cliente = new Cliente(clienteReq);
+		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
 		if(cliente.getEndereco() != null) {
 			enderecoRepository.save(cliente.getEndereco());
@@ -54,7 +59,7 @@ public class ClienteService {
 
 	public Cliente clienteCpf(String cpf) {
 		var cliente = clienteRepository.getReferenceByCpf(cpf);
-		return null;
+		return  cliente;
 	}
 	
 	public void excluir(Long id) {

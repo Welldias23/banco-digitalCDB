@@ -13,6 +13,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
 	UserDetails findByCpf(String cpf);
 
-	Object getReferenceByCpf(String cpf);
+	Cliente getReferenceByCpf(String cpf);
 
 }
