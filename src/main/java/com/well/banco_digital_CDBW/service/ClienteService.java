@@ -38,6 +38,7 @@ public class ClienteService {
 		cpfUnico(clienteReq.cpf());		
 		deMaior(clienteReq.dataNascimento());
 		var cliente = new Cliente(clienteReq);
+		cliente.setCategoria(categoria(clienteReq.rendaMensal()));
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
 		if(cliente.getEndereco() != null) {
@@ -56,6 +57,7 @@ public class ClienteService {
 		idExiste(id);
 		var cliente = clienteRepository.getReferenceById(id);
 		cliente.atualizarDados(clienteAtualizar);
+		cliente.setCategoria(categoria(clienteAtualizar.rendaMensal()));
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
 		return cliente;

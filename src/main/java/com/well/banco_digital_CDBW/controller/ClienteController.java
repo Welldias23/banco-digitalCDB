@@ -30,6 +30,7 @@ public class ClienteController {
 	public ResponseEntity<ClienteDto> cadastrar(@RequestBody @Valid ClienteRequest clienteReq, UriComponentsBuilder uriBuilder){
 		
 		var cliente = clienteService.cadastrar(clienteReq);
+		cliente.setCategoria(clienteService.categoria(clienteReq.rendaMensal()));
 		var uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
 		return ResponseEntity.created(uri).body(new ClienteDto(cliente));
 		

@@ -16,6 +16,8 @@ import com.well.banco_digital_CDBW.service.ClienteService;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,10 +36,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Cliente implements UserDetails{
-	
-	@Autowired
-	private ClienteService clienteService; 
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -47,6 +46,7 @@ public class Cliente implements UserDetails{
 	private String senha;
 	private LocalDate dataNascimento;
 	private BigDecimal rendaMensal;
+	@Enumerated(EnumType.STRING)
 	private CategoriaCliente categoria;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
@@ -59,7 +59,6 @@ public class Cliente implements UserDetails{
 		this.senha = clienteReq.senha();
 		this.dataNascimento = clienteReq.dataNascimento();
 		this.rendaMensal = clienteReq.rendaMensal();
-		this.categoria = ;
 		
 		if (clienteReq.endereco() != null) {
 			this.endereco = new Endereco(clienteReq.endereco());
@@ -73,11 +72,17 @@ public class Cliente implements UserDetails{
 		if (clienteAtualizar.nome() != null) {
 			this.nome = clienteAtualizar.nome();
 		}
+		if (clienteAtualizar.email() != null) {
+			this.email = clienteAtualizar.email();
+		}
 		if (clienteAtualizar.senha() != null) {
 			this.senha = clienteAtualizar.senha();
 		}
 		if (clienteAtualizar.dataNascimento() != null) {
 			this.dataNascimento = clienteAtualizar.dataNascimento();
+		}
+		if (clienteAtualizar.rendaMensal() != null) {
+			this.rendaMensal = clienteAtualizar.rendaMensal();
 		}
 
 		
