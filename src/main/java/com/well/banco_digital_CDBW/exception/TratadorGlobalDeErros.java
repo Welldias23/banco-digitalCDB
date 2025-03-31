@@ -57,6 +57,15 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(CriarContaException.class)
+	public ProblemDetail tratadorCriarContaException(CriarContaException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("Ouve um problema ao tentar criar uma conta.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

@@ -69,6 +69,11 @@ public class ClienteService {
 		return  cliente;
 	}
 	
+	public Cliente clienteId(Long id) {
+		var cliente = clienteRepository.getReferenceById(id);
+		return  cliente;
+	}
+	
 	public void excluir(Long id) {
 		idExiste(id);
 		clienteRepository.deleteById(id);	
