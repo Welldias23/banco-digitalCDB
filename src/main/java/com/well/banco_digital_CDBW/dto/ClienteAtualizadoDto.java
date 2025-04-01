@@ -16,6 +16,6 @@ public record ClienteAtualizadoDto(
 		@Past(message = "A data de nascimento deve estar no passado.")
 		LocalDate dataNascimento,
 		BigDecimal rendaMensal,
-		EnderecoDto endereco) {
+		EnderecoReqDto endereco) {
 
 }

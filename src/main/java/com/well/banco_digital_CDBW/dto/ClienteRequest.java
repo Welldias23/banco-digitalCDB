@@ -5,8 +5,6 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.well.banco_digital_CDBW.entity.CategoriaCliente;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +30,6 @@ public record ClienteRequest(
 		LocalDate dataNascimento,
 		@NotNull(message = "O campo renda mensal é obrigatorio.")
 		BigDecimal rendaMensal,
-		EnderecoDto endereco) {
+		EnderecoReqDto endereco) {
 
 }

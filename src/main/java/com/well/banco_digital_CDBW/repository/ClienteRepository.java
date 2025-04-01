@@ -14,5 +14,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 	UserDetails findByCpf(String cpf);
 
 	Cliente getReferenceByCpf(String cpf);
+	
+	Cliente findById(Long id);
+
+	boolean existsByEmail(String email);
+	
+	
 
 }

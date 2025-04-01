@@ -7,10 +7,10 @@ public record ClienteDto(
 		Long id,
 		String nome,
 		LocalDate dataNascimento,
-		EnderecoDto endereco) {
+		EnderecoReqDto endereco) {
 
 	public ClienteDto(Cliente cliente) {
-		this(cliente.getId(), cliente.getNome(), cliente.getDataNascimento(), new EnderecoDto(cliente.getEndereco()));
+		this(cliente.getId(), cliente.getNome(), cliente.getDataNascimento(), new EnderecoReqDto(cliente.getEndereco()));
 	}
 
 
