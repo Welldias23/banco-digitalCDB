@@ -1,6 +1,7 @@
 package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -35,12 +37,14 @@ public abstract class Conta {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cliente cliente;
 	private Boolean ativa;
+	private LocalDate dataCriacao;
 
 	
 	public Conta(Cliente cliente) {
 		this.saldo = saldo.valueOf(0);
 		this.cliente = cliente;
 		this.ativa = true;
+		this.dataCriacao = LocalDate.now();
 		
 	}
 	

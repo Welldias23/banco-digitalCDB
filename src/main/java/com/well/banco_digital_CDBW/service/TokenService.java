@@ -25,7 +25,7 @@ public class TokenService {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API banco-digital-CDBW")
-                    .withSubject(cliente.getCpf())
+                    .withSubject(cliente.getId().toString())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
 		} catch (JWTVerificationException ex) {

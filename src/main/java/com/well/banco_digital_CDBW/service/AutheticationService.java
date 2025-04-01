@@ -16,6 +16,7 @@ public class AutheticationService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String cpf) throws UsernameNotFoundException {
+		//refatorar para não usar o clliente repo
 		return clienteRepository.findByCpf(cpf);
 	}
 

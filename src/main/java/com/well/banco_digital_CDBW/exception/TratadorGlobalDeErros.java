@@ -66,6 +66,27 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(EnderecoIdNaoExisteException.class)
+	public ProblemDetail tratadorEnderecoIdNaoExisteException(EnderecoIdNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O endereco id não existe.");
+		problemDetail.setDetail("É preciso informar um enderço id valido na url.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	@ExceptionHandler(EmailUnicoException.class)
+	public ProblemDetail tratadorEmailUnicoException(EmailUnicoException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O email ja existe.");
+		problemDetail.setDetail("É preciso informar um email que seja unico.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

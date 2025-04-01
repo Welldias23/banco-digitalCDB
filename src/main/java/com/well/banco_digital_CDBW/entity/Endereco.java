@@ -1,6 +1,6 @@
 package com.well.banco_digital_CDBW.entity;
 
-import com.well.banco_digital_CDBW.dto.EnderecoDto;
+import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +34,7 @@ public class Endereco {
 	private String bairro;
 
 	
-	public Endereco(EnderecoDto endereco) {
+	public Endereco(EnderecoReqDto endereco) {
 		this.cep = endereco.cep();
 		this.cidade = endereco.cidade();
 		this.estado = endereco.estado();
