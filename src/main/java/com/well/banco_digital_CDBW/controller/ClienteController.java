@@ -54,7 +54,7 @@ public class ClienteController {
 		return ResponseEntity.ok(new ClienteDto(cliente));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping
 	public ResponseEntity<ClienteDto> excluir(@AuthenticationPrincipal Cliente clienteLogado) {
 		var id = clienteLogado.getId();
 		clienteService.excluir(id);

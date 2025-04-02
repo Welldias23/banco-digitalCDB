@@ -50,4 +50,8 @@ public class EnderecoService {
 		
 		return endereco;
 	}
+
+	public void excluir(Long id) {
+		enderecoRepository.deleteById(id);
+	}
 }
