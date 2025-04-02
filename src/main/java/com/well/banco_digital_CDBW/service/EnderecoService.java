@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
 import com.well.banco_digital_CDBW.entity.Endereco;
+import com.well.banco_digital_CDBW.exception.EnderecoCadastrarException;
 import com.well.banco_digital_CDBW.exception.EnderecoIdNaoExisteException;
+import com.well.banco_digital_CDBW.exception.NaotemEnderecoException;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
 
 @Service
@@ -33,5 +35,19 @@ public class EnderecoService {
 		if(!enderecoRepository.existsById(id)) {
 			throw new EnderecoIdNaoExisteException();
 		}	
+	}
+
+	public void JaTemEnderecoCadastrado(Endereco endereco) {
+		if(endereco != null) {
+			throw new EnderecoCadastrarException();
+		}
+	}
+
+	public Endereco temEndereco(Endereco endereco) {
+		if(endereco == null) {
+			throw new NaotemEnderecoException();
+		}
+		
+		return endereco;
 	}
 }

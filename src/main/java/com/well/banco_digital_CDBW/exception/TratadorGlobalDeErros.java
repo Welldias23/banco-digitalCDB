@@ -84,7 +84,28 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		problemDetail.setProperty("TimesTemp", Instant.now());
 		
 		return problemDetail;
+	}	
+	
+	@ExceptionHandler(EnderecoCadastrarException.class)
+	public ProblemDetail tratadorEnderecoCadastrarException(EnderecoCadastrarException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O cliente ja tem um endereço cadastrado.");
+		problemDetail.setDetail("Atualize o endereço no endpoint de atualização de endereço.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
 	}
+	
+	@ExceptionHandler(NaotemEnderecoException.class)
+	public ProblemDetail tratadorNaotemEnderecoException(NaotemEnderecoException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O cliente não tem um endereço cadastrado.");
+		problemDetail.setDetail("Cadastre um endereço no endpoint de cadastro de endereço.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	
 	
 	@Override
