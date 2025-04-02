@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
 import com.well.banco_digital_CDBW.dto.EnderecoResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.exception.EnderecoCadastrarException;
 import com.well.banco_digital_CDBW.service.ClienteService;
 import com.well.banco_digital_CDBW.service.EnderecoService;
 
@@ -52,9 +50,9 @@ public class EnderecoController {
 	@PutMapping("/atualizar")
 	public ResponseEntity<EnderecoResDto> atualizar(@RequestBody @Valid EnderecoReqDto enderecoAtualizar,@AuthenticationPrincipal Cliente clienteLogado){
 		var cliente = clienteService.clienteId(clienteLogado.getId());
-		//implementar parte final 
+		var enderecoAtualizado = enderecoService.atualizar(cliente, enderecoAtualizar);
 		
-		return ResponseEntity.ok(new EnderecoResDto(null));
+		return ResponseEntity.ok(new EnderecoResDto(enderecoAtualizado));
 	}
 	
 	@DeleteMapping

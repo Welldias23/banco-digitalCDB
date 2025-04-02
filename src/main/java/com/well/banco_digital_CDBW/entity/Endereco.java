@@ -43,5 +43,16 @@ public class Endereco {
 		this.complemento = endereco.complemento();
 		this.bairro = endereco.bairro();
 	}
+
+
+	public void atualizar(EnderecoReqDto enderecoAtualizar) {
+		this.cep = enderecoAtualizar.cep();
+		this.cidade = enderecoAtualizar.cidade();
+		this.estado = enderecoAtualizar.estado();
+		this.rua = enderecoAtualizar.rua();
+		this.numero = enderecoAtualizar.numero();
+		this.complemento = enderecoAtualizar.complemento();
+		this.bairro = enderecoAtualizar.bairro();
+	}
 }
 
