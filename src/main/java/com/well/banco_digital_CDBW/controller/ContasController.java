@@ -1,5 +1,8 @@
 package com.well.banco_digital_CDBW.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,14 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
-import com.well.banco_digital_CDBW.dto.ClienteRequest;
-import com.well.banco_digital_CDBW.dto.ContaAAbrir;
-import com.well.banco_digital_CDBW.dto.ContaDTO;
+import com.well.banco_digital_CDBW.dto.ContaReqDto;
+import com.well.banco_digital_CDBW.dto.ContaResDto;
+import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
+import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.service.ClienteService;
+import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.service.ContaService;
 
 import jakarta.validation.Valid;
@@ -30,28 +33,55 @@ public class ContasController {
 	private ContaService contaService;
 
 	@PostMapping("/cadastrar")
-	//refatorar esse metodo
-	public ResponseEntity<ContaDTO> cadastrar( @RequestBody ContaAAbrir contaAAbrir, @AuthenticationPrincipal Cliente clienteLogado){
+	public ResponseEntity<ContaResDto> cadastrar( @RequestBody ContaReqDto contaAAbrir, @AuthenticationPrincipal Cliente clienteLogado){
 		var conta = contaService.criarConta(clienteLogado.getId(), contaAAbrir);
-		return ResponseEntity.ok(new ContaDTO(conta));	
+		return ResponseEntity.ok(new ContaResDto(conta));	
 	}
 	
 	@GetMapping("/{idConta}")
-	public ResponseEntity<ContaDTO> dados(@PathVariable Long id) {
+	public ResponseEntity<ContaResDto> detalharUma(@PathVariable Long idConta, @AuthenticationPrincipal Cliente clienteLogado) {
+		var conta = contaService.buscarUma(idConta, clienteLogado.getId());
+		return ResponseEntity.ok(new ContaResDto(conta));
+	}
+	
+	
+	@GetMapping
+	public ResponseEntity<List<ContaResDto>> detalharTodas(@AuthenticationPrincipal Cliente clienteLogado) {
+		var contas = contaService.buscarTodas(clienteLogado.getId());
+	    List<ContaResDto> contasDto = contas.stream().map(conta -> new ContaResDto(conta)).collect(Collectors.toList());
+		return ResponseEntity.ok(contasDto);
+	}
+
+	@DeleteMapping("/{idConta}")
+	public ResponseEntity<ContaResDto> excluir(@PathVariable Long idConta) {
 		
 		return null;
 	}
 	
-	@PutMapping("/{idConta}")
-	public ResponseEntity<ContaDTO> atualizar(@RequestBody @Valid ClienteAtualizadoDto clienteAtualizar, @PathVariable Long id) {
-		
-		return null;
-	}
-
-	@DeleteMapping("/{idConta}")
-	public ResponseEntity<ContaDTO> excluir(@PathVariable Long id) {
-		
-		return null;
+	@PostMapping("/{idConta}/transferencia")
+	public ResponseEntity<TransferenciaResDto> transferir(@RequestBody @Valid TransferenciaReqDto transferenciaAFazer, @AuthenticationPrincipal Cliente clienteLogado){
+		var transferencia = contaService.transferir(clienteLogado, transferenciaAFazer);
+		return ResponseEntity.ok(new TransferenciaResDto(transferencia));
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

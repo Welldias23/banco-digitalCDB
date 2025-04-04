@@ -106,6 +106,25 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(ContaNaoExisteException.class)
+	public ProblemDetail tratadorContaNaoExisteException(ContaNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("A conta iformada com o id não foi encontrada.");
+		problemDetail.setDetail("Informe o id de uma conta valida.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	@ExceptionHandler(SaldoInsuficienteException.class)
+	public ProblemDetail tratadorSaldoInsuficienteException(SaldoInsuficienteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O saldo em conta não é o suficienate para a transação.");
+		problemDetail.setDetail("Faça um deposito em sua conta.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
 	
 	
 	@Override

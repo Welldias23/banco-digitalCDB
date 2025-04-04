@@ -12,6 +12,10 @@ import lombok.Setter;
 public class ContaCorrente extends Conta{
 	private Double taxaManutencao;
 	
+	public ContaCorrente() {
+	    super(); 
+	}
+	
 	public ContaCorrente(Cliente cliente) {
 		super(cliente);
 	}

@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record ClienteRequest(
+public record ClienteReqDto(
 		@NotBlank(message = "O campo nome é obrigatorio.")
 		@Size(min = 2, max = 200, message = "o campo nome deve conter no mínimo 2 caracteres e máximo de 100 caracteres.")
 		@Pattern(regexp = "^[a-zA-ZÀ-ú ]+$", message = "O campo nome deve conter apenas letras.")
@@ -26,10 +26,10 @@ public record ClienteRequest(
 		@NotBlank(message = "O campo senha é obrigatorio.")
 		@Size(min = 6, message = "A senha deve ter no minimo 6 digitos.")
 		String senha,
+		@NotNull(message = "O campo data de nascimento é obrigatorio.")
 		@Past(message = "A data de nascimento deve estar no passado.")
 		LocalDate dataNascimento,
 		@NotNull(message = "O campo renda mensal é obrigatorio.")
-		BigDecimal rendaMensal,
-		EnderecoReqDto endereco) {
+		BigDecimal rendaMensal) {
 
 }

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
-import com.well.banco_digital_CDBW.dto.ClienteRequest;
+import com.well.banco_digital_CDBW.dto.ClienteReqDto;
 import com.well.banco_digital_CDBW.entity.CategoriaCliente;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
@@ -19,8 +19,6 @@ import com.well.banco_digital_CDBW.exception.MenorDeIdadeException;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 
 @Service
@@ -30,13 +28,10 @@ public class ClienteService {
 	private ClienteRepository clienteRepository;
 	
 	@Autowired
-	private EnderecoService enderecoService;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	public Cliente cadastrar(ClienteRequest clienteReq) {		
+	public Cliente cadastrar(ClienteReqDto clienteReq) {		
 		cpfUnico(clienteReq.cpf());	
 		emailUnico(clienteReq.email());
 		deMaior(clienteReq.dataNascimento());
@@ -44,9 +39,6 @@ public class ClienteService {
 		cliente.setCategoria(categoria(clienteReq.rendaMensal()));
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
-		if(clienteReq.endereco() != null) {
-			enderecoService.cadastrar(clienteReq.endereco());
-		}
 		return cliente;
 	}
 
@@ -131,6 +123,13 @@ public class ClienteService {
 			categoria = CategoriaCliente.PREMIU;
 		}
 		return categoria;
+	}
+
+
+	public void removerEndereco(Cliente cliente) {
+		cliente.setEndereco(null);
+		System.out.println(cliente.getEndereco());
+		clienteRepository.save(cliente);
 	}
 
 

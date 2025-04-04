@@ -6,4 +6,6 @@ import com.well.banco_digital_CDBW.entity.Conta;
 
 public interface ContaRepository extends JpaRepository<Conta, Long>{
 
+	Conta findByIdAndClienteId(Long idConta, Long id);
+
 }

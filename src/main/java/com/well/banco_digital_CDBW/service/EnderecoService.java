@@ -11,8 +11,7 @@ import com.well.banco_digital_CDBW.exception.EnderecoIdNaoExisteException;
 import com.well.banco_digital_CDBW.exception.NaotemEnderecoException;
 import com.well.banco_digital_CDBW.repository.EnderecoRepository;
 
-import jakarta.validation.Valid;
-
+import jakarta.transaction.Transactional;
 @Service
 public class EnderecoService {
 	
@@ -20,14 +19,16 @@ public class EnderecoService {
 	private EnderecoRepository enderecoRepository;
 	
 	
-	public Endereco cadastrar(EnderecoReqDto enderecoDto) {
+	public Endereco cadastrar(EnderecoReqDto enderecoDto, Cliente cliente) {
 		//criar um metodo para verificar cep
-		var endereco = new Endereco(enderecoDto);
+		jaTemEnderecoCadastrado(cliente.getEndereco());
+		var endereco = new Endereco(enderecoDto, cliente);
+		System.out.println("CHEGUEI AQUI");
 		enderecoRepository.save(endereco);
-		
+
 		return endereco;
 	}
-
+	
 	public Endereco detalhar(Long id) {
 		enderedoIdExiste(id);
 		//criar metodo para verficar e o endereco pertence ao cliente logado
@@ -48,7 +49,7 @@ public class EnderecoService {
 		}	
 	}
 
-	public void JaTemEnderecoCadastrado(Endereco endereco) {
+	public void jaTemEnderecoCadastrado(Endereco endereco) {
 		if(endereco != null) {
 			throw new EnderecoCadastrarException();
 		}
@@ -61,9 +62,10 @@ public class EnderecoService {
 		
 		return endereco;
 	}
-
-	public void excluir(Long id) {
-		enderecoRepository.deleteById(id);
+	@Transactional
+	public void excluir(Endereco endereco) {
+		temEndereco(endereco);
+		enderecoRepository.deleteById(endereco.getId());
 	}
 
 

@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,9 +34,12 @@ public class Endereco {
 	private Integer numero;
 	private String complemento;
 	private String bairro;
+    @OneToOne
+    @JoinColumn(name = "cliente_id", nullable = true)
+    private Cliente cliente;
 
 	
-	public Endereco(EnderecoReqDto endereco) {
+	public Endereco(EnderecoReqDto endereco, Cliente cliente) {
 		this.cep = endereco.cep();
 		this.cidade = endereco.cidade();
 		this.estado = endereco.estado();
@@ -42,6 +47,7 @@ public class Endereco {
 		this.numero = endereco.numero();
 		this.complemento = endereco.complemento();
 		this.bairro = endereco.bairro();
+		this.cliente = cliente;
 	}
 
 
@@ -54,5 +60,6 @@ public class Endereco {
 		this.complemento = enderecoAtualizar.complemento();
 		this.bairro = enderecoAtualizar.bairro();
 	}
+
 }
 

@@ -2,8 +2,10 @@ package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -12,6 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -33,19 +37,31 @@ public abstract class Conta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private BigDecimal saldo;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Cliente cliente;
 	private Boolean ativa;
 	private LocalDate dataCriacao;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+    @ManyToOne
+    private List<Transferencia> transferencias;
 
 	
 	public Conta(Cliente cliente) {
 		this.saldo = saldo.valueOf(0);
-		this.cliente = cliente;
 		this.ativa = true;
 		this.dataCriacao = LocalDate.now();
+		this.cliente = cliente;
 		
+	}
+
+
+	public void debitar(BigDecimal valor) {
+		saldo.subtract(valor);
+	}
+
+
+	public void creditar(BigDecimal valor) {
+		saldo.add(valor);
 	}
 	
 }

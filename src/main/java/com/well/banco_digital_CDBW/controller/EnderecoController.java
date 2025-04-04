@@ -32,9 +32,7 @@ public class EnderecoController {
 	@PostMapping("/cadastrar")
 	public ResponseEntity<EnderecoResDto> cadastrar(@RequestBody @Valid EnderecoReqDto enderecoReq, @AuthenticationPrincipal Cliente clienteLogado) {
 		var cliente = clienteService.clienteId(clienteLogado.getId());
-		enderecoService.JaTemEnderecoCadastrado(cliente.getEndereco());
-		//implementar parte final 
-		var endereco = enderecoService.cadastrar(enderecoReq);
+		var endereco = enderecoService.cadastrar(enderecoReq, cliente);
 		
 		return ResponseEntity.created(null).body(new EnderecoResDto(endereco));
 	}
@@ -58,8 +56,7 @@ public class EnderecoController {
 	@DeleteMapping
 	public ResponseEntity<EnderecoResDto> excluir(@AuthenticationPrincipal Cliente clienteLogado){
 		var cliente = clienteService.clienteId(clienteLogado.getId());
-		var endereco = enderecoService.temEndereco(cliente.getEndereco());
-		enderecoService.excluir(endereco.getId());
+		clienteService.removerEndereco(cliente);
 		
 		return ResponseEntity.noContent().build();
 	}

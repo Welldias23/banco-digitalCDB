@@ -5,14 +5,12 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
-import com.well.banco_digital_CDBW.dto.ClienteRequest;
-import com.well.banco_digital_CDBW.service.ClienteService;
+import com.well.banco_digital_CDBW.dto.ClienteReqDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,6 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -48,22 +47,19 @@ public class Cliente implements UserDetails{
 	private BigDecimal rendaMensal;
 	@Enumerated(EnumType.STRING)
 	private CategoriaCliente categoria;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private Endereco endereco;
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Conta> contas;
 	
 	
-	public Cliente(ClienteRequest clienteReq) {
+	public Cliente(ClienteReqDto clienteReq) {
 		this.nome = clienteReq.nome();
 		this.cpf = clienteReq.cpf();
 		this.email = clienteReq.email();
 		this.senha = clienteReq.senha();
 		this.dataNascimento = clienteReq.dataNascimento();
 		this.rendaMensal = clienteReq.rendaMensal();
-		
-		if (clienteReq.endereco() != null) {
-			this.endereco = new Endereco(clienteReq.endereco());
-					
-		}
 		
 	}
 
