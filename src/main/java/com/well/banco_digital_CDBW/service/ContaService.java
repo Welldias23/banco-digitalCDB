@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
 import com.well.banco_digital_CDBW.dto.DepositoReqDto;
+import com.well.banco_digital_CDBW.dto.TransacaoDto;
+import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.entity.CategoriaCliente;
 import com.well.banco_digital_CDBW.entity.Cliente;
@@ -18,6 +20,8 @@ import com.well.banco_digital_CDBW.entity.ContaPoupanca;
 import com.well.banco_digital_CDBW.entity.Deposito;
 import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
+import com.well.banco_digital_CDBW.entity.TransferenciaPix;
+import com.well.banco_digital_CDBW.exception.ChavePixNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
@@ -62,24 +66,50 @@ public class ContaService {
 	
 	//DESACOPLAR
 	public Transferencia transferir(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
+		var transacao = iniciarTransacao(clienteOrigem, transferenciaAFazer);
+		var transferencia = new Transferencia(transacao.contaOrigem(), transacao.contaDestino(), transferenciaAFazer.valor());
+		//rever esse detalhe
+		transferencia.setNomeOrigem(transacao.nomeOrigem());
+		transferencia.setNomeDestino(transacao.nomeDestino());
+		contaRepository.save(transacao.contaDestino());
+		contaRepository.save(transacao.contaOrigem());
+		transacaoRepository.save(transferencia);
+		
+		return transferencia;
+	}
+	
+	public TransferenciaPix transferirPix(Cliente clienteOrigen, TransferenciaPixReqDto transferenciaPixAFazer) {
+		var contaDestino = pixExiste(transferenciaPixAFazer.chavePix());
+		var transacao = iniciarTransacao(clienteOrigen, new TransferenciaReqDto(transferenciaPixAFazer.idContaOrigem(), contaDestino.getId(), transferenciaPixAFazer.valor()));
+		var transferenciaPix = new TransferenciaPix(transacao.contaOrigem(), transacao.contaDestino(), transferenciaPixAFazer.valor());
+		contaRepository.save(transacao.contaDestino());
+		contaRepository.save(transacao.contaOrigem());
+		transacaoRepository.save(transferenciaPix);
+		
+		return transferenciaPix;
+	}
+	
+	private Conta pixExiste(String chavePix) {
+		var conta = contaRepository.getReferenceByChavePix(chavePix);
+		if(conta == null) {
+			throw new ChavePixNaoExisteException();
+		}
+		return conta;
+	}
+
+	private TransacaoDto iniciarTransacao(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
+		clienteService.clienteId(clienteOrigem.getId());
 		var contaOrigem = contaRepository.findByIdAndClienteId(transferenciaAFazer.idContaOrigem(), clienteOrigem.getId());
 		temConta(contaOrigem);
 		temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
 		var contaDestino = contaRepository.getReferenceById(transferenciaAFazer.idContaDestino());
 		temConta(contaDestino);
 		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
-		var transferencia = new Transferencia(contaOrigem, contaDestino, transferenciaAFazer.valor());
-		//rever esse detalhe
-		transferencia.setNomeOrigem(clienteOrigem.getNome());
-		transferencia.setNomeDestino(clienteDestino.getNome());
-		System.out.println(contaOrigem.getSaldo());
-		contaRepository.save(contaDestino);
-		contaRepository.save(contaOrigem);
-		transacaoRepository.save(transferencia);
+		var transacao = new TransacaoDto(contaOrigem, clienteOrigem.getNome(), contaDestino, clienteDestino.getNome());
 		
-		return transferencia;
+		return transacao;
 	}
-	
+
 	public Deposito depositar(Cliente clienteLogado, DepositoReqDto deposito) {
 		clienteService.clienteId(clienteLogado.getId());
 		var contaDestino = contaExiste(deposito.idContaDestino());
@@ -144,6 +174,8 @@ public class ContaService {
 		}
 		
 	}
+
+
 
 
 	

@@ -126,6 +126,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(ChavePixNaoExisteException.class)
+	public ProblemDetail tratadorChavePixNaoExisteException(ChavePixNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("A chave pix não esta vinculada a nenhuma conta.");
+		problemDetail.setDetail("Infirme uma chave pix valida.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(

@@ -8,4 +8,6 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 
 	Conta findByIdAndClienteId(Long idConta, Long id);
 
+	Conta getReferenceByChavePix(String chavePix);
+
 }

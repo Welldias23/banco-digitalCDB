@@ -39,6 +39,7 @@ public abstract class Conta {
 	private BigDecimal saldo;
 	private Boolean ativa;
 	private LocalDate dataCriacao;
+	private String chavePix;
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;

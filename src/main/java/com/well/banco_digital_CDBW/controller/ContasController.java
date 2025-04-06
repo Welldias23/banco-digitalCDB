@@ -20,6 +20,7 @@ import com.well.banco_digital_CDBW.dto.ContaReqDto;
 import com.well.banco_digital_CDBW.dto.ContaResDto;
 import com.well.banco_digital_CDBW.dto.DepositoReqDto;
 import com.well.banco_digital_CDBW.dto.DepositoResDto;
+import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
@@ -51,6 +52,7 @@ public class ContasController {
 	public ResponseEntity<List<ContaResDto>> detalharTodas(@AuthenticationPrincipal Cliente clienteLogado) {
 		var contas = contaService.buscarTodas(clienteLogado.getId());
 	    List<ContaResDto> contasDto = contas.stream().map(conta -> new ContaResDto(conta)).collect(Collectors.toList());
+	    
 		return ResponseEntity.ok(contasDto);
 	}
 
@@ -72,6 +74,13 @@ public class ContasController {
 		var transferencia = contaService.transferir(clienteLogado, transferenciaAFazer);
 		
 		return ResponseEntity.ok(new TransferenciaResDto(transferencia));
+	}
+	
+	@PostMapping("/pix")
+	public ResponseEntity<TransferenciaResDto> pix(@RequestBody @Valid TransferenciaPixReqDto transferenciaPixAFazer, @AuthenticationPrincipal Cliente clienteLogado){
+		var transferenciaPix = contaService.transferirPix(clienteLogado, transferenciaPixAFazer);
+		
+		return ResponseEntity.ok(new TransferenciaResDto(transferenciaPix));
 	}
 
 }
