@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
 import com.well.banco_digital_CDBW.dto.ContaResDto;
+import com.well.banco_digital_CDBW.dto.DepositoReqDto;
+import com.well.banco_digital_CDBW.dto.DepositoResDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.entity.Transferencia;
+import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.service.ContaService;
 
 import jakarta.validation.Valid;
@@ -58,9 +60,17 @@ public class ContasController {
 		return null;
 	}
 	
-	@PostMapping("/{idConta}/transferencia")
+	@PostMapping("/deposito")
+	public ResponseEntity<DepositoResDto> depositar(@RequestBody @Valid DepositoReqDto deposito, @AuthenticationPrincipal Cliente clienteLogado){
+		var depositoFeito = contaService.depositar(clienteLogado, deposito);
+		
+		return ResponseEntity.ok(new DepositoResDto(depositoFeito));
+	}
+	
+	@PostMapping("/transferencia")
 	public ResponseEntity<TransferenciaResDto> transferir(@RequestBody @Valid TransferenciaReqDto transferenciaAFazer, @AuthenticationPrincipal Cliente clienteLogado){
 		var transferencia = contaService.transferir(clienteLogado, transferenciaAFazer);
+		
 		return ResponseEntity.ok(new TransferenciaResDto(transferencia));
 	}
 

@@ -8,18 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
+import com.well.banco_digital_CDBW.dto.DepositoReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.entity.CategoriaCliente;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
+import com.well.banco_digital_CDBW.entity.Deposito;
+import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.exception.ContaNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
 import com.well.banco_digital_CDBW.repository.ContaRepository;
+import com.well.banco_digital_CDBW.repository.TransacaoRepository;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @Service
@@ -30,6 +35,10 @@ public class ContaService {
 
 	@Autowired
 	private ContaRepository contaRepository;
+	
+	//DESACOPLAR
+	@Autowired
+	public TransacaoRepository transacaoRepository;
 	
 	public Conta criarConta(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
@@ -51,20 +60,39 @@ public class ContaService {
 		return contas;
 	}
 	
+	//DESACOPLAR
 	public Transferencia transferir(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
 		var contaOrigem = contaRepository.findByIdAndClienteId(transferenciaAFazer.idContaOrigem(), clienteOrigem.getId());
-		contaExiste(contaOrigem);
+		temConta(contaOrigem);
 		temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
-		var contaDestino = contaRepository.findById(transferenciaAFazer.idContaDestino());
-		contaExiste(contaDestino);
-		var clienteDestino = clienteService.clienteId(contaDestino.get().getCliente().getId());
-		var transferencia = new Transferencia(contaOrigem, contaDestino.get(), transferenciaAFazer.valor());
+		var contaDestino = contaRepository.getReferenceById(transferenciaAFazer.idContaDestino());
+		temConta(contaDestino);
+		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
+		var transferencia = new Transferencia(contaOrigem, contaDestino, transferenciaAFazer.valor());
 		//rever esse detalhe
 		transferencia.setNomeOrigem(clienteOrigem.getNome());
 		transferencia.setNomeDestino(clienteDestino.getNome());
+		System.out.println(contaOrigem.getSaldo());
+		contaRepository.save(contaDestino);
+		contaRepository.save(contaOrigem);
+		transacaoRepository.save(transferencia);
 		
 		return transferencia;
 	}
+	
+	public Deposito depositar(Cliente clienteLogado, DepositoReqDto deposito) {
+		clienteService.clienteId(clienteLogado.getId());
+		var contaDestino = contaExiste(deposito.idContaDestino());
+		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
+		var depositoEfetuado = new Deposito(contaDestino, deposito.valor());
+		depositoEfetuado.setNomeDestino(clienteDestino.getNome());
+		System.out.println(contaDestino.getSaldo());
+		contaRepository.save(contaDestino);
+		transacaoRepository.save(depositoEfetuado);
+		
+		return depositoEfetuado;
+	}
+
 
 	private void temSaldo(BigDecimal saldo,BigDecimal valor) {
 		var valorResto = saldo.subtract(valor);
@@ -73,16 +101,19 @@ public class ContaService {
 		}
 	}
 
-	private void contaExiste(Optional<Conta> contaDestino) {
-		if(contaDestino.get() == null) {
-			throw new ContaNaoExisteException();
-		}
-	}
-
-	private void contaExiste(Conta contaOrigem) {
+	private void temConta(Conta contaOrigem) {
 		if(contaOrigem == null) {
 			throw new ContaNaoExisteException();
 		}		
+	}
+	
+
+	private Conta contaExiste(Long idContaDestino) {
+		var conta = contaRepository.getReferenceById(idContaDestino);
+		if(conta == null) {
+			throw new ContaNaoExisteException();
+		}	
+		return conta;
 	}
 
 	private Conta criar(Cliente cliente, ContaReqDto contaAbrir) {
@@ -113,6 +144,8 @@ public class ContaService {
 		}
 		
 	}
+
+
 	
 	
 	

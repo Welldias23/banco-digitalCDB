@@ -42,12 +42,14 @@ public abstract class Conta {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
-    @ManyToOne
-    private List<Transferencia> transferencias;
+    @OneToMany(mappedBy = "contaOrigem")
+    private List<Transferencia> transferenciasEnviadas;   
+    @OneToMany(mappedBy = "contaDestino")
+    private List<Transferencia> transferenciasRecebidas;
 
 	
 	public Conta(Cliente cliente) {
-		this.saldo = saldo.valueOf(0);
+		this.saldo = saldo.ZERO;
 		this.ativa = true;
 		this.dataCriacao = LocalDate.now();
 		this.cliente = cliente;
@@ -56,12 +58,12 @@ public abstract class Conta {
 
 
 	public void debitar(BigDecimal valor) {
-		saldo.subtract(valor);
+		this.saldo = saldo.subtract(valor);
 	}
 
 
 	public void creditar(BigDecimal valor) {
-		saldo.add(valor);
+		this.saldo = saldo.add(valor);
 	}
 	
 }
