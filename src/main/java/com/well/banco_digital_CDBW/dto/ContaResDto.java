@@ -8,14 +8,15 @@ import com.well.banco_digital_CDBW.entity.Conta;
 public record ContaResDto(	
 		Long id,
 		BigDecimal saldo,
+		String chavePix,
 		Boolean ativa) {
 
 	public ContaResDto(Conta conta) {
-		this(conta.getId(), conta.getSaldo(),conta.getAtiva());
+		this(conta.getId(), conta.getSaldo(), conta.getChavePix(), conta.getAtiva());
 	}
 
 	public ContaResDto(Optional<Conta> conta) {
-		this(conta.get().getId(), conta.get().getSaldo(),conta.get().getAtiva());
+		this(conta.get().getId(), conta.get().getSaldo(), conta.get().getChavePix(),conta.get().getAtiva());
 	}
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
 import com.well.banco_digital_CDBW.dto.DepositoReqDto;
+import com.well.banco_digital_CDBW.dto.PixDto;
 import com.well.banco_digital_CDBW.dto.TransacaoDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
@@ -49,6 +50,16 @@ public class ContaService {
 		var conta = criar(cliente, contaAbrir);
 		contaRepository.save(conta);
 
+		return conta;
+	}
+	
+	public Conta cadastrarPix(Cliente clienteLogado, PixDto pix) {
+		clienteService.clienteId(clienteLogado.getId());
+		var conta = contaRepository.findByIdAndClienteId(pix.contaId(), clienteLogado.getId());
+		temConta(conta);
+		conta.setChavePix(pix.chavePix());
+		contaRepository.save(conta);
+		
 		return conta;
 	}
 	
@@ -174,6 +185,8 @@ public class ContaService {
 		}
 		
 	}
+
+
 
 
 
