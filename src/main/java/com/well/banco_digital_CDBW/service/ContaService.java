@@ -2,7 +2,6 @@ package com.well.banco_digital_CDBW.service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +18,15 @@ import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
 import com.well.banco_digital_CDBW.entity.Deposito;
-import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.entity.TransferenciaPix;
+import com.well.banco_digital_CDBW.exception.ChavePixJaExisteException;
 import com.well.banco_digital_CDBW.exception.ChavePixNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
 import com.well.banco_digital_CDBW.repository.ContaRepository;
 import com.well.banco_digital_CDBW.repository.TransacaoRepository;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 @Service
 public class ContaService {
@@ -55,6 +51,7 @@ public class ContaService {
 	
 	public Conta cadastrarPix(Cliente clienteLogado, PixDto pix) {
 		clienteService.clienteId(clienteLogado.getId());
+		pixUnico(pix.chavePix());
 		var conta = contaRepository.findByIdAndClienteId(pix.contaId(), clienteLogado.getId());
 		temConta(conta);
 		conta.setChavePix(pix.chavePix());
@@ -62,7 +59,8 @@ public class ContaService {
 		
 		return conta;
 	}
-	
+
+
 	public Conta buscarUma(Long idConta, Long id) {
 		clienteService.clienteId(id);
 		var conta = contaRepository.findByIdAndClienteId(idConta, id);
@@ -93,6 +91,8 @@ public class ContaService {
 		var contaDestino = pixExiste(transferenciaPixAFazer.chavePix());
 		var transacao = iniciarTransacao(clienteOrigen, new TransferenciaReqDto(transferenciaPixAFazer.idContaOrigem(), contaDestino.getId(), transferenciaPixAFazer.valor()));
 		var transferenciaPix = new TransferenciaPix(transacao.contaOrigem(), transacao.contaDestino(), transferenciaPixAFazer.valor());
+		transferenciaPix.setNomeOrigem(transacao.nomeOrigem());
+		transferenciaPix.setNomeDestino(transacao.nomeDestino());
 		contaRepository.save(transacao.contaDestino());
 		contaRepository.save(transacao.contaOrigem());
 		transacaoRepository.save(transferenciaPix);
@@ -106,6 +106,14 @@ public class ContaService {
 			throw new ChavePixNaoExisteException();
 		}
 		return conta;
+	}
+	
+	
+	private void pixUnico(String chavePix) {
+		var pix = contaRepository.findByChavePix(chavePix);
+		if(pix) {
+			throw new ChavePixJaExisteException();
+		}		
 	}
 
 	private TransacaoDto iniciarTransacao(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
@@ -176,7 +184,7 @@ public class ContaService {
 	private void atribuirTaxaManutencao(Cliente cliente, ContaCorrente conta) {
 		if(cliente.getCategoria().equals(CategoriaCliente.COMUM)) {
 			conta.setTaxaManutencao(30.0);
-		} else if(cliente.getCategoria().equals(CategoriaCliente.PREMIU)) {
+		} else if(cliente.getCategoria().equals(CategoriaCliente.PREMIUM)) {
 			conta.setTaxaManutencao(15.0);
 		} else if(cliente.getCategoria().equals(CategoriaCliente.SUPER)) {
 			conta.setTaxaManutencao(1.0);
@@ -184,6 +192,11 @@ public class ContaService {
 			throw new CriarContaException();
 		}
 		
+	}
+
+	public List<Conta> buscarData(int diaDoMes) {
+		var contas = contaRepository.findAllByDayMoth(diaDoMes);
+		return contas;
 	}
 
 

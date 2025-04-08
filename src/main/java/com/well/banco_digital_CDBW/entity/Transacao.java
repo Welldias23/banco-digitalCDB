@@ -2,6 +2,7 @@ package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -38,13 +39,15 @@ public abstract class Transacao {
 	private Conta contaDestino;
 	private String nomeDestino;
 	private BigDecimal valor;
-	private LocalDate horario;
+	private LocalDate data;
+	private LocalTime horario;
 
 
 	public Transacao(Conta contaDestino, BigDecimal valor) {
 		this.contaDestino = contaDestino;
 		this.valor = valor;
-		this.horario = LocalDate.now();
+		this.data = LocalDate.now();
+		this.horario = LocalTime.now();
 		contaDestino.creditar(valor);
 		
 	}
