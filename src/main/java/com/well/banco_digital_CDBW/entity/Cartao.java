@@ -34,6 +34,7 @@ public abstract class Cartao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long numeroCartao;
+	private String senha;
 	private LocalDate dataCriacao;
 	private LocalTime horaCriacao;
 	private Boolean ativo;
@@ -49,5 +50,19 @@ public abstract class Cartao {
 		this.ativo = true;
 		this.conta = (Conta) conta;
 	}
+
+	public void mudarStatus() {
+		if(ativo) {
+			ativo = false; 
+		}else {
+			ativo = true;
+		}
+	}
+
+	public void mudarSenha(String senha2) {
+		this.senha = senha2;
+		
+	}
+
 
 }

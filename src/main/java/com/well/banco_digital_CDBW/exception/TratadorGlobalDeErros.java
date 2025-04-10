@@ -147,6 +147,27 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 	}
 	
 	
+	@ExceptionHandler(CategoriaNaoExisteException.class)
+	public ProblemDetail tratadorCategoriaNaoExisteException(CategoriaNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O cliente nao possui uma categoria.");
+		problemDetail.setDetail("Infirme o salario do cliente para ser atribuida uma categoria.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	
+	@ExceptionHandler(CartaoNaoExisteException.class)
+	public ProblemDetail tratadorCartaoNaoExisteException(CartaoNaoExisteException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O id do cartão informado não existe.");
+		problemDetail.setDetail("Infirme o id de um cartão valido.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

@@ -25,4 +25,10 @@ public class CartaoDebito extends Cartao{
 		this.limiteDiario = new BigDecimal("200.00");
 	}
 
+
+	public void alterarLimiteDiario(BigDecimal novoLimite) {
+		this.limiteDiario = novoLimite;
+		
+	}
+
 }
