@@ -1,9 +1,11 @@
 package com.well.banco_digital_CDBW.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
@@ -12,12 +14,13 @@ import com.well.banco_digital_CDBW.dto.PixDto;
 import com.well.banco_digital_CDBW.dto.TransacaoDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
-import com.well.banco_digital_CDBW.entity.CategoriaCliente;
+import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
 import com.well.banco_digital_CDBW.entity.Deposito;
+import com.well.banco_digital_CDBW.entity.Manuntencao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 import com.well.banco_digital_CDBW.exception.ChavePixJaExisteException;
@@ -33,13 +36,14 @@ public class ContaService {
 	
 	@Autowired
 	private ClienteService clienteService;
+	
 
 	@Autowired
 	private ContaRepository contaRepository;
 	
 	//DESACOPLAR
 	@Autowired
-	public TransacaoRepository transacaoRepository;
+	private TransacaoRepository transacaoRepository;
 	
 	public Conta criarConta(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
@@ -64,6 +68,7 @@ public class ContaService {
 	public Conta buscarUma(Long idConta, Long id) {
 		clienteService.clienteId(id);
 		var conta = contaRepository.findByIdAndClienteId(idConta, id);
+		temConta(conta);
 		return conta;
 	}
 
@@ -168,7 +173,7 @@ public class ContaService {
 	private Conta criar(Cliente cliente, ContaReqDto contaAbrir) {
 		if(contaAbrir.tipoConta().toUpperCase().equals("CONTA CORRENTE")) {
 			var conta = new ContaCorrente(cliente);
-			atribuirTaxaManutencao(cliente, conta);
+			//atribuirTaxaManutencao(cliente, conta);
 			
 			return conta;
 		}else if(contaAbrir.tipoConta().toUpperCase().equals("CONTA POUPANÇA")){
@@ -181,23 +186,38 @@ public class ContaService {
 		}
 	}
 
-	private void atribuirTaxaManutencao(Cliente cliente, ContaCorrente conta) {
-		if(cliente.getCategoria().equals(CategoriaCliente.COMUM)) {
-			conta.setTaxaManutencao(30.0);
-		} else if(cliente.getCategoria().equals(CategoriaCliente.PREMIUM)) {
-			conta.setTaxaManutencao(15.0);
-		} else if(cliente.getCategoria().equals(CategoriaCliente.SUPER)) {
-			conta.setTaxaManutencao(1.0);
-		} else {
-			throw new CriarContaException();
-		}
+	//	private void atribuirTaxaManutencao(Cliente cliente, ContaCorrente conta) {
+		//		if(cliente.getCategoria().equals(CategoriaCliente.COMUM)) {
+			//			conta.setTaxaManutencao(30.0);
+			//		} else if(cliente.getCategoria().equals(CategoriaCliente.PREMIUM)) {
+			//			conta.setTaxaManutencao(15.0);
+			//		} else if(cliente.getCategoria().equals(CategoriaCliente.SUPER)) {
+			//			conta.setTaxaManutencao(1.0);
+			//		} else {
+			//			throw new CriarContaException();
+			//		}
 		
+		//	}
+	
+	@Scheduled(cron = "${spring.task.scheduling.cron}")
+	public void manuntecao() {
+		var data = LocalDate.now();
+		var contas = buscarData(data.getDayOfMonth());
+		for (Conta conta : contas) {
+			if(conta.getClass() == ContaCorrente.class) {
+				var cliente = clienteService.clienteId(conta.getCliente().getId());
+				conta.debitar(cliente.getCategoria().getTaxaManuntencao());
+				transacaoRepository.save(new Manuntencao(conta, cliente.getCategoria().getTaxaManuntencao()));
+			}
+		}
 	}
 
+
 	public List<Conta> buscarData(int diaDoMes) {
-		var contas = contaRepository.findAllByDayMoth(diaDoMes);
+		var contas = contaRepository.findAllByDayMonth(diaDoMes);
 		return contas;
 	}
+
 
 
 

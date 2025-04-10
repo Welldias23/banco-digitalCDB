@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContaCorrente extends Conta{
-	private Double taxaManutencao;
+	//private Double taxaManutencao;
 	
 	public ContaCorrente() {
 	    super(); 

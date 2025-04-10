@@ -23,6 +23,7 @@ import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.service.CartaoService;
 import com.well.banco_digital_CDBW.service.ContaService;
 
 import jakarta.validation.Valid;
@@ -32,15 +33,22 @@ import jakarta.validation.Valid;
 public class ContaController {
 	@Autowired
 	private ContaService contaService;
+	
+
+	@Autowired
+	private CartaoService cartaoService;
+	
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<ContaResDto> cadastrar( @RequestBody ContaReqDto contaAAbrir, @AuthenticationPrincipal Cliente clienteLogado){
 		var conta = contaService.criarConta(clienteLogado.getId(), contaAAbrir);
+		cartaoService.criar(conta);
 		return ResponseEntity.ok(new ContaResDto(conta));	
 	}
 	
 	@PostMapping("/cadastrar/pix")
 	public ResponseEntity<ContaResDto> cadastrarPix(@RequestBody @Valid PixDto pix, @AuthenticationPrincipal Cliente clienteLogado){
+		System.out.println(pix.chavePix());
 		var conta = contaService.cadastrarPix(clienteLogado, pix);
 		
 		return ResponseEntity.ok(new ContaResDto(conta));

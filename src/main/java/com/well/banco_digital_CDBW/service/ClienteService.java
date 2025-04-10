@@ -115,12 +115,12 @@ public class ClienteService {
 
 	public CategoriaCliente categoria(BigDecimal rendaMensal) {
 		CategoriaCliente categoria;
-		if(rendaMensal.doubleValue() <= 1.512) {
+		if(rendaMensal.doubleValue() <= 1512.00) {
 			categoria = CategoriaCliente.COMUM;
-		}else if (rendaMensal.doubleValue() <= 3.000) {
+		}else if (rendaMensal.doubleValue() <= 3000.00) {
 			categoria = CategoriaCliente.SUPER;
 		} else {
-			categoria = CategoriaCliente.PREMIU;
+			categoria = CategoriaCliente.PREMIUM;
 		}
 		return categoria;
 	}

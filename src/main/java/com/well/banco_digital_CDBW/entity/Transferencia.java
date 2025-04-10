@@ -31,5 +31,11 @@ public class Transferencia extends Transacao{
 		this.contaOrigem = contaOrigem;
 		contaOrigem.debitar(valor);
 	}
+
+
+	public Transferencia(Conta contaOrigem, BigDecimal valor) {
+		super(valor);
+		this.contaOrigem = contaOrigem;
+	}
 	
 }

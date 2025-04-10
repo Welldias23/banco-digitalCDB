@@ -14,8 +14,8 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 	Conta getReferenceByChavePix(String chavePix);
 
 	boolean findByChavePix(String chavePix);
-
-	@Query("SELECT * FROM Conta EXTRACT(DAY FROM created_at) = :diaDoMes AND created_at >= date_trunc('month', CURRENT_DATE - INTERVAL '1 month')  AND created_at < date_trunc('month', CURRENT_DATE)")
-	List<Conta> findAllByDayMoth(int diaDoMes);
+	
+	@Query("SELECT c FROM Conta c WHERE DAY(c.dataCriacao) = :diaDoMes")
+	List<Conta> findAllByDayMonth(int diaDoMes);
 
 }
