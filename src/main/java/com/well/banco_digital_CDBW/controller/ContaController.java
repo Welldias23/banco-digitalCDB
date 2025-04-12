@@ -48,7 +48,6 @@ public class ContaController {
 	
 	@PostMapping("/cadastrar/pix")
 	public ResponseEntity<ContaResDto> cadastrarPix(@RequestBody @Valid PixDto pix, @AuthenticationPrincipal Cliente clienteLogado){
-		System.out.println(pix.chavePix());
 		var conta = contaService.cadastrarPix(clienteLogado, pix);
 		
 		return ResponseEntity.ok(new ContaResDto(conta));

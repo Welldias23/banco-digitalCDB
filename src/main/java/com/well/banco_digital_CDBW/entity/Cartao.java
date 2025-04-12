@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
+
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -33,24 +36,17 @@ public abstract class Cartao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long numeroCartao;
+	private String numeroCartao;
 	private String senha;
 	private LocalDate dataCriacao;
 	private LocalTime horaCriacao;
 	private Boolean ativo;
-	@OneToOne
+	@ManyToOne
 	private Conta conta;
-	@OneToMany
-	private List<CompraDetalhes> compras;
+	@OneToMany(mappedBy = "cartao")
+	private List<Compra> compras;
 	
-	public Cartao(Object conta) {
-		//criar uma logica para criar o numero do cartao
-		this.dataCriacao = LocalDate.now();
-		this.horaCriacao = LocalTime.now();
-		this.ativo = true;
-		this.conta = (Conta) conta;
-	}
-
+	
 	public void mudarStatus() {
 		if(ativo) {
 			ativo = false; 
@@ -62,6 +58,23 @@ public abstract class Cartao {
 	public void mudarSenha(String senha2) {
 		this.senha = senha2;
 		
+	}
+
+	public Cartao(Conta conta, String senha,  String numeroCartao) {
+		this.numeroCartao =  numeroCartao;
+		this.senha = senha;
+		this.dataCriacao = LocalDate.now();
+		this.horaCriacao = LocalTime.now();
+		this.ativo = true;
+		this.conta = (Conta) conta;
+	}
+
+	public Cartao(Conta conta, String numeroCartao) {
+		this.numeroCartao = numeroCartao;
+		this.dataCriacao = LocalDate.now();
+		this.horaCriacao = LocalTime.now();
+		this.ativo = true;
+		this.conta = (Conta) conta;
 	}
 
 

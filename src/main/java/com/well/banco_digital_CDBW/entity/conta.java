@@ -36,6 +36,8 @@ public abstract class Conta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long agencia;
+	private Long numeroConta;
 	private BigDecimal saldo;
 	private Boolean ativa;
 	private LocalDate dataCriacao;
@@ -43,6 +45,8 @@ public abstract class Conta {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+    @OneToMany
+    private List<Cartao> cartoes;
     @OneToMany(mappedBy = "contaOrigem")
     private List<Transferencia> transferenciasEnviadas;   
     @OneToMany(mappedBy = "contaDestino")
@@ -50,6 +54,7 @@ public abstract class Conta {
 
 	
 	public Conta(Cliente cliente) {
+		this.agencia = new Long(1001);
 		this.saldo = saldo.ZERO;
 		this.ativa = true;
 		this.dataCriacao = LocalDate.now();
@@ -57,6 +62,9 @@ public abstract class Conta {
 		
 	}
 
+	public void gerarNumeroConta(Long id) {
+		this.numeroConta = id + 5613;
+	}
 
 	public void debitar(BigDecimal valor) {
 		this.saldo = saldo.subtract(valor);

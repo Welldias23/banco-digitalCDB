@@ -48,6 +48,7 @@ public class ContaService {
 	public Conta criarConta(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
 		var conta = criar(cliente, contaAbrir);
+		conta.gerarNumeroConta(id);
 		contaRepository.save(conta);
 
 		return conta;
@@ -115,8 +116,8 @@ public class ContaService {
 	
 	
 	private void pixUnico(String chavePix) {
-		var pix = contaRepository.findByChavePix(chavePix);
-		if(pix) {
+		var conta = contaRepository.findByChavePix(chavePix);
+		if(conta != null) {
 			throw new ChavePixJaExisteException();
 		}		
 	}

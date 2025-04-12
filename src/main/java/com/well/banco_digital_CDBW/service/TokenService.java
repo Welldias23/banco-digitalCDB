@@ -29,6 +29,7 @@ public class TokenService {
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
 		} catch (JWTVerificationException ex) {
+        	System.out.println(ex.toString());
 			throw new TokenInvalidoExcepition();
 		}
 	}

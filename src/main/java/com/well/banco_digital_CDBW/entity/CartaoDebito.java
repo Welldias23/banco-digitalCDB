@@ -20,8 +20,8 @@ public class CartaoDebito extends Cartao{
 	private BigDecimal limiteDiario;
 	
 
-	public CartaoDebito(Object conta) {
-		super(conta);
+	public CartaoDebito(Conta conta, String numeroCartao) {
+		super(conta, numeroCartao);
 		this.limiteDiario = new BigDecimal("200.00");
 	}
 

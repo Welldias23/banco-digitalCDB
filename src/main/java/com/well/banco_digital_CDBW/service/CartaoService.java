@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.well.banco_digital_CDBW.dto.CartaoReqDto;
 import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
@@ -12,6 +13,7 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.repository.CartaoRepository;
+import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,16 +26,21 @@ public class CartaoService {
 	
 	@Autowired
 	private CartaoRepository cartaoRepository;
+	
+	@Autowired
+	private CriarNumeroCartao geraNumero; 
 
-	public CartaoCredito criar(Cliente cliente, Long idConta) {
+	public CartaoCredito criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
 		var conta = contaService.buscarUma(idConta, cliente.getId());
-		var cartao = new CartaoCredito(conta, cliente); 
+		var numeroCartao = geraNumero.criarNumeroCartao(cartaoACriar.bandeira());
+		var cartao = new CartaoCredito(conta, cliente, cartaoACriar.senha(), numeroCartao); 
 		cartaoRepository.save(cartao);
 		return cartao;
 	}
 
 	public void criar(Conta conta) {
-		var cartao = new CartaoDebito(conta); 
+		var numeroCartao = geraNumero.criarNumeroCartao("masterCard");
+		var cartao = new CartaoDebito(conta, numeroCartao); 
 		cartaoRepository.save(cartao);
 	}
 

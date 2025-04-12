@@ -13,7 +13,7 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 
 	Conta getReferenceByChavePix(String chavePix);
 
-	boolean findByChavePix(String chavePix);
+	Conta findByChavePix(String chavePix);
 	
 	@Query("SELECT c FROM Conta c WHERE DAY(c.dataCriacao) = :diaDoMes")
 	List<Conta> findAllByDayMonth(int diaDoMes);

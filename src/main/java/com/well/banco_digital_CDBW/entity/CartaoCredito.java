@@ -23,8 +23,8 @@ public class CartaoCredito extends Cartao{
 	private BigDecimal limiteCredito;
 	
 	
-	public CartaoCredito(Object conta, Cliente cliente) {
-		super(conta);
+	public CartaoCredito(Conta conta, Cliente cliente, String senha, String numeroCartao) {
+		super(conta, senha, numeroCartao);
 		this.taxaAnuidade = new BigDecimal("150.00");
 		if(cliente.getCategoria() == CategoriaCliente.COMUM) {
 			this.limiteCredito = new BigDecimal("1000.00");

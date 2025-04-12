@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,6 +43,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
 		problemDetail.setTitle("O id do cliente não existe no banco de dados.");
 		problemDetail.setDetail("É preciso informar um id valido na url.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ProblemDetail tratadorBadCredentialsException(BadCredentialsException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
+		problemDetail.setTitle("O cpf ou senha estão incorretos.");
+		problemDetail.setDetail("É preciso informar um cpf e senha validos.");
 		problemDetail.setProperty("TimesTemp", Instant.now());
 		
 		return problemDetail;
