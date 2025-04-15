@@ -11,7 +11,7 @@ import lombok.Setter;
 @DiscriminatorValue("pix")
 @Getter
 @Setter
-public class TransferenciaPix extends Transferencia{
+public class TransferenciaPix extends Transacao{
 
 	public TransferenciaPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
 		super(contaOrigem, contaDestino, valor);

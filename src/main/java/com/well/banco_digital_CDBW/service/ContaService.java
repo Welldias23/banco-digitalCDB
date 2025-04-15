@@ -21,6 +21,7 @@ import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
 import com.well.banco_digital_CDBW.entity.Deposito;
 import com.well.banco_digital_CDBW.entity.Manuntencao;
+import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 import com.well.banco_digital_CDBW.exception.ChavePixJaExisteException;
@@ -30,6 +31,8 @@ import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
 import com.well.banco_digital_CDBW.repository.ContaRepository;
 import com.well.banco_digital_CDBW.repository.TransacaoRepository;
+
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class ContaService {
@@ -41,9 +44,6 @@ public class ContaService {
 	@Autowired
 	private ContaRepository contaRepository;
 	
-	//DESACOPLAR
-	@Autowired
-	private TransacaoRepository transacaoRepository;
 	
 	public Conta criarConta(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
@@ -79,23 +79,11 @@ public class ContaService {
 		return contas;
 	}
 	
-	//DESACOPLAR
-	public Transferencia transferir(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
-		var transacao = iniciarTransacao(clienteOrigem, transferenciaAFazer);
-		var transferencia = new Transferencia(transacao.contaOrigem(), transacao.contaDestino(), transferenciaAFazer.valor());
-		//rever esse detalhe
-		transferencia.setNomeOrigem(transacao.nomeOrigem());
-		transferencia.setNomeDestino(transacao.nomeDestino());
-		contaRepository.save(transacao.contaDestino());
-		contaRepository.save(transacao.contaOrigem());
-		transacaoRepository.save(transferencia);
-		
-		return transferencia;
-	}
+
 	
-	public TransferenciaPix transferirPix(Cliente clienteOrigen, TransferenciaPixReqDto transferenciaPixAFazer) {
+	public TransferenciaPix transferirPix(Cliente clienteOrigen, Long idConta, TransferenciaPixReqDto transferenciaPixAFazer) {
 		var contaDestino = pixExiste(transferenciaPixAFazer.chavePix());
-		var transacao = iniciarTransacao(clienteOrigen, new TransferenciaReqDto(transferenciaPixAFazer.idContaOrigem(), contaDestino.getId(), transferenciaPixAFazer.valor()));
+		var transacao = iniciarTransacao(clienteOrigen, new TransferenciaReqDto(idConta, contaDestino.getId(), transferenciaPixAFazer.valor()));
 		var transferenciaPix = new TransferenciaPix(transacao.contaOrigem(), transacao.contaDestino(), transferenciaPixAFazer.valor());
 		transferenciaPix.setNomeOrigem(transacao.nomeOrigem());
 		transferenciaPix.setNomeDestino(transacao.nomeDestino());
@@ -122,12 +110,11 @@ public class ContaService {
 		}		
 	}
 
-	private TransacaoDto iniciarTransacao(Cliente clienteOrigem, TransferenciaReqDto transferenciaAFazer) {
+	private TransacaoDto iniciarTransacao(Cliente clienteOrigem, Long idConta, Transacao transferenciaAFazer) {
 		clienteService.clienteId(clienteOrigem.getId());
-		var contaOrigem = contaRepository.findByIdAndClienteId(transferenciaAFazer.idContaOrigem(), clienteOrigem.getId());
 		temConta(contaOrigem);
-		temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
-		var contaDestino = contaRepository.getReferenceById(transferenciaAFazer.idContaDestino());
+		temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.getValor());
+		var contaDestino = contaRepository.getReferenceById(transferenciaAFazer.getContaDestino().getId());
 		temConta(contaDestino);
 		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
 		var transacao = new TransacaoDto(contaOrigem, clienteOrigem.getNome(), contaDestino, clienteDestino.getNome());
@@ -149,7 +136,7 @@ public class ContaService {
 	}
 
 
-	private void temSaldo(BigDecimal saldo,BigDecimal valor) {
+	public void temSaldo(BigDecimal saldo,BigDecimal valor) {
 		var valorResto = saldo.subtract(valor);
 		if(valorResto.compareTo(BigDecimal.ZERO) < 0) {
 			throw new SaldoInsuficienteException();
@@ -163,7 +150,7 @@ public class ContaService {
 	}
 	
 
-	private Conta contaExiste(Long idContaDestino) {
+	public Conta buscarPorId(Long idContaDestino) {
 		var conta = contaRepository.getReferenceById(idContaDestino);
 		if(conta == null) {
 			throw new ContaNaoExisteException();
@@ -219,13 +206,14 @@ public class ContaService {
 		return contas;
 	}
 
+	public Conta pegarPorIdContaICliente(Long idConta, Long idCliente) {
+		var conta = contaRepository.findByIdAndClienteId(idConta, idCliente);
+		if(conta == null) {
+			throw new ContaNaoExisteException();
+		}	
+		return conta;
+	}
 
-
-
-
-
-
-	
 	
 	
 

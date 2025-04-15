@@ -38,17 +38,23 @@ public abstract class Transacao {
 	@JoinColumn(name = "conta_destino_id")
 	private Conta contaDestino;
 	private String nomeDestino;
+	@ManyToOne
+	@JoinColumn(name = "conta_origem_id")
+	private Conta contaOrigem;
+	private String nomeOrigem;
 	private BigDecimal valor;
 	private LocalDate data;
 	private LocalTime horario;
 
 
-	public Transacao(Conta contaDestino, BigDecimal valor) {
+	public Transacao(Conta contaDestino, Conta contaOrigem, BigDecimal valor) {
 		this.contaDestino = contaDestino;
 		this.valor = valor;
 		this.data = LocalDate.now();
 		this.horario = LocalTime.now();
-		contaDestino.creditar(valor);
+		contaDestino.creditar(valor);		
+		this.contaOrigem = contaOrigem;
+		contaOrigem.debitar(valor);
 		
 	}
 

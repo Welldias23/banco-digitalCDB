@@ -39,58 +39,65 @@ public class ContaController {
 	private CartaoService cartaoService;
 	
 
-	@PostMapping("/cadastrar")
-	public ResponseEntity<ContaResDto> cadastrar( @RequestBody ContaReqDto contaAAbrir, @AuthenticationPrincipal Cliente clienteLogado){
+	@PostMapping
+	public ResponseEntity<ContaResDto> cadastrar( @RequestBody ContaReqDto contaAAbrir, 
+			@AuthenticationPrincipal Cliente clienteLogado){
 		var conta = contaService.criarConta(clienteLogado.getId(), contaAAbrir);
 		cartaoService.criar(conta);
 		return ResponseEntity.ok(new ContaResDto(conta));	
 	}
 	
-	@PostMapping("/cadastrar/pix")
-	public ResponseEntity<ContaResDto> cadastrarPix(@RequestBody @Valid PixDto pix, @AuthenticationPrincipal Cliente clienteLogado){
+	@PostMapping("/pix")
+	public ResponseEntity<ContaResDto> cadastrarPix(@RequestBody @Valid PixDto pix, 
+			@AuthenticationPrincipal Cliente clienteLogado){
 		var conta = contaService.cadastrarPix(clienteLogado, pix);
 		
 		return ResponseEntity.ok(new ContaResDto(conta));
 	}
 	
 	@GetMapping("/{idConta}")
-	public ResponseEntity<ContaResDto> detalharUma(@PathVariable Long idConta, @AuthenticationPrincipal Cliente clienteLogado) {
+	public ResponseEntity<ContaResDto> detalharUma(@PathVariable Long idConta, 
+			@AuthenticationPrincipal Cliente clienteLogado) {
 		var conta = contaService.buscarUma(idConta, clienteLogado.getId());
 		return ResponseEntity.ok(new ContaResDto(conta));
 	}
 	
 	
-	@GetMapping
-	public ResponseEntity<List<ContaResDto>> detalharTodas(@AuthenticationPrincipal Cliente clienteLogado) {
-		var contas = contaService.buscarTodas(clienteLogado.getId());
-	    List<ContaResDto> contasDto = contas.stream().map(conta -> new ContaResDto(conta)).collect(Collectors.toList());
+	//@GetMapping
+	//public ResponseEntity<List<ContaResDto>> detalharTodas(@AuthenticationPrincipal Cliente clienteLogado) {
+		//var contas = contaService.buscarTodas(clienteLogado.getId());
+	    //List<ContaResDto> contasDto = contas.stream().map(conta -> new ContaResDto(conta)).collect(Collectors.toList());
 	    
-		return ResponseEntity.ok(contasDto);
-	}
+		//return ResponseEntity.ok(contasDto);
+	//}
 
-	@DeleteMapping("/{idConta}")
-	public ResponseEntity<ContaResDto> excluir(@PathVariable Long idConta) {
+	//@DeleteMapping("/{idConta}")
+	//public ResponseEntity<ContaResDto> excluir(@PathVariable Long idConta) {
 		
-		return null;
-	}
+		//return null;
+	//}
 	
 	@PostMapping("/deposito")
-	public ResponseEntity<DepositoResDto> depositar(@RequestBody @Valid DepositoReqDto deposito, @AuthenticationPrincipal Cliente clienteLogado){
+	public ResponseEntity<DepositoResDto> depositar(@RequestBody @Valid DepositoReqDto deposito, 
+			@AuthenticationPrincipal Cliente clienteLogado){
 		var depositoFeito = contaService.depositar(clienteLogado, deposito);
 		
 		return ResponseEntity.ok(new DepositoResDto(depositoFeito));
 	}
 	
 	@PostMapping("/transferencia")
-	public ResponseEntity<TransferenciaResDto> transferir(@RequestBody @Valid TransferenciaReqDto transferenciaAFazer, @AuthenticationPrincipal Cliente clienteLogado){
+	public ResponseEntity<TransferenciaResDto> transferir(@RequestBody @Valid TransferenciaReqDto transferenciaAFazer, 
+			@AuthenticationPrincipal Cliente clienteLogado){
 		var transferencia = contaService.transferir(clienteLogado, transferenciaAFazer);
 		
 		return ResponseEntity.ok(new TransferenciaResDto(transferencia));
 	}
 	
-	@PostMapping("/pix")
-	public ResponseEntity<TransferenciaResDto> pix(@RequestBody @Valid TransferenciaPixReqDto transferenciaPixAFazer, @AuthenticationPrincipal Cliente clienteLogado){
-		var transferenciaPix = contaService.transferirPix(clienteLogado, transferenciaPixAFazer);
+	@PostMapping("/{idConta}/pix")
+	public ResponseEntity<TransferenciaResDto> pix(@PathVariable Long idConta, 
+			@RequestBody @Valid TransferenciaPixReqDto transferenciaPixAFazer,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		var transferenciaPix = contaService.transferirPix(clienteLogado, idConta, transferenciaPixAFazer);
 		
 		return ResponseEntity.ok(new TransferenciaResDto(transferenciaPix));
 	}

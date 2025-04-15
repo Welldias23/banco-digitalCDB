@@ -50,16 +50,15 @@ public class CartaoController {
 	}
 	
 	@PutMapping("/{idCartao}/status ")
-	public ResponseEntity<CartaoCreditoResDto> alterarStatus(@PathVariable Long idCartao){
-		var cartao = cartaoService.alterarStatus(idCartao);
+	public ResponseEntity<Void> alterarStatus(@PathVariable Long idCartao){
+		cartaoService.alterarStatus(idCartao);
 		
-		return null;
-		//ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/{idCartao}/senha ")
 	public ResponseEntity<CartaoCreditoResDto> alterarSenha(@PathVariable Long idCartao, @RequestBody @Valid NovaSenhaDto senha){
-		var cartao = cartaoService.alterarSenha(idCartao, senha.novaSenha());
+		cartaoService.alterarSenha(idCartao, senha.novaSenha());
 		
 		return ResponseEntity.ok().build();
 	}

@@ -14,28 +14,14 @@ import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("transferencia")
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Transferencia extends Transacao{
 	
-	@ManyToOne
-	@JoinColumn(name = "conta_origem_id")
-	private Conta contaOrigem;
-	private String nomeOrigem;
-	
-	
 	public Transferencia(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
-		super(contaDestino, valor);
-		this.contaOrigem = contaOrigem;
-		contaOrigem.debitar(valor);
+		super(contaDestino, contaDestino, valor);
+
 	}
 
-
-	public Transferencia(Conta contaOrigem, BigDecimal valor) {
-		super(valor);
-		this.contaOrigem = contaOrigem;
-	}
 	
 }
