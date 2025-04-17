@@ -20,7 +20,7 @@ import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
 import com.well.banco_digital_CDBW.entity.Deposito;
-import com.well.banco_digital_CDBW.entity.Manuntencao;
+import com.well.banco_digital_CDBW.entity.TaxaManuntencao;
 import com.well.banco_digital_CDBW.entity.Transacao;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.entity.TransferenciaPix;
@@ -45,9 +45,9 @@ public class ContaService {
 	private ContaRepository contaRepository;
 	
 	
-	public Conta criarConta(Long id, ContaReqDto contaAbrir) {
+	public Conta criar(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
-		var conta = criar(cliente, contaAbrir);
+		var conta = tipar(cliente, contaAbrir);
 		conta.gerarNumeroConta(id);
 		contaRepository.save(conta);
 
@@ -66,13 +66,6 @@ public class ContaService {
 	}
 
 
-	public Conta buscarUma(Long idConta, Long id) {
-		clienteService.clienteId(id);
-		var conta = contaRepository.findByIdAndClienteId(idConta, id);
-		temConta(conta);
-		return conta;
-	}
-
 	public List<Conta> buscarTodas(Long id) {
 		var cliente = clienteService.clienteId(id);
 		var contas = cliente.getContas();
@@ -80,21 +73,8 @@ public class ContaService {
 	}
 	
 
-	
-	public TransferenciaPix transferirPix(Cliente clienteOrigen, Long idConta, TransferenciaPixReqDto transferenciaPixAFazer) {
-		var contaDestino = pixExiste(transferenciaPixAFazer.chavePix());
-		var transacao = iniciarTransacao(clienteOrigen, new TransferenciaReqDto(idConta, contaDestino.getId(), transferenciaPixAFazer.valor()));
-		var transferenciaPix = new TransferenciaPix(transacao.contaOrigem(), transacao.contaDestino(), transferenciaPixAFazer.valor());
-		transferenciaPix.setNomeOrigem(transacao.nomeOrigem());
-		transferenciaPix.setNomeDestino(transacao.nomeDestino());
-		contaRepository.save(transacao.contaDestino());
-		contaRepository.save(transacao.contaOrigem());
-		transacaoRepository.save(transferenciaPix);
-		
-		return transferenciaPix;
-	}
-	
-	private Conta pixExiste(String chavePix) {
+
+	public Conta buscarPorPix(String chavePix) {
 		var conta = contaRepository.getReferenceByChavePix(chavePix);
 		if(conta == null) {
 			throw new ChavePixNaoExisteException();
@@ -108,31 +88,6 @@ public class ContaService {
 		if(conta != null) {
 			throw new ChavePixJaExisteException();
 		}		
-	}
-
-	private TransacaoDto iniciarTransacao(Cliente clienteOrigem, Long idConta, Transacao transferenciaAFazer) {
-		clienteService.clienteId(clienteOrigem.getId());
-		temConta(contaOrigem);
-		temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.getValor());
-		var contaDestino = contaRepository.getReferenceById(transferenciaAFazer.getContaDestino().getId());
-		temConta(contaDestino);
-		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
-		var transacao = new TransacaoDto(contaOrigem, clienteOrigem.getNome(), contaDestino, clienteDestino.getNome());
-		
-		return transacao;
-	}
-
-	public Deposito depositar(Cliente clienteLogado, DepositoReqDto deposito) {
-		clienteService.clienteId(clienteLogado.getId());
-		var contaDestino = contaExiste(deposito.idContaDestino());
-		var clienteDestino = clienteService.clienteId(contaDestino.getCliente().getId());
-		var depositoEfetuado = new Deposito(contaDestino, deposito.valor());
-		depositoEfetuado.setNomeDestino(clienteDestino.getNome());
-		System.out.println(contaDestino.getSaldo());
-		contaRepository.save(contaDestino);
-		transacaoRepository.save(depositoEfetuado);
-		
-		return depositoEfetuado;
 	}
 
 
@@ -158,10 +113,9 @@ public class ContaService {
 		return conta;
 	}
 
-	private Conta criar(Cliente cliente, ContaReqDto contaAbrir) {
+	private Conta tipar(Cliente cliente, ContaReqDto contaAbrir) {
 		if(contaAbrir.tipoConta().toUpperCase().equals("CONTA CORRENTE")) {
 			var conta = new ContaCorrente(cliente);
-			//atribuirTaxaManutencao(cliente, conta);
 			
 			return conta;
 		}else if(contaAbrir.tipoConta().toUpperCase().equals("CONTA POUPANÇA")){
@@ -174,39 +128,13 @@ public class ContaService {
 		}
 	}
 
-	//	private void atribuirTaxaManutencao(Cliente cliente, ContaCorrente conta) {
-		//		if(cliente.getCategoria().equals(CategoriaCliente.COMUM)) {
-			//			conta.setTaxaManutencao(30.0);
-			//		} else if(cliente.getCategoria().equals(CategoriaCliente.PREMIUM)) {
-			//			conta.setTaxaManutencao(15.0);
-			//		} else if(cliente.getCategoria().equals(CategoriaCliente.SUPER)) {
-			//			conta.setTaxaManutencao(1.0);
-			//		} else {
-			//			throw new CriarContaException();
-			//		}
-		
-		//	}
-	
-	@Scheduled(cron = "${spring.task.scheduling.cron}")
-	public void manuntecao() {
-		var data = LocalDate.now();
-		var contas = buscarData(data.getDayOfMonth());
-		for (Conta conta : contas) {
-			if(conta.getClass() == ContaCorrente.class) {
-				var cliente = clienteService.clienteId(conta.getCliente().getId());
-				conta.debitar(cliente.getCategoria().getTaxaManuntencao());
-				transacaoRepository.save(new Manuntencao(conta, cliente.getCategoria().getTaxaManuntencao()));
-			}
-		}
-	}
 
-
-	public List<Conta> buscarData(int diaDoMes) {
+	public List<Conta> buscarPorData(int diaDoMes) {
 		var contas = contaRepository.findAllByDayMonth(diaDoMes);
 		return contas;
 	}
 
-	public Conta pegarPorIdContaICliente(Long idConta, Long idCliente) {
+	public Conta buscarPorIdContaIdCliente(Long idConta, Long idCliente) {
 		var conta = contaRepository.findByIdAndClienteId(idConta, idCliente);
 		if(conta == null) {
 			throw new ContaNaoExisteException();

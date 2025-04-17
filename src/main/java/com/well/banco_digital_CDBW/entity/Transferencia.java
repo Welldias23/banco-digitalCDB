@@ -19,9 +19,8 @@ import lombok.Setter;
 public class Transferencia extends Transacao{
 	
 	public Transferencia(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
-		super(contaDestino, contaDestino, valor);
+		super(contaOrigem, contaDestino, valor);
 
 	}
-
 	
 }

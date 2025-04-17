@@ -7,9 +7,9 @@ import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("taxa manuntecao")
-public class Manuntencao extends Transferencia{
+public class TaxaManuntencao extends Transacao{
 
-	public Manuntencao(Conta contaOrigem, BigDecimal valor) {
+	public TaxaManuntencao(Conta contaOrigem, BigDecimal valor) {
 		super(contaOrigem, valor);
 	}
 

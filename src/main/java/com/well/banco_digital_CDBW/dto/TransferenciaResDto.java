@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.well.banco_digital_CDBW.entity.Transferencia;
+import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 
 public record TransferenciaResDto(
 		String nomeOrigem,
@@ -16,5 +17,11 @@ public record TransferenciaResDto(
 	public TransferenciaResDto(Transferencia transferencia) {
 		this(transferencia.getNomeOrigem(), transferencia.getNomeDestino(), transferencia.getValor(), transferencia.getData(), transferencia.getHorario());
 	}
+
+	public TransferenciaResDto(TransferenciaPix transferenciaPix) {
+		this(transferenciaPix.getNomeOrigem(), transferenciaPix.getNomeDestino(), transferenciaPix.getValor(), transferenciaPix.getData(), transferenciaPix.getHorario());
+	}
+
+
 
 }

@@ -10,7 +10,7 @@ import com.well.banco_digital_CDBW.repository.ContaRepository;
 import com.well.banco_digital_CDBW.repository.TransacaoRepository;
 
 @Service
-public class TransacaoService {
+public class TransferenciaService {
 
 	@Autowired
 	private ClienteService clienteService;
@@ -26,12 +26,12 @@ public class TransacaoService {
 
 	public Transferencia transferir(Cliente clienteOrigem, Long idConta, TransferenciaReqDto transferenciaAFazer) {
 		clienteService.clienteId(clienteOrigem.getId());
-		var contaOrigem = contaService.pegarPorIdContaICliente(idConta, clienteOrigem.getId());
+		var contaOrigem = contaService.buscarPorIdContaIdCliente(idConta, clienteOrigem.getId());
 		contaService.temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
 		var contaDestino = contaService.buscarPorId(transferenciaAFazer.idContaDestino());  
 		
 		var transferencia = new Transferencia(contaOrigem, contaDestino, transferenciaAFazer.valor());
-
+		
 		transferencia.setNomeOrigem(contaOrigem.getCliente().getNome());
 		transferencia.setNomeDestino(contaDestino.getCliente().getNome());
 		contaRepository.save(contaDestino);

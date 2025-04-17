@@ -31,7 +31,7 @@ public class CartaoService {
 	private CriarNumeroCartao geraNumero; 
 
 	public CartaoCredito criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
-		var conta = contaService.buscarUma(idConta, cliente.getId());
+		var conta = contaService.buscarPorIdContaIdCliente(idConta, cliente.getId());
 		var numeroCartao = geraNumero.criarNumeroCartao(cartaoACriar.bandeira());
 		var cartao = new CartaoCredito(conta, cliente, cartaoACriar.senha(), numeroCartao); 
 		cartaoRepository.save(cartao);
@@ -44,7 +44,7 @@ public class CartaoService {
 		cartaoRepository.save(cartao);
 	}
 
-	public Cartao buscar(Long idCartao) {
+	public Cartao buscarPorId(Long idCartao) {
 		var cartao = cartaoRepository.getReferenceById(idCartao);
 		temCartao(cartao);
 		return cartao;
@@ -66,12 +66,7 @@ public class CartaoService {
 		return (CartaoCredito) cartao;
 	}
 
-	private void isCartaoCredito(Cartao cartao) {
-		if(cartao.getClass() != CartaoCredito.class) {
-			throw new CartaoNaoExisteException();
-		}
-		
-	}
+
 
 	public Cartao alterarStatus(Long idCartao) {
 		var cartao = cartaoRepository.getReferenceById(idCartao);
@@ -100,6 +95,13 @@ public class CartaoService {
 
 	private void isCartaoDebito(Cartao cartao) {
 		if(cartao.getClass() != CartaoDebito.class) {
+			throw new CartaoNaoExisteException();
+		}
+		
+	}
+	
+	private void isCartaoCredito(Cartao cartao) {
+		if(cartao.getClass() != CartaoCredito.class) {
 			throw new CartaoNaoExisteException();
 		}
 		

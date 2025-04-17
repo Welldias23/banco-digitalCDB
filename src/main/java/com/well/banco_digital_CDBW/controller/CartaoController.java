@@ -37,7 +37,7 @@ public class CartaoController {
 	
 	@GetMapping("/{idCartao}")
 	public ResponseEntity<CartaoCreditoResDto> buscar(@PathVariable Long idCartao){
-		var cartao = cartaoService.buscar(idCartao);
+		var cartao = cartaoService.buscarPorId(idCartao);
 		return null;
 				//ResponseEntity.ok(new CartaoResDto(cartao));
 	}
