@@ -31,7 +31,9 @@ public class ManutencaoService {
 			if(conta.getClass() == ContaCorrente.class) {
 				var cliente = clienteService.clienteId(conta.getCliente().getId());
 				conta.debitar(cliente.getCategoria().getTaxaManuntencao());
-				transacaoRepository.save(new TaxaManuntencao(conta, cliente.getCategoria().getTaxaManuntencao()));
+				var manutencao = new TaxaManuntencao(conta, cliente.getCategoria().getTaxaManuntencao());
+				manutencao.aplicar();
+				transacaoRepository.save(manutencao);
 			}
 		}
 	}

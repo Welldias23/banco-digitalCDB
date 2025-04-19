@@ -15,9 +15,6 @@ import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.repository.CartaoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 @Service
 public class CartaoService {
 	

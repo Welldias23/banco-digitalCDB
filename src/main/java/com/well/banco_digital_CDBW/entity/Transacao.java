@@ -47,11 +47,10 @@ public abstract class Transacao {
 	private LocalTime horario;
 
 
+	
 	public Transacao(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
 		this.contaOrigem = contaOrigem;
-		contaOrigem.debitar(valor);
 		this.contaDestino = contaDestino;	
-		contaDestino.creditar(valor);
 		this.valor = valor;
 		this.data = LocalDate.now();
 		this.horario = LocalTime.now();
@@ -59,20 +58,7 @@ public abstract class Transacao {
 	}
 
 
-	public Transacao(BigDecimal valor) {
-		this.valor = valor;
-		this.data = LocalDate.now();
-		this.horario = LocalTime.now();
-	}
-
-	
-	public Transacao(Conta contaDestino, BigDecimal valor) {
-		this.contaDestino = contaDestino;
-		contaDestino.creditar(valor);
-		this.valor = valor;
-		this.data = LocalDate.now();
-		this.horario = LocalTime.now();
-	}
+    public abstract void aplicar();
 
 
 }

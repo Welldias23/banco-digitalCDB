@@ -1,38 +1,23 @@
 package com.well.banco_digital_CDBW.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
-import com.well.banco_digital_CDBW.dto.DepositoReqDto;
 import com.well.banco_digital_CDBW.dto.PixDto;
-import com.well.banco_digital_CDBW.dto.TransacaoDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
-import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
 import com.well.banco_digital_CDBW.entity.ContaPoupanca;
-import com.well.banco_digital_CDBW.entity.Deposito;
-import com.well.banco_digital_CDBW.entity.TaxaManuntencao;
-import com.well.banco_digital_CDBW.entity.Transacao;
-import com.well.banco_digital_CDBW.entity.Transferencia;
-import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 import com.well.banco_digital_CDBW.exception.ChavePixJaExisteException;
 import com.well.banco_digital_CDBW.exception.ChavePixNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
 import com.well.banco_digital_CDBW.repository.ContaRepository;
-import com.well.banco_digital_CDBW.repository.TransacaoRepository;
-
-import jakarta.validation.constraints.NotNull;
 
 @Service
 public class ContaService {

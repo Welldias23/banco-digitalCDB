@@ -1,12 +1,9 @@
 package com.well.banco_digital_CDBW.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.well.banco_digital_CDBW.dto.ContaReqDto;
 import com.well.banco_digital_CDBW.dto.ContaResDto;
-import com.well.banco_digital_CDBW.dto.DepositoReqDto;
-import com.well.banco_digital_CDBW.dto.DepositoResDto;
 import com.well.banco_digital_CDBW.dto.PixDto;
 import com.well.banco_digital_CDBW.dto.SaldoDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.service.CartaoService;
 import com.well.banco_digital_CDBW.service.ContaService;

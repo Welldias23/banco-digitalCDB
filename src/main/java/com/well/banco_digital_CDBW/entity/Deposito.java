@@ -15,7 +15,13 @@ import lombok.Setter;
 public class Deposito extends Transacao{
 	
 	public Deposito(Conta contaDestino, BigDecimal valor) {
-		super(contaDestino, valor);
+		super(null, contaDestino, valor);
+	}
+
+	@Override
+	public void aplicar() {
+		getContaDestino().creditar(getValor());
+		
 	}
 
 }

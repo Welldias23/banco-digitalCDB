@@ -28,10 +28,9 @@ public class TransferenciaService {
 		clienteService.clienteId(clienteOrigem.getId());
 		var contaOrigem = contaService.buscarPorIdContaIdCliente(idConta, clienteOrigem.getId());
 		contaService.temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
-		var contaDestino = contaService.buscarPorId(transferenciaAFazer.idContaDestino());  
-		
+		var contaDestino = contaService.buscarPorId(transferenciaAFazer.idContaDestino());  		
 		var transferencia = new Transferencia(contaOrigem, contaDestino, transferenciaAFazer.valor());
-		
+		transferencia.aplicar();		
 		transferencia.setNomeOrigem(contaOrigem.getCliente().getNome());
 		transferencia.setNomeDestino(contaDestino.getCliente().getNome());
 		contaRepository.save(contaDestino);

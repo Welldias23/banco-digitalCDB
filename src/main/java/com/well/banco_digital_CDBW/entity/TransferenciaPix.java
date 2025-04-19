@@ -16,4 +16,11 @@ public class TransferenciaPix extends Transacao{
 	public TransferenciaPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
 		super(contaOrigem, contaDestino, valor);
 	}
+
+	@Override
+	public void aplicar() {
+		getContaDestino().creditar(getValor());
+		getContaOrigem().debitar(getValor());
+		
+	}
 }
