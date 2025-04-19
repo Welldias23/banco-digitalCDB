@@ -19,6 +19,7 @@ import com.well.banco_digital_CDBW.dto.ContaResDto;
 import com.well.banco_digital_CDBW.dto.DepositoReqDto;
 import com.well.banco_digital_CDBW.dto.DepositoResDto;
 import com.well.banco_digital_CDBW.dto.PixDto;
+import com.well.banco_digital_CDBW.dto.SaldoDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
@@ -60,6 +61,14 @@ public class ContaController {
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		var conta = contaService.buscarPorIdContaIdCliente(idConta, clienteLogado.getId());
 		return ResponseEntity.ok(new ContaResDto(conta));
+	}
+	
+	@GetMapping("/saldo/{idConta}")
+	public ResponseEntity<SaldoDto> consultarSaldo(@PathVariable Long idConta, 
+			@AuthenticationPrincipal Cliente clienteLogado) {
+		var saldo = contaService.buscarSaldo(idConta, clienteLogado.getId());
+		
+		return ResponseEntity.ok(new SaldoDto(saldo));
 	}
 	
 	

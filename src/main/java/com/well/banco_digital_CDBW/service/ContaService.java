@@ -98,8 +98,8 @@ public class ContaService {
 		}
 	}
 
-	private void temConta(Conta contaOrigem) {
-		if(contaOrigem == null) {
+	private void temConta(Conta conta) {
+		if(conta == null) {
 			throw new ContaNaoExisteException();
 		}		
 	}
@@ -107,9 +107,7 @@ public class ContaService {
 
 	public Conta buscarPorId(Long idContaDestino) {
 		var conta = contaRepository.getReferenceById(idContaDestino);
-		if(conta == null) {
-			throw new ContaNaoExisteException();
-		}	
+		temConta(conta);
 		return conta;
 	}
 
@@ -136,10 +134,16 @@ public class ContaService {
 
 	public Conta buscarPorIdContaIdCliente(Long idConta, Long idCliente) {
 		var conta = contaRepository.findByIdAndClienteId(idConta, idCliente);
-		if(conta == null) {
-			throw new ContaNaoExisteException();
-		}	
+		temConta(conta);	
 		return conta;
+	}
+
+	public BigDecimal buscarSaldo(Long idConta, Long idCliente) {
+		var conta = contaRepository.findByIdAndClienteId(idConta, idCliente);
+		temConta(conta);
+		var saldo = conta.getSaldo();
+		
+		return saldo;
 	}
 
 	
