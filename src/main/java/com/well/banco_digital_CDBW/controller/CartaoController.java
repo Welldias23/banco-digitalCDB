@@ -78,10 +78,12 @@ public class CartaoController {
 	}
 	
 	@PutMapping("/{idCartao}/limite-diario")
-	public ResponseEntity<CartaoResDto> alterarLimiteDiario(@PathVariable Long idCartao, @RequestBody @Valid NovoLimiteDto limite){
-		var cartao = cartaoService.alterarLimiteDiario(idCartao, limite.novoLimite());
+	public ResponseEntity<Void> alterarLimiteDiario(@PathVariable Long idCartao, 
+			@AuthenticationPrincipal Cliente clienteLogado,
+			@RequestBody @Valid NovoLimiteDto limite){
+		cartaoService.alterarLimiteDiario(idCartao, clienteLogado, limite.novoLimite());
 		
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok().build();
 	}
 	
 

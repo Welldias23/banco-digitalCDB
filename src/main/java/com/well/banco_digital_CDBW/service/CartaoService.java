@@ -120,8 +120,10 @@ public class CartaoService {
 		return cartao;
 	}
 
-	public CartaoDebito alterarLimiteDiario(Long idCartao, BigDecimal novoLimite) {
+	public CartaoDebito alterarLimiteDiario(Long idCartao, Cliente clienteLogado, BigDecimal novoLimite) {
+		clienteService.clienteId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
+		cartaoPertenceCliente(cartao, clienteLogado);
 		isCartaoDebito(cartao);
 		((CartaoDebito) cartao).alterarLimiteDiario(novoLimite);
 		
