@@ -52,8 +52,8 @@ public abstract class Cartao {
 		}
 	}
 
-	public void mudarSenha(String senha2) {
-		this.senha = senha2;
+	public void mudarSenha(String senha) {
+		this.senha = senha;
 		
 	}
 
