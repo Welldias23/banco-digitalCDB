@@ -43,14 +43,6 @@ public abstract class Cartao {
 	@OneToMany(mappedBy = "cartao")
 	private List<Compra> compras;
 	
-	
-	public void mudarStatus() {
-		if(ativo) {
-			ativo = false; 
-		}else {
-			ativo = true;
-		}
-	}
 
 	public void mudarSenha(String senha) {
 		this.senha = senha;
@@ -74,5 +66,14 @@ public abstract class Cartao {
 		this.conta = (Conta) conta;
 	}
 
+	public void ativarStatus() {
+		this.ativo = true;
+		
+	}
+
+	public void desativarStatus() {
+		this.ativo = false;
+		
+	}
 
 }

@@ -52,9 +52,18 @@ public class CartaoController {
 		return ResponseEntity.ok(cartao);
 	}
 	
-	@PutMapping("/{idCartao}/status ")
-	public ResponseEntity<Void> alterarStatus(@PathVariable Long idCartao){
-		cartaoService.alterarStatus(idCartao);
+	@PutMapping("/{idCartao}/ativar")
+	public ResponseEntity<Void> ativarStatus(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		cartaoService.ativarStatus(idCartao, clienteLogado);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{idCartao}/desativar")
+	public ResponseEntity<Void> desativarStatus(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		cartaoService.desativarStatus(idCartao, clienteLogado);
 		
 		return ResponseEntity.ok().build();
 	}

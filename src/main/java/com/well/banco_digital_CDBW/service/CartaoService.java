@@ -93,12 +93,23 @@ public class CartaoService {
 
 
 
-	public Cartao alterarStatus(Long idCartao) {
+	public Cartao ativarStatus(Long idCartao, Cliente clienteLogado) {
+		clienteService.clienteId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
-		cartao.mudarStatus();
-		
+		cartaoPertenceCliente(cartao, clienteLogado);
+		cartao.ativarStatus();
+		cartaoRepository.save(cartao);
 		return cartao;
 	}
+	
+	public Cartao desativarStatus(Long idCartao, Cliente clienteLogado) {
+		clienteService.clienteId(clienteLogado.getId());
+		var cartao = buscarPorId(idCartao);
+		cartaoPertenceCliente(cartao, clienteLogado);
+		cartao.desativarStatus();
+		cartaoRepository.save(cartao);		
+		return cartao;
+	}	
 
 	public Cartao alterarSenha(Long idCartao, String senha) {
 		var cartao = buscarPorId(idCartao);
