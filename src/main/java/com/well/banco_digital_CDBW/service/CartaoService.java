@@ -2,10 +2,12 @@ package com.well.banco_digital_CDBW.service;
 
 import java.math.BigDecimal;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.CartaoReqDto;
+import com.well.banco_digital_CDBW.dto.CartaoResDto;
 import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
@@ -18,11 +20,16 @@ import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 @Service
 public class CartaoService {
 	
+	private static final Cartao CartaoDebito = null;
+
 	@Autowired
 	private ContaService contaService;
 	
 	@Autowired
 	private CartaoRepository cartaoRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 	
 	@Autowired
 	private CriarNumeroCartao geraNumero; 
@@ -41,10 +48,35 @@ public class CartaoService {
 		cartaoRepository.save(cartao);
 	}
 
-	public Cartao buscarPorId(Long idCartao) {
-		var cartao = cartaoRepository.getReferenceById(idCartao);
-		temCartao(cartao);
+	public CartaoResDto detalhar(Long idCartao, Cliente clienteLogado) {
+		clienteService.clienteId(clienteLogado.getId());	
+		var cartao = buscarPorId(idCartao);
+		cartaoPertenceCliente(cartao, clienteLogado);		
+		var tipoCartao = tipoDoCartao(cartao);
+		return tipoCartao;
+	}
+
+
+	private void cartaoPertenceCliente(Cartao cartao, Cliente clienteLogado) {
+		var conta = contaService.buscarPorIdContaIdCliente(cartao.getConta().getId(), clienteLogado.getId());
+		if (conta == null) {
+			throw new CartaoNaoExisteException();
+		}
+	}
+
+	private Cartao buscarPorId(Long idCartao) {
+		var cartao = cartaoRepository.findById(idCartao).orElseThrow(() -> new CartaoNaoExisteException());
 		return cartao;
+	}
+
+	private CartaoResDto tipoDoCartao(Cartao cartao) {
+		Cartao cartaoDesproxiado = (Cartao) Hibernate.unproxy(cartao);
+		if(cartaoDesproxiado.getClass() == CartaoDebito.class) {
+			var cartaoDebito = (CartaoDebito) cartaoDesproxiado;
+			return new CartaoResDto(cartaoDebito);
+		}
+		var cartaoCredito = (CartaoCredito) cartaoDesproxiado;
+		return new CartaoResDto(cartaoCredito); 		
 	}
 
 	private void temCartao(Cartao cartao) {

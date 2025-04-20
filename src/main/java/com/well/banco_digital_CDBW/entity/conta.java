@@ -59,9 +59,8 @@ public abstract class Conta {
 		
 	}
 
-	public void gerarNumeroConta(Long id) {
-		this.numeroConta = id + 5613;
-	}
+	
+	public abstract void gerarNumeroConta();
 
 	public void debitar(BigDecimal valor) {
 		this.saldo = saldo.subtract(valor);

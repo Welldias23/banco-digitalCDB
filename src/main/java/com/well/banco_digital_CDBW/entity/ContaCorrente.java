@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContaCorrente extends Conta{
-	//private Double taxaManutencao;
 	
 	public ContaCorrente() {
 	    super(); 
@@ -18,6 +17,13 @@ public class ContaCorrente extends Conta{
 	
 	public ContaCorrente(Cliente cliente) {
 		super(cliente);
+	}
+
+	@Override
+	public void gerarNumeroConta() {
+		getNumeroConta();
+		Long.sum(4011, getId());
+		
 	}
 
 }
