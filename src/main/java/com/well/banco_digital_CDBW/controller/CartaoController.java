@@ -68,9 +68,11 @@ public class CartaoController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PutMapping("/{idCartao}/senha ")
-	public ResponseEntity<CartaoResDto> alterarSenha(@PathVariable Long idCartao, @RequestBody @Valid NovaSenhaDto senha){
-		cartaoService.alterarSenha(idCartao, senha.novaSenha());
+	@PutMapping("/{idCartao}/senha")
+	public ResponseEntity<Void> alterarSenha(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado,
+			@RequestBody @Valid NovaSenhaDto senha){
+		cartaoService.alterarSenha(idCartao, clienteLogado, senha.novaSenha());
 		
 		return ResponseEntity.ok().build();
 	}

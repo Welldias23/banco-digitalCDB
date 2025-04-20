@@ -111,10 +111,12 @@ public class CartaoService {
 		return cartao;
 	}	
 
-	public Cartao alterarSenha(Long idCartao, String senha) {
+	public Cartao alterarSenha(Long idCartao, Cliente clienteLogado, String senha) {
+		clienteService.clienteId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
+		cartaoPertenceCliente(cartao, clienteLogado);
 		cartao.mudarSenha(senha);
-		
+		cartaoRepository.save(cartao);
 		return cartao;
 	}
 
