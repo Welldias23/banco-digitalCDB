@@ -29,9 +29,11 @@ public class CartaoController {
 	private CartaoService cartaoService; 
 	
 	@PostMapping("/{idConta}/emitir")
-	public ResponseEntity<CartaoResDto> criarCartaoCredito(@RequestBody CartaoReqDto cartaoACriar, @PathVariable Long idConta, @AuthenticationPrincipal Cliente cliente){
+	public ResponseEntity<CartaoResDto> criarCartaoCredito(@RequestBody CartaoReqDto cartaoACriar, 
+			@PathVariable Long idConta, 
+			@AuthenticationPrincipal Cliente cliente){
 		var cartao = cartaoService.criar(cliente, idConta, cartaoACriar);
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok(cartao);
 	}
 	
 	@GetMapping("/{idCartao}")
@@ -42,10 +44,12 @@ public class CartaoController {
 	}
 	
 	@PutMapping("/{idCartao}/limite")
-	public ResponseEntity<CartaoResDto> alterarLimiteCredito(@PathVariable Long idCartao, @RequestBody @Valid NovoLimiteDto limite){
-		var cartao = cartaoService.alterarLimiteCredito(idCartao, limite.novoLimite());
+	public ResponseEntity<CartaoResDto> alterarLimiteCredito(@PathVariable Long idCartao, 
+			@RequestBody @Valid NovoLimiteDto limite, 
+			@AuthenticationPrincipal Cliente clienteLogado){
+		var cartao = cartaoService.alterarLimiteCredito(idCartao, clienteLogado, limite.novoLimite());
 		
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok(cartao);
 	}
 	
 	@PutMapping("/{idCartao}/status ")

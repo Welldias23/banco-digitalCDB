@@ -34,12 +34,12 @@ public class CartaoService {
 	@Autowired
 	private CriarNumeroCartao geraNumero; 
 
-	public CartaoCredito criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
+	public CartaoResDto criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
 		var conta = contaService.buscarPorIdContaIdCliente(idConta, cliente.getId());
 		var numeroCartao = geraNumero.criarNumeroCartao(cartaoACriar.bandeira());
 		var cartao = new CartaoCredito(conta, cliente, cartaoACriar.senha(), numeroCartao); 
 		cartaoRepository.save(cartao);
-		return cartao;
+		return new CartaoResDto(cartao);
 	}
 
 	public void criar(Conta conta) {
@@ -79,43 +79,36 @@ public class CartaoService {
 		return new CartaoResDto(cartaoCredito); 		
 	}
 
-	private void temCartao(Cartao cartao) {
-		if(cartao == null) {
-			throw new CartaoNaoExisteException();
-		}
-		
-	}
 
-	public CartaoCredito alterarLimiteCredito(Long idCartao, BigDecimal limite) {
-		var cartao = cartaoRepository.getReferenceById(idCartao);
-		temCartao(cartao);
+	public CartaoResDto alterarLimiteCredito(Long idCartao, Cliente clienteLogado, BigDecimal limite) {
+		clienteService.clienteId(clienteLogado.getId());
+		var cartao = buscarPorId(idCartao);
 		isCartaoCredito(cartao);
+		cartaoPertenceCliente(cartao, clienteLogado);
 		((CartaoCredito) cartao).alterarLimite(limite);
-		
-		return (CartaoCredito) cartao;
+		var cc = (CartaoCredito) cartao;
+		cartaoRepository.save(cc);
+		return new CartaoResDto(cc);
 	}
 
 
 
 	public Cartao alterarStatus(Long idCartao) {
-		var cartao = cartaoRepository.getReferenceById(idCartao);
-		temCartao(cartao);
+		var cartao = buscarPorId(idCartao);
 		cartao.mudarStatus();
 		
 		return cartao;
 	}
 
 	public Cartao alterarSenha(Long idCartao, String senha) {
-		var cartao = cartaoRepository.getReferenceById(idCartao);
-		temCartao(cartao);
+		var cartao = buscarPorId(idCartao);
 		cartao.mudarSenha(senha);
 		
 		return cartao;
 	}
 
 	public CartaoDebito alterarLimiteDiario(Long idCartao, BigDecimal novoLimite) {
-		var cartao = cartaoRepository.getReferenceById(idCartao);
-		temCartao(cartao);
+		var cartao = buscarPorId(idCartao);
 		isCartaoDebito(cartao);
 		((CartaoDebito) cartao).alterarLimiteDiario(novoLimite);
 		
