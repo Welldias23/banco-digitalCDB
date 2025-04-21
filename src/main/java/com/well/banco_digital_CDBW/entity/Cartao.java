@@ -41,7 +41,7 @@ public abstract class Cartao {
 	@ManyToOne
 	private Conta conta;
 	@OneToMany(mappedBy = "cartao")
-	private List<Compra> compras;
+	private List<Pagamento> compras;
 	
 
 	public void mudarSenha(String senha) {
