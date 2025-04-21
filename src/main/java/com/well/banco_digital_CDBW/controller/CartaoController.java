@@ -29,9 +29,11 @@ public class CartaoController {
 	private CartaoService cartaoService; 
 	
 	@PostMapping("/{idConta}/emitir")
-	public ResponseEntity<CartaoResDto> criarCartaoCredito(@RequestBody CartaoReqDto cartaoACriar, @PathVariable Long idConta, @AuthenticationPrincipal Cliente cliente){
+	public ResponseEntity<CartaoResDto> criarCartaoCredito(@RequestBody CartaoReqDto cartaoACriar, 
+			@PathVariable Long idConta, 
+			@AuthenticationPrincipal Cliente cliente){
 		var cartao = cartaoService.criar(cliente, idConta, cartaoACriar);
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok(cartao);
 	}
 	
 	@GetMapping("/{idCartao}")
@@ -42,31 +44,46 @@ public class CartaoController {
 	}
 	
 	@PutMapping("/{idCartao}/limite")
-	public ResponseEntity<CartaoResDto> alterarLimiteCredito(@PathVariable Long idCartao, @RequestBody @Valid NovoLimiteDto limite){
-		var cartao = cartaoService.alterarLimiteCredito(idCartao, limite.novoLimite());
+	public ResponseEntity<CartaoResDto> alterarLimiteCredito(@PathVariable Long idCartao, 
+			@RequestBody @Valid NovoLimiteDto limite, 
+			@AuthenticationPrincipal Cliente clienteLogado){
+		var cartao = cartaoService.alterarLimiteCredito(idCartao, clienteLogado, limite.novoLimite());
 		
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok(cartao);
 	}
 	
-	@PutMapping("/{idCartao}/status ")
-	public ResponseEntity<Void> alterarStatus(@PathVariable Long idCartao){
-		cartaoService.alterarStatus(idCartao);
+	@PutMapping("/{idCartao}/ativar")
+	public ResponseEntity<Void> ativarStatus(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		cartaoService.ativarStatus(idCartao, clienteLogado);
 		
 		return ResponseEntity.ok().build();
 	}
 	
-	@PutMapping("/{idCartao}/senha ")
-	public ResponseEntity<CartaoResDto> alterarSenha(@PathVariable Long idCartao, @RequestBody @Valid NovaSenhaDto senha){
-		cartaoService.alterarSenha(idCartao, senha.novaSenha());
+	@PutMapping("/{idCartao}/desativar")
+	public ResponseEntity<Void> desativarStatus(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		cartaoService.desativarStatus(idCartao, clienteLogado);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{idCartao}/senha")
+	public ResponseEntity<Void> alterarSenha(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado,
+			@RequestBody @Valid NovaSenhaDto senha){
+		cartaoService.alterarSenha(idCartao, clienteLogado, senha.novaSenha());
 		
 		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/{idCartao}/limite-diario")
-	public ResponseEntity<CartaoResDto> alterarLimiteDiario(@PathVariable Long idCartao, @RequestBody @Valid NovoLimiteDto limite){
-		var cartao = cartaoService.alterarLimiteDiario(idCartao, limite.novoLimite());
+	public ResponseEntity<Void> alterarLimiteDiario(@PathVariable Long idCartao, 
+			@AuthenticationPrincipal Cliente clienteLogado,
+			@RequestBody @Valid NovoLimiteDto limite){
+		cartaoService.alterarLimiteDiario(idCartao, clienteLogado, limite.novoLimite());
 		
-		return ResponseEntity.ok(new CartaoResDto(cartao));
+		return ResponseEntity.ok().build();
 	}
 	
 
