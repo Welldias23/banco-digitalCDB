@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.CartaoReqDto;
 import com.well.banco_digital_CDBW.dto.CartaoResDto;
 import com.well.banco_digital_CDBW.dto.FaturaDto;
+import com.well.banco_digital_CDBW.dto.FaturaPaga;
 import com.well.banco_digital_CDBW.dto.NovaSenhaDto;
 import com.well.banco_digital_CDBW.dto.NovoLimiteDto;
+import com.well.banco_digital_CDBW.dto.PagamentoFatura;
 import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
 import com.well.banco_digital_CDBW.dto.PagamentoResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
@@ -94,6 +96,15 @@ public class CartaoController {
 			@AuthenticationPrincipal Cliente clienteLogado){
 		var fatuta = cartaoService.consultarFatura(idCartao, clienteLogado);
 		return ResponseEntity.ok(fatuta);
+	}
+	
+	@PostMapping("/{idCartao}/fatura/pagamento")
+	public ResponseEntity<FaturaPaga> pagarFatura(@PathVariable Long idCartao,
+			@AuthenticationPrincipal Cliente clienteLogado,
+			@RequestBody PagamentoFatura pagamentoFatura){
+		var faturaPaga = cartaoService.pagarFatura(idCartao, clienteLogado, pagamentoFatura);
+		
+		return ResponseEntity.ok(faturaPaga);
 	}
 
 }

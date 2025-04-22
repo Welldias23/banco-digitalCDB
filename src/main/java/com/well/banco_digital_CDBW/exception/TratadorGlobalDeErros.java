@@ -189,6 +189,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(ValorMaiorQueFatura.class)
+	public ProblemDetail tratadorValorMaiorQueFatura(ValorMaiorQueFatura ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O valor inviado é maior que o valor da fatura.");
+		problemDetail.setDetail("Envie um valor igual ou menor que o da fatura.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 
