@@ -1,9 +1,11 @@
 package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,8 @@ import lombok.Setter;
 public class CartaoDebito extends Cartao{
 
 	private BigDecimal limiteDiario;
+	@OneToMany(mappedBy = "cartao")
+	private List<PagamentoDebito> compras;
 	
 
 	public CartaoDebito(Conta conta, String numeroCartao) {

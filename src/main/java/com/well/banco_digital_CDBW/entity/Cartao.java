@@ -40,8 +40,6 @@ public abstract class Cartao {
 	private Boolean ativo;
 	@ManyToOne
 	private Conta conta;
-	@OneToMany(mappedBy = "cartao")
-	private List<Compra> compras;
 	
 
 	public void mudarSenha(String senha) {

@@ -33,7 +33,7 @@ public class ContaService {
 	public Conta criar(Long id, ContaReqDto contaAbrir) {
 		var cliente = clienteService.clienteId(id);
 		var conta = tipar(cliente, contaAbrir);
-		conta.gerarNumeroConta(id);
+		conta.gerarNumeroConta();
 		contaRepository.save(conta);
 
 		return conta;
@@ -129,6 +129,10 @@ public class ContaService {
 		var saldo = conta.getSaldo();
 		
 		return saldo;
+	}
+
+	public void atualizarSaldo(Conta conta) {
+		contaRepository.save(conta);		
 	}
 
 	

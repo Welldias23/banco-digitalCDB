@@ -15,6 +15,8 @@ import com.well.banco_digital_CDBW.dto.CartaoReqDto;
 import com.well.banco_digital_CDBW.dto.CartaoResDto;
 import com.well.banco_digital_CDBW.dto.NovaSenhaDto;
 import com.well.banco_digital_CDBW.dto.NovoLimiteDto;
+import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
+import com.well.banco_digital_CDBW.dto.PagamentoResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.service.CartaoService;
 
@@ -85,6 +87,6 @@ public class CartaoController {
 		
 		return ResponseEntity.ok().build();
 	}
-	
+
 
 }

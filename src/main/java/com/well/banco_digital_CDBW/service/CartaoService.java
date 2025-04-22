@@ -14,8 +14,11 @@ import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
+import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
 import com.well.banco_digital_CDBW.repository.CartaoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
+
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class CartaoService {
@@ -52,30 +55,30 @@ public class CartaoService {
 		clienteService.clienteId(clienteLogado.getId());	
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);		
-		var tipoCartao = tipoDoCartao(cartao);
+		var tipoCartao = verificarTipoDoCartao(cartao);
 		return tipoCartao;
 	}
 
 
-	private void cartaoPertenceCliente(Cartao cartao, Cliente clienteLogado) {
+	public void cartaoPertenceCliente(Cartao cartao, Cliente clienteLogado) {
 		var conta = contaService.buscarPorIdContaIdCliente(cartao.getConta().getId(), clienteLogado.getId());
 		if (conta == null) {
 			throw new CartaoNaoExisteException();
 		}
 	}
 
-	private Cartao buscarPorId(Long idCartao) {
+	public Cartao buscarPorId(Long idCartao) {
 		var cartao = cartaoRepository.findById(idCartao).orElseThrow(() -> new CartaoNaoExisteException());
 		return cartao;
 	}
 
-	private CartaoResDto tipoDoCartao(Cartao cartao) {
-		Cartao cartaoDesproxiado = (Cartao) Hibernate.unproxy(cartao);
-		if(cartaoDesproxiado.getClass() == CartaoDebito.class) {
-			var cartaoDebito = (CartaoDebito) cartaoDesproxiado;
+	private CartaoResDto verificarTipoDoCartao(Cartao cartao) {
+		cartao = (Cartao) Hibernate.unproxy(cartao);
+		if(cartao.getClass() == CartaoDebito.class) {
+			var cartaoDebito = (CartaoDebito) cartao;
 			return new CartaoResDto(cartaoDebito);
 		}
-		var cartaoCredito = (CartaoCredito) cartaoDesproxiado;
+		var cartaoCredito = (CartaoCredito) cartao;
 		return new CartaoResDto(cartaoCredito); 		
 	}
 
@@ -142,6 +145,17 @@ public class CartaoService {
 			throw new CartaoNaoExisteException();
 		}
 		
+	}
+
+	public void limiteESuficiente(CartaoCredito cartao, BigDecimal valor) {
+		var resto = cartao.getLimiteCredito().subtract(valor);
+		if (resto.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new LimiteDeCreditoInsuficiente();
+		}
+	}
+
+	public void atualizarLimite(Cartao cartao) {
+		cartaoRepository.save(cartao);		
 	}
 
 

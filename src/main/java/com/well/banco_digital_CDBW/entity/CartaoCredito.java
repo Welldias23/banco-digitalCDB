@@ -1,11 +1,13 @@
 package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.well.banco_digital_CDBW.exception.CategoriaNaoExisteException;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +23,13 @@ public class CartaoCredito extends Cartao{
 
 	private BigDecimal taxaAnuidade;
 	private BigDecimal limiteCredito;
+	@OneToMany(mappedBy = "cartao")
+	private List<PagamentoCredito> fatura;
 	
 	
 	public CartaoCredito(Conta conta, Cliente cliente, String senha, String numeroCartao) {
 		super(conta, senha, numeroCartao);
+		//tirar essa regra do construtor
 		this.taxaAnuidade = new BigDecimal("150.00");
 		if(cliente.getCategoria() == CategoriaCliente.COMUM) {
 			this.limiteCredito = new BigDecimal("1000.00");
@@ -43,6 +48,11 @@ public class CartaoCredito extends Cartao{
 		//colocar a logica 
 		this.limiteCredito = limite;
 		
+	}
+
+
+	public void debitarNoLimite(BigDecimal valor) {
+		this.limiteCredito = limiteCredito.subtract(valor);
 	}
 	
 }

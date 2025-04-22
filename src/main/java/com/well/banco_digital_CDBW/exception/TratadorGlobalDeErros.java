@@ -168,6 +168,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(LimiteDeCreditoInsuficiente.class)
+	public ProblemDetail tratadorLimiteDeCreditoInsuficiente(LimiteDeCreditoInsuficiente ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O cartap nao possui uma limite suficiente.");
+		problemDetail.setDetail("Libere limite pagando a sua fatura.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	
 	@ExceptionHandler(CartaoNaoExisteException.class)
 	public ProblemDetail tratadorCartaoNaoExisteException(CartaoNaoExisteException ex) {
