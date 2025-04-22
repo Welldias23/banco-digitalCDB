@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.CartaoReqDto;
 import com.well.banco_digital_CDBW.dto.CartaoResDto;
+import com.well.banco_digital_CDBW.dto.FaturaDto;
 import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
@@ -156,6 +157,14 @@ public class CartaoService {
 
 	public void atualizarLimite(Cartao cartao) {
 		cartaoRepository.save(cartao);		
+	}
+
+	public FaturaDto consultarFatura(Long idCartao, Cliente clienteLogado) {
+		clienteService.clienteId(clienteLogado.getId());
+		var cartao =(CartaoCredito)  buscarPorId(idCartao);
+		cartaoPertenceCliente(cartao, clienteLogado);
+		var valorFatura =cartao.calcularFatura();
+		return new FaturaDto(valorFatura, cartao.getFatura());
 	}
 
 

@@ -55,4 +55,10 @@ public class CartaoCredito extends Cartao{
 		this.limiteCredito = limiteCredito.subtract(valor);
 	}
 	
+	public BigDecimal calcularFatura() {
+		return fatura.stream()
+				.map(PagamentoCredito::getValor)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+	
 }
