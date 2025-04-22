@@ -23,6 +23,7 @@ public class PagamentoCredito extends Pagamento {
 
 	@Override
 	public void pagar() {
+		//pensar em como refatorar
 		this.cartao.debitarNoLimite(getValor());
 	}
 

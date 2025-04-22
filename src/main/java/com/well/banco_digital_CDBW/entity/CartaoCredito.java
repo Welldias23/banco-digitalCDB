@@ -23,7 +23,7 @@ public class CartaoCredito extends Cartao{
 
 	private BigDecimal taxaAnuidade;
 	private BigDecimal limiteCredito;
-	@OneToMany
+	@OneToMany(mappedBy = "cartao")
 	private List<PagamentoCredito> fatura;
 	
 	
