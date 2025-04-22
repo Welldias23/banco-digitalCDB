@@ -48,7 +48,7 @@ public class PagamentoService {
 			cartaoService.limiteESuficiente((CartaoCredito) cartao, pagamentoReq.valor());
 			var pagamento =  new PagamentoCredito((CartaoCredito) cartao, pagamentoReq);
 			pagamento.pagar();
-			cartaoService.atualizarLimite(cartao);
+			cartaoService.atualizarCartao(cartao);
 			return pagamento;
 		}else if(cartao.getClass() == CartaoDebito.class) {
 			var conta = contaService.buscarPorId(cartao.getConta().getId());

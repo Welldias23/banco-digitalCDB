@@ -20,7 +20,7 @@ public record CartaoResDto(
 		this(cartao.getId(), 
 				cartao.getNumeroCartao(), 
 				null,
-				cartao.getLimiteCredito(), 
+				cartao.getLimiteCreditoDisponivel(), 
 				cartao.getDataCriacao(), 
 				cartao.getHoraCriacao(), 
 				cartao.getAtivo());
