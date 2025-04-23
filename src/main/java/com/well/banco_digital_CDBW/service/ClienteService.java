@@ -3,6 +3,7 @@ package com.well.banco_digital_CDBW.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,65 +25,63 @@ import jakarta.transaction.Transactional;
 @Service
 public class ClienteService {
 	
-	@Autowired
-	private ClienteRepository clienteRepository;
+
+	private final ClienteRepository clienteRepository;	
+	private final PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	public ClienteService(ClienteRepository clienteRepository,PasswordEncoder passwordEncoder) {
+		this.clienteRepository = clienteRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
+	
+	
 	
 	@Transactional
-	public Cliente cadastrar(ClienteReqDto clienteReq) {		
-		cpfUnico(clienteReq.cpf());	
-		emailUnico(clienteReq.email());
-		deMaior(clienteReq.dataNascimento());
+	public Cliente cadastrarCliente(ClienteReqDto clienteReq) {		
+		validarCliente(clienteReq);
 		var cliente = new Cliente(clienteReq);
-		cliente.setCategoria(categoria(clienteReq.rendaMensal()));
+		cliente.definirCategoria(clienteReq);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
 		return cliente;
 	}
 
 
-	public Cliente detalhar(Long id) {
-		idExiste(id);
-		var cliente = clienteRepository.getReferenceById(id);
+	public Cliente detalharCliente(Long id) {		
+		return buscarclientePorId(id);
+	}
+	
+	@Transactional
+	public Cliente atualizarCliente(ClienteReqDto clienteReq, Long id) {
+		//validar antes de atualizar
+		var cliente = buscarclientePorId(id);
+		cliente.atualizarDados(clienteReq);
+		cliente.definirCategoria(clienteReq);
 		return cliente;
 	}
 	
 	@Transactional
-	public Cliente atualizar(ClienteAtualizadoDto clienteAtualizar, Long id) {
-		idExiste(id);
-		var cliente = clienteRepository.getReferenceById(id);
-		cliente.atualizarDados(clienteAtualizar);
-		if(clienteAtualizar.rendaMensal() != null) {
-			cliente.setCategoria(categoria(clienteAtualizar.rendaMensal()));
-		}
-		if(clienteAtualizar.senha() != null) {
-			cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
-		}
-		clienteRepository.save(cliente);
-		return cliente;
-	}
-	
-	@Transactional
-	public void excluir(Long id) {
-		idExiste(id);
+	public void excluirCliente(Long id) {
+		buscarclientePorId(id);
 		clienteRepository.deleteById(id);	
 	}
 	
 
-	public Cliente clienteCpf(String cpf) {
-		var cliente = clienteRepository.getReferenceByCpf(cpf);
-		return  cliente;
+	public Cliente buscarClientePorCpf(String cpf) {
+		return clienteRepository.getReferenceByCpf(cpf);
 	}
 	
 	@Transactional
-	public Cliente clienteId(Long id) {
-		idExiste(id);
-		var cliente = clienteRepository.findById(id);
-		return  cliente;
+	public Cliente buscarclientePorId(Long id) {
+		return  clienteRepository.findById(id)
+				.orElseThrow(() -> new ClienteIdNaoExisteException());
 	}
 	
+	public void validarCliente(ClienteReqDto clienteReq) {
+		Optional.ofNullable(clienteReq.cpf()).ifPresent(this::cpfUnico);
+		Optional.ofNullable(clienteReq.email()).ifPresent(this::emailUnico);
+		Optional.ofNullable(clienteReq.dataNascimento()).ifPresent(this::deMaior);
+	}
 
 	private void cpfUnico(String cpf) {
 		if(clienteRepository.existsByCpf(cpf)) {
@@ -104,25 +103,6 @@ public class ClienteService {
 		if(periodo.getYears() < 18) {
 			throw new MenorDeIdadeException();
 		}		
-	}
-
-	@Transactional
-	private void idExiste(Long id) {
-		if(!clienteRepository.existsById(id)) {
-			throw new ClienteIdNaoExisteException();
-		}
-	}
-
-	public CategoriaCliente categoria(BigDecimal rendaMensal) {
-		CategoriaCliente categoria;
-		if(rendaMensal.doubleValue() <= 1512.00) {
-			categoria = CategoriaCliente.COMUM;
-		}else if (rendaMensal.doubleValue() <= 3000.00) {
-			categoria = CategoriaCliente.SUPER;
-		} else {
-			categoria = CategoriaCliente.PREMIUM;
-		}
-		return categoria;
 	}
 
 

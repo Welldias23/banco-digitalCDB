@@ -18,6 +18,8 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
+import com.well.banco_digital_CDBW.exception.LimiteDiarioInsuficiente;
+import com.well.banco_digital_CDBW.exception.TipoCartaoInvalidoException;
 import com.well.banco_digital_CDBW.exception.ValorMaiorQueFatura;
 import com.well.banco_digital_CDBW.repository.CartaoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
@@ -25,22 +27,22 @@ import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 import jakarta.validation.constraints.NotNull;
 
 
+
 @Service
 public class CartaoService {
-	
-	private static final Cartao CartaoDebito = null;
 
-	@Autowired
-	private ContaService contaService;
-	
-	@Autowired
-	private CartaoRepository cartaoRepository;
-	
-	@Autowired
-	private ClienteService clienteService;
-	
-	@Autowired
-	private CriarNumeroCartao geraNumero; 
+    private final ContaService contaService;
+    private final CartaoRepository cartaoRepository;
+    private final ClienteService clienteService;
+    private final CriarNumeroCartao geraNumero;
+
+    public CartaoService(ContaService contaService, CartaoRepository cartaoRepository,
+                         ClienteService clienteService, CriarNumeroCartao geraNumero) {
+        this.contaService = contaService;
+        this.cartaoRepository = cartaoRepository;
+        this.clienteService = clienteService;
+        this.geraNumero = geraNumero;
+    }
 
 	public CartaoResDto criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
 		var conta = contaService.buscarPorIdContaIdCliente(idConta, cliente.getId());
@@ -57,7 +59,7 @@ public class CartaoService {
 	}
 
 	public CartaoResDto detalhar(Long idCartao, Cliente clienteLogado) {
-		clienteService.clienteId(clienteLogado.getId());	
+		clienteService.buscarclientePorId(clienteLogado.getId());	
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);		
 		var tipoCartao = verificarTipoDoCartao(cartao);
@@ -65,7 +67,7 @@ public class CartaoService {
 	}
 	
 	public CartaoResDto alterarLimiteCredito(Long idCartao, Cliente clienteLogado, BigDecimal limite) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
 		isCartaoCredito(cartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
@@ -77,7 +79,7 @@ public class CartaoService {
 
 
 	public Cartao ativarStatus(Long idCartao, Cliente clienteLogado) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
 		cartao.ativarStatus();
@@ -86,7 +88,7 @@ public class CartaoService {
 	}
 	
 	public Cartao desativarStatus(Long idCartao, Cliente clienteLogado) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
 		cartao.desativarStatus();
@@ -95,7 +97,7 @@ public class CartaoService {
 	}	
 
 	public Cartao alterarSenha(Long idCartao, Cliente clienteLogado, String senha) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
 		cartao.mudarSenha(senha);
@@ -104,7 +106,7 @@ public class CartaoService {
 	}
 
 	public CartaoDebito alterarLimiteDiario(Long idCartao, Cliente clienteLogado, BigDecimal novoLimite) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = buscarPorId(idCartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
 		isCartaoDebito(cartao);
@@ -114,7 +116,7 @@ public class CartaoService {
 	}
 
 	public FaturaDto consultarFatura(Long idCartao, Cliente clienteLogado) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao =(CartaoCredito)  buscarPorId(idCartao);
 		isCartaoCredito(cartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
@@ -123,7 +125,7 @@ public class CartaoService {
 	}
 
 	public FaturaPaga pagarFatura(Long idCartao, Cliente clienteLogado, PagamentoFatura pagamentoFatura) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao =(CartaoCredito) buscarPorId(idCartao);
 		isCartaoCredito(cartao);
 		cartaoPertenceCliente(cartao, clienteLogado);
@@ -156,9 +158,9 @@ public class CartaoService {
 
 	private CartaoResDto verificarTipoDoCartao(Cartao cartao) {
 		cartao = (Cartao) Hibernate.unproxy(cartao);
-		if(cartao.getClass() == CartaoDebito.class) {
-			var cartaoDebito = (CartaoDebito) cartao;
-			return new CartaoResDto(cartaoDebito);
+		if(cartao instanceof CartaoDebito cc) {
+			//var cartaoDebito = (CartaoDebito) cartao;
+			return new CartaoResDto(cc);
 		}
 		var cartaoCredito = (CartaoCredito) cartao;
 		return new CartaoResDto(cartaoCredito); 		
@@ -167,14 +169,14 @@ public class CartaoService {
 
 	private void isCartaoDebito(Cartao cartao) {
 		if(cartao.getClass() != CartaoDebito.class) {
-			throw new CartaoNaoExisteException();
+			throw new TipoCartaoInvalidoException();
 		}
 		
 	}
 	
 	private void isCartaoCredito(Cartao cartao) {
 		if(cartao.getClass() != CartaoCredito.class) {
-			throw new CartaoNaoExisteException();
+			throw new TipoCartaoInvalidoException();
 		}
 		
 	}
@@ -188,6 +190,13 @@ public class CartaoService {
 
 	public void atualizarCartao(Cartao cartao) {
 		cartaoRepository.save(cartao);
+	}
+
+	public void limiteDiarioSuficiente(CartaoDebito cartao, BigDecimal valor) {
+		if (cartao.getLimiteDiario().compareTo(valor) > 0) {
+			throw new LimiteDiarioInsuficiente();
+		}
+		
 	}
 
 }

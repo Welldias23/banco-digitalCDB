@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,21 +66,21 @@ public class Cliente implements UserDetails{
 	}
 
 
-	public void atualizarDados(ClienteAtualizadoDto clienteAtualizar) {
-		if (clienteAtualizar.nome() != null) {
-			this.nome = clienteAtualizar.nome();
+	public void atualizarDados(ClienteReqDto clienteReq) {
+		if (clienteReq.nome() != null) {
+			this.nome = clienteReq.nome();
 		}
-		if (clienteAtualizar.email() != null) {
-			this.email = clienteAtualizar.email();
+		if (clienteReq.email() != null) {
+			this.email = clienteReq.email();
 		}
-		if (clienteAtualizar.senha() != null) {
-			this.senha = clienteAtualizar.senha();
+		if (clienteReq.senha() != null) {
+			this.senha = clienteReq.senha();
 		}
-		if (clienteAtualizar.dataNascimento() != null) {
-			this.dataNascimento = clienteAtualizar.dataNascimento();
+		if (clienteReq.dataNascimento() != null) {
+			this.dataNascimento = clienteReq.dataNascimento();
 		}
-		if (clienteAtualizar.rendaMensal() != null) {
-			this.rendaMensal = clienteAtualizar.rendaMensal();
+		if (clienteReq.rendaMensal() != null) {
+			this.rendaMensal = clienteReq.rendaMensal();
 		}
 
 		
@@ -100,6 +102,14 @@ public class Cliente implements UserDetails{
 	@Override
 	public String getUsername() {
 		return cpf;
+	}
+
+
+	public void definirCategoria(ClienteReqDto clienteReq) {
+		this.categoria = Optional.ofNullable(clienteReq.rendaMensal())
+				.map(r -> r.doubleValue() <= 1.512 ? CategoriaCliente.COMUM
+						: r.doubleValue() <= 3.000 ? CategoriaCliente.PREMIUM
+						: CategoriaCliente.SUPER).orElse(categoria);
 	}
 
 }
