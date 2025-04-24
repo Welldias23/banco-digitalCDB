@@ -1,17 +1,13 @@
 package com.well.banco_digital_CDBW.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
 import com.well.banco_digital_CDBW.dto.ClienteReqDto;
-import com.well.banco_digital_CDBW.entity.CategoriaCliente;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CpfUnicoException;
@@ -55,7 +51,7 @@ public class ClienteService {
 	public Cliente atualizarCliente(ClienteReqDto clienteReq, Long id) {
 		//validar antes de atualizar
 		var cliente = buscarclientePorId(id);
-		cliente.atualizarDados(clienteReq);
+		cliente.atualizarCliente(clienteReq);
 		cliente.definirCategoria(clienteReq);
 		return cliente;
 	}
@@ -78,23 +74,22 @@ public class ClienteService {
 	}
 	
 	public void validarCliente(ClienteReqDto clienteReq) {
-		Optional.ofNullable(clienteReq.cpf()).ifPresent(this::cpfUnico);
-		Optional.ofNullable(clienteReq.email()).ifPresent(this::emailUnico);
+		Optional.ofNullable(clienteReq.cpf()).ifPresent(this::validarCpfUnico);
+		Optional.ofNullable(clienteReq.email()).ifPresent(this::ValidarEmailUnico);
 		Optional.ofNullable(clienteReq.dataNascimento()).ifPresent(this::deMaior);
 	}
 
-	private void cpfUnico(String cpf) {
-		if(clienteRepository.existsByCpf(cpf)) {
-			throw new CpfUnicoException();
-		}
+	private void validarCpfUnico(String cpf) {
+		Optional.of(cpf)
+					.filter(c -> clienteRepository.existsByCpf(c))
+					.ifPresent(c -> {throw new CpfUnicoException();});
 	}
 	
 	
-	private void emailUnico(String email) {
-		if(clienteRepository.existsByEmail(email)) {
-			throw new EmailUnicoException();
-		}
-		
+	private void ValidarEmailUnico(String email) {
+		Optional.of(email)
+						.filter(e -> clienteRepository.existsByEmail(e))
+						.ifPresent(e -> {throw new EmailUnicoException();});
 	}
 
 	private void deMaior(LocalDate dataNascimento) {
@@ -108,7 +103,6 @@ public class ClienteService {
 
 	public void removerEndereco(Cliente cliente) {
 		cliente.setEndereco(null);
-		System.out.println(cliente.getEndereco());
 		clienteRepository.save(cliente);
 	}
 
