@@ -26,9 +26,9 @@ public class TransferenciaService {
 
 	public Transferencia transferir(Cliente clienteOrigem, Long idConta, TransferenciaReqDto transferenciaAFazer) {
 		clienteService.buscarclientePorId(clienteOrigem.getId());
-		var contaOrigem = contaService.buscarPorIdContaIdCliente(idConta, clienteOrigem.getId());
-		contaService.temSaldo(contaOrigem.getSaldo(), transferenciaAFazer.valor());
-		var contaDestino = contaService.buscarPorId(transferenciaAFazer.idContaDestino());  		
+		var contaOrigem = contaService.buscarContaPorIdContaIdCliente(idConta, clienteOrigem.getId());
+		contaService.validarSaldoSufuciente(contaOrigem.getSaldo(), transferenciaAFazer.valor());
+		var contaDestino = contaService.buscarContaPorId(transferenciaAFazer.idContaDestino());  		
 		var transferencia = new Transferencia(contaOrigem, contaDestino, transferenciaAFazer.valor());
 		transferencia.aplicar();		
 		transferencia.setNomeOrigem(contaOrigem.getCliente().getNome());

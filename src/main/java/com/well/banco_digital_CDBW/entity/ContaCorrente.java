@@ -22,8 +22,7 @@ public class ContaCorrente extends Conta{
 	@Override
 	public void gerarNumeroConta() {
 		getNumeroConta();
-		Long.sum(4011, getId());
-		
+		Long.sum(4011, getId());		
 	}
 
 }

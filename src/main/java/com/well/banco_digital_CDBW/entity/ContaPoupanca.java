@@ -23,9 +23,7 @@ public class ContaPoupanca extends Conta{
 
 	@Override
 	public void gerarNumeroConta() {
-
 		getNumeroConta();
-		Long.sum(5011, getId());
-		
+		Long.sum(5011, getId());		
 	}
 }

@@ -3,11 +3,13 @@ package com.well.banco_digital_CDBW.entity;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.well.banco_digital_CDBW.dto.ContaDto;
 import com.well.banco_digital_CDBW.exception.CategoriaNaoExisteException;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

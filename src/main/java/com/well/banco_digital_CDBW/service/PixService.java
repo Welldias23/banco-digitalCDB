@@ -26,9 +26,9 @@ public class PixService {
 	
 	public TransferenciaPix transferir(Cliente clienteOrigen, Long idConta, TransferenciaPixReqDto transferenciaPixAFazer) {
 		clienteService.buscarclientePorId(clienteOrigen.getId());
-		var contaOrigem = contaService.buscarPorIdContaIdCliente(idConta, clienteOrigen.getId());
-		contaService.temSaldo(contaOrigem.getSaldo(), transferenciaPixAFazer.valor());
-		var contaDestino = contaService.buscarPorPix(transferenciaPixAFazer.chavePix());	
+		var contaOrigem = contaService.buscarContaPorIdContaIdCliente(idConta, clienteOrigen.getId());
+		contaService.validarSaldoSufuciente(contaOrigem.getSaldo(), transferenciaPixAFazer.valor());
+		var contaDestino = contaService.buscarContaPorPix(transferenciaPixAFazer.chavePix());	
 		var transferenciaPix = new TransferenciaPix(contaOrigem, contaDestino, transferenciaPixAFazer.valor());
 		transferenciaPix.aplicar();
 		transferenciaPix.setNomeOrigem(contaOrigem.getCliente().getNome());
