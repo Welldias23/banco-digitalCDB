@@ -199,6 +199,26 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(TipoCartaoInvalidoException.class)
+	public ProblemDetail tratadorTipoCartaoInvalidoException(TipoCartaoInvalidoException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O tipo do cartao informado é invalido.");
+		problemDetail.setDetail("Infirme o um cartão valido.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
+	@ExceptionHandler(LimiteDiarioInsuficiente.class)
+	public ProblemDetail tratadorLimiteDiarioInsuficiente(LimiteDiarioInsuficiente ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("O limite diario do cartao de debito foi excedido.");
+		problemDetail.setDetail("Espere até o proximo dia ou aumente seu limite diario.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

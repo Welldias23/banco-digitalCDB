@@ -20,6 +20,7 @@ import lombok.Setter;
 public class CartaoDebito extends Cartao{
 
 	private BigDecimal limiteDiario;
+	private BigDecimal limiteDiarioUsado;
 	@OneToMany(mappedBy = "cartao")
 	private List<PagamentoDebito> compras;
 	
@@ -33,6 +34,10 @@ public class CartaoDebito extends Cartao{
 	public void alterarLimiteDiario(BigDecimal novoLimite) {
 		this.limiteDiario = novoLimite;
 		
+	}
+	
+	public void diminuirLimiteDiario(BigDecimal valor) {
+		this.limiteDiarioUsado = this.limiteDiarioUsado.subtract(valor);
 	}
 
 }

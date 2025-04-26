@@ -31,7 +31,7 @@ public class ContaService {
 	
 	
 	public Conta criar(Long id, ContaReqDto contaAbrir) {
-		var cliente = clienteService.clienteId(id);
+		var cliente = clienteService.buscarclientePorId(id);
 		var conta = tipar(cliente, contaAbrir);
 		conta.gerarNumeroConta();
 		contaRepository.save(conta);
@@ -40,7 +40,7 @@ public class ContaService {
 	}
 	
 	public Conta cadastrarPix(Cliente clienteLogado, PixDto pix) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		pixUnico(pix.chavePix());
 		var conta = contaRepository.findByIdAndClienteId(pix.contaId(), clienteLogado.getId());
 		temConta(conta);
@@ -52,7 +52,7 @@ public class ContaService {
 
 
 	public List<Conta> buscarTodas(Long id) {
-		var cliente = clienteService.clienteId(id);
+		var cliente = clienteService.buscarclientePorId(id);
 		var contas = cliente.getContas();
 		return contas;
 	}

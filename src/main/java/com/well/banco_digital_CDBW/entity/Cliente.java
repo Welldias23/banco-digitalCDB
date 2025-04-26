@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.well.banco_digital_CDBW.dto.ClienteAtualizadoDto;
-import com.well.banco_digital_CDBW.dto.ClienteReqDto;
+import com.well.banco_digital_CDBW.dto.ClienteDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -53,7 +53,7 @@ public class Cliente implements UserDetails{
 	private List<Conta> contas;
 	
 	
-	public Cliente(ClienteReqDto clienteReq) {
+	public Cliente(ClienteDto clienteReq) {
 		this.nome = clienteReq.nome();
 		this.cpf = clienteReq.cpf();
 		this.email = clienteReq.email();
@@ -64,24 +64,12 @@ public class Cliente implements UserDetails{
 	}
 
 
-	public void atualizarDados(ClienteAtualizadoDto clienteAtualizar) {
-		if (clienteAtualizar.nome() != null) {
-			this.nome = clienteAtualizar.nome();
-		}
-		if (clienteAtualizar.email() != null) {
-			this.email = clienteAtualizar.email();
-		}
-		if (clienteAtualizar.senha() != null) {
-			this.senha = clienteAtualizar.senha();
-		}
-		if (clienteAtualizar.dataNascimento() != null) {
-			this.dataNascimento = clienteAtualizar.dataNascimento();
-		}
-		if (clienteAtualizar.rendaMensal() != null) {
-			this.rendaMensal = clienteAtualizar.rendaMensal();
-		}
-
-		
+	public void atualizarCliente(ClienteDto clienteReq) {
+		Optional.ofNullable(clienteReq.nome()).ifPresent(nome -> this.nome = nome);
+		Optional.ofNullable(clienteReq.email()).ifPresent(email -> this.email = email);
+		Optional.ofNullable(clienteReq.senha()).ifPresent(senha -> this.senha = senha);
+		Optional.ofNullable(clienteReq.dataNascimento()).ifPresent(dataNascimento -> this.dataNascimento = dataNascimento);
+		Optional.ofNullable(clienteReq.rendaMensal()).ifPresent(rendaMensal -> this.rendaMensal = rendaMensal);
 	}
 
 
@@ -100,6 +88,14 @@ public class Cliente implements UserDetails{
 	@Override
 	public String getUsername() {
 		return cpf;
+	}
+
+
+	public void definirCategoria(ClienteDto clienteReq) {
+		this.categoria = Optional.ofNullable(clienteReq.rendaMensal())
+				.map(r -> r.compareTo(new BigDecimal("1512")) <= 0 ? CategoriaCliente.COMUM
+						: r.compareTo(new BigDecimal("3000")) <= 0 ? CategoriaCliente.PREMIUM
+						: CategoriaCliente.SUPER).orElse(categoria);
 	}
 
 }

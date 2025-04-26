@@ -26,7 +26,7 @@ public class DepositoService {
 
 
 	public Deposito depositar(Cliente clienteLogado, DepositoReqDto deposito) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var contaDestino = contaService.buscarPorId(deposito.idContaDestino());
 		var depositoEfetuado = new Deposito(contaDestino, deposito.valor());
 		depositoEfetuado.aplicar();

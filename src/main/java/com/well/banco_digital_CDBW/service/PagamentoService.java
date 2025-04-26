@@ -32,7 +32,7 @@ public class PagamentoService {
 	private PagamentoRepository pagamentoRepository;
 
 	public PagamentoResDto pagar(Long idCartao, Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var cartao = cartaoService.buscarPorId(idCartao);
 		cartaoService.cartaoPertenceCliente(cartao, clienteLogado);
 		var pagamento = tipoPagamento(cartao, pagamentoReq);
@@ -51,10 +51,12 @@ public class PagamentoService {
 			cartaoService.atualizarCartao(cartao);
 			return pagamento;
 		}else if(cartao.getClass() == CartaoDebito.class) {
+			cartaoService.limiteDiarioSuficiente((CartaoDebito) cartao, pagamentoReq.valor());
 			var conta = contaService.buscarPorId(cartao.getConta().getId());
 			contaService.temSaldo(conta.getSaldo(), pagamentoReq.valor());
 			var pagamento =  new PagamentoDebito((CartaoDebito) cartao, pagamentoReq);
 			pagamento.pagar();
+			((CartaoDebito) cartao).diminuirLimiteDiario(pagamento.getValor());
 			contaService.atualizarSaldo(conta);
 			return pagamento;			
 		}

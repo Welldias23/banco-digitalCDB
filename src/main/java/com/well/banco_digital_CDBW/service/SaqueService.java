@@ -26,7 +26,7 @@ public class SaqueService {
 	private TransacaoRepository transacaoRepository;
 
 	public Saque sacar(Cliente clienteLogado, Long idConta, SaqueReqDto saque) {
-		clienteService.clienteId(clienteLogado.getId());
+		clienteService.buscarclientePorId(clienteLogado.getId());
 		var conta = contaService.buscarPorIdContaIdCliente(idConta, clienteLogado.getId());
 		contaService.temSaldo(conta.getSaldo(), saque.valor());		
 		var saqueFeito = new Saque(conta, saque.valor());

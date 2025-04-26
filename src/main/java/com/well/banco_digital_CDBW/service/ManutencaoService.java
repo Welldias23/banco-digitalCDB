@@ -29,7 +29,7 @@ public class ManutencaoService {
 		var contas = contaService.buscarPorData(data.getDayOfMonth());
 		for (Conta conta : contas) {
 			if(conta.getClass() == ContaCorrente.class) {
-				var cliente = clienteService.clienteId(conta.getCliente().getId());
+				var cliente = clienteService.buscarclientePorId(conta.getCliente().getId());
 				conta.debitar(cliente.getCategoria().getTaxaManuntencao());
 				var manutencao = new TaxaManuntencao(conta, cliente.getCategoria().getTaxaManuntencao());
 				manutencao.aplicar();

@@ -31,7 +31,7 @@ public class EnderecoController {
 	
 	@PostMapping("/cadastrar")
 	public ResponseEntity<EnderecoResDto> cadastrar(@RequestBody @Valid EnderecoReqDto enderecoReq, @AuthenticationPrincipal Cliente clienteLogado) {
-		var cliente = clienteService.clienteId(clienteLogado.getId());
+		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
 		var endereco = enderecoService.cadastrar(enderecoReq, cliente);
 		
 		return ResponseEntity.created(null).body(new EnderecoResDto(endereco));
@@ -39,7 +39,7 @@ public class EnderecoController {
 	
 	@GetMapping
 	public ResponseEntity<EnderecoResDto> detalhar(@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.clienteId(clienteLogado.getId());
+		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
 		var endereco = enderecoService.temEndereco(cliente.getEndereco());
 		
 		return ResponseEntity.ok(new EnderecoResDto(endereco));
@@ -47,7 +47,7 @@ public class EnderecoController {
 	
 	@PutMapping("/atualizar")
 	public ResponseEntity<EnderecoResDto> atualizar(@RequestBody @Valid EnderecoReqDto enderecoAtualizar,@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.clienteId(clienteLogado.getId());
+		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
 		var enderecoAtualizado = enderecoService.atualizar(cliente, enderecoAtualizar);
 		
 		return ResponseEntity.ok(new EnderecoResDto(enderecoAtualizado));
@@ -55,7 +55,7 @@ public class EnderecoController {
 	
 	@DeleteMapping
 	public ResponseEntity<EnderecoResDto> excluir(@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.clienteId(clienteLogado.getId());
+		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
 		clienteService.removerEndereco(cliente);
 		
 		return ResponseEntity.noContent().build();
