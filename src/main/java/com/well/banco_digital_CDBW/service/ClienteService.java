@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.well.banco_digital_CDBW.dto.ClienteReqDto;
+import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CpfUnicoException;
@@ -33,33 +33,34 @@ public class ClienteService {
 	
 	
 	@Transactional
-	public Cliente cadastrarCliente(ClienteReqDto clienteReq) {		
+	public ClienteDto cadastrarCliente(ClienteDto clienteReq) {		
 		validarCliente(clienteReq);
 		var cliente = new Cliente(clienteReq);
 		cliente.definirCategoria(clienteReq);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
-		return cliente;
+		return new ClienteDto(cliente);
 	}
 
 
-	public Cliente detalharCliente(Long id) {		
-		return buscarclientePorId(id);
+	public ClienteDto detalharCliente(Cliente clienteLogado) {		
+		 Cliente cliente = buscarclientePorId(clienteLogado.getId());
+		 return new ClienteDto(cliente);
 	}
 	
 	@Transactional
-	public Cliente atualizarCliente(ClienteReqDto clienteReq, Long id) {
-		//validar antes de atualizar
-		var cliente = buscarclientePorId(id);
-		cliente.atualizarCliente(clienteReq);
-		cliente.definirCategoria(clienteReq);
-		return cliente;
+	public ClienteDto atualizarCliente(ClienteDto clienteAtualizar, Cliente clienteLogado) {
+		validarCliente(clienteAtualizar);
+		Cliente cliente = buscarclientePorId(clienteLogado.getId());
+		cliente.atualizarCliente(clienteAtualizar);
+		cliente.definirCategoria(clienteAtualizar);
+		return new ClienteDto(cliente);
 	}
 	
 	@Transactional
-	public void excluirCliente(Long id) {
-		buscarclientePorId(id);
-		clienteRepository.deleteById(id);	
+	public void excluirCliente(Cliente clienteLogado) {
+		buscarclientePorId(clienteLogado.getId());
+		clienteRepository.deleteById(clienteLogado.getId());	
 	}
 	
 
@@ -73,7 +74,7 @@ public class ClienteService {
 				.orElseThrow(() -> new ClienteIdNaoExisteException());
 	}
 	
-	public void validarCliente(ClienteReqDto clienteReq) {
+	public void validarCliente(ClienteDto clienteReq) {
 		Optional.ofNullable(clienteReq.cpf()).ifPresent(this::validarCpfUnico);
 		Optional.ofNullable(clienteReq.email()).ifPresent(this::ValidarEmailUnico);
 		Optional.ofNullable(clienteReq.dataNascimento()).ifPresent(this::deMaior);
@@ -93,8 +94,8 @@ public class ClienteService {
 	}
 
 	private void deMaior(LocalDate dataNascimento) {
-		var agora = LocalDate.now();
-		var periodo = Period.between(dataNascimento, agora);
+		LocalDate agora = LocalDate.now();
+		Period periodo = Period.between(dataNascimento, agora);
 		if(periodo.getYears() < 18) {
 			throw new MenorDeIdadeException();
 		}		
