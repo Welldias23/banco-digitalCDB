@@ -19,7 +19,7 @@ public record ContaDto(
 		Long agencia,
 		
 		@JsonView(View.Get.class)
-		Long numeroConta,
+		String numeroConta,
 		
 		@JsonView(View.Get.class)
 		BigDecimal saldo,

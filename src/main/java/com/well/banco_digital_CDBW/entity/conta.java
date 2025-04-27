@@ -34,7 +34,7 @@ public abstract class Conta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long agencia;
-	private Long numeroConta;
+	private String numeroConta;
 	private BigDecimal saldo;
 	private Boolean ativa;
 	private LocalDate dataCriacao;
@@ -60,7 +60,9 @@ public abstract class Conta {
 	}
 
 	
-	public abstract void gerarNumeroConta();
+	public  void gerarNumeroConta(Long idConta) {
+		this.numeroConta = "0000" + idConta.toString();
+	};
 
 	public void debitar(BigDecimal valor) {
 		this.saldo = saldo.subtract(valor);

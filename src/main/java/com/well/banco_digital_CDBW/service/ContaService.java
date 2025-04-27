@@ -40,11 +40,12 @@ public class ContaService {
 	
 	public ContaDto criarConta(Long id, ContaDto contaAbrir) {
 		Cliente cliente = clienteService.buscarclientePorId(id);
-		Conta conta = criarConta(cliente, contaAbrir);
-		conta.gerarNumeroConta();
+		Conta conta = criar(cliente, contaAbrir);
 		//cartaoService.criar(conta);
+		conta = contaRepository.save(conta);
+		conta.gerarNumeroConta(conta.getId());
 		contaRepository.save(conta);
-
+		
 		return new ContaDto(conta);
 	}
 	
@@ -100,7 +101,7 @@ public class ContaService {
 				.orElseThrow(() -> new ContaNaoExisteException());
 		}
 
-	private Conta criarConta(Cliente cliente, ContaDto contaAbrir) {
+	private Conta criar(Cliente cliente, ContaDto contaAbrir) {
 		if(contaAbrir.tipoConta().toUpperCase().equals("CONTA CORRENTE")) {
 			return new ContaCorrente(cliente);
 		}else if(contaAbrir.tipoConta().toUpperCase().equals("CONTA POUPANÇA")){

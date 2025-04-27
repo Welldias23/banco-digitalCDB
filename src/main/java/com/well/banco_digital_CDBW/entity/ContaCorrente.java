@@ -19,10 +19,4 @@ public class ContaCorrente extends Conta{
 		super(cliente);
 	}
 
-	@Override
-	public void gerarNumeroConta() {
-		getNumeroConta();
-		Long.sum(4011, getId());		
-	}
-
 }
