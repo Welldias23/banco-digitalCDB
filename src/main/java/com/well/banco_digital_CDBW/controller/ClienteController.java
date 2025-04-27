@@ -23,7 +23,6 @@ import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.service.ClienteService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cliente")
@@ -33,7 +32,7 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@PostMapping("/cadastrar")
-	@JsonView(View.Post.class)
+	@JsonView(View.Get.class)
 	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteReq, 
 			UriComponentsBuilder uriBuilder){		
 		ClienteDto cliente = clienteService.cadastrarCliente(clienteReq);
@@ -50,7 +49,7 @@ public class ClienteController {
 	}
 	
 	@PutMapping
-	@JsonView(View.Put.class)
+	@JsonView(View.Get.class)
 	public ResponseEntity<ClienteDto> atualizarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteAtualizar, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);

@@ -45,7 +45,7 @@ public class CartaoService {
     }
 
 	public CartaoResDto criar(Cliente cliente, Long idConta, CartaoReqDto cartaoACriar) {
-		var conta = contaService.buscarPorIdContaIdCliente(idConta, cliente.getId());
+		var conta = contaService.buscarContaPorIdContaIdCliente(idConta, cliente.getId());
 		var numeroCartao = geraNumero.criarNumeroCartao(cartaoACriar.bandeira());
 		var cartao = new CartaoCredito(conta, cliente, cartaoACriar.senha(), numeroCartao); 
 		cartaoRepository.save(cartao);
@@ -145,7 +145,7 @@ public class CartaoService {
 	}
 
 	public void cartaoPertenceCliente(Cartao cartao, Cliente clienteLogado) {
-		var conta = contaService.buscarPorIdContaIdCliente(cartao.getConta().getId(), clienteLogado.getId());
+		var conta = contaService.buscarContaPorIdContaIdCliente(cartao.getConta().getId(), clienteLogado.getId());
 		if (conta == null) {
 			throw new CartaoNaoExisteException();
 		}

@@ -2,7 +2,7 @@ package com.well.banco_digital_CDBW.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,7 +52,7 @@ public abstract class Cartao {
 		this.dataCriacao = LocalDate.now();
 		this.horaCriacao = LocalTime.now();
 		this.ativo = true;
-		this.conta = (Conta) conta;
+		this.conta = (Conta) conta; 
 	}
 
 	public Cartao(Conta conta, String numeroCartao) {

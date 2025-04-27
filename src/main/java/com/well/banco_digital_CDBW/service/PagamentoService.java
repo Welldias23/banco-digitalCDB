@@ -52,14 +52,14 @@ public class PagamentoService {
 			return pagamento;
 		}else if(cartao.getClass() == CartaoDebito.class) {
 			cartaoService.limiteDiarioSuficiente((CartaoDebito) cartao, pagamentoReq.valor());
-			var conta = contaService.buscarPorId(cartao.getConta().getId());
-			contaService.temSaldo(conta.getSaldo(), pagamentoReq.valor());
+			var conta = contaService.buscarContaPorId(cartao.getConta().getId());
+			contaService.validarSaldoSufuciente(conta.getSaldo(), pagamentoReq.valor());
 			var pagamento =  new PagamentoDebito((CartaoDebito) cartao, pagamentoReq);
 			pagamento.pagar();
 			((CartaoDebito) cartao).diminuirLimiteDiario(pagamento.getValor());
-			contaService.atualizarSaldo(conta);
+			contaService.atualizarSaldoConta(conta);
 			return pagamento;			
-		}
+		} 
 		
 		throw new CartaoNaoExisteException();
 	}

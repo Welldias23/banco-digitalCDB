@@ -26,7 +26,7 @@ public class ManutencaoService {
 	@Scheduled(cron = "${spring.task.scheduling.cron}")
 	public void manuntecaoMensal() {
 		var data = LocalDate.now();
-		var contas = contaService.buscarPorData(data.getDayOfMonth());
+		var contas = contaService.buscarContaPorData(data.getDayOfMonth());
 		for (Conta conta : contas) {
 			if(conta.getClass() == ContaCorrente.class) {
 				var cliente = clienteService.buscarclientePorId(conta.getCliente().getId());
