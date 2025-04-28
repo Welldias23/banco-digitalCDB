@@ -64,7 +64,7 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
-## 🔒 Funcionalidades Avançadas (Opcional)
+## 🔒 Funcionalidades Avançadas 
 
 - **Autenticação e Autorização** via Spring Security + JWT
 <!-- - **Perfis de Usuário** (`ADMIN`, `CLIENTE`) com permissões diferentes 
