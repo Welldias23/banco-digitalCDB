@@ -1,62 +1,73 @@
 package com.well.banco_digital_CDBW.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
-import com.well.banco_digital_CDBW.dto.EnderecoResDto;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.well.banco_digital_CDBW.dto.Complete;
+import com.well.banco_digital_CDBW.dto.EnderecoDto;
+import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
-import com.well.banco_digital_CDBW.service.ClienteService;
 import com.well.banco_digital_CDBW.service.EnderecoService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/endereco")
 public class EnderecoController {
 	
-	@Autowired
-	private EnderecoService enderecoService;
-	
-	@Autowired
-	private ClienteService clienteService; 
+	private final EnderecoService enderecoService;
+
+	public EnderecoController(EnderecoService enderecoService) {
+		this.enderecoService = enderecoService;
+	}
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<EnderecoResDto> cadastrar(@RequestBody @Valid EnderecoReqDto enderecoReq, @AuthenticationPrincipal Cliente clienteLogado) {
-		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
-		var endereco = enderecoService.cadastrar(enderecoReq, cliente);
+	@JsonView(View.Get.class)
+	public ResponseEntity<EnderecoDto> cadastrarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoReq, 
+			@AuthenticationPrincipal Cliente clienteLogado) {
+		EnderecoDto endereco = enderecoService.cadastrarCliente(enderecoReq, clienteLogado);
 		
-		return ResponseEntity.created(null).body(new EnderecoResDto(endereco));
+		return ResponseEntity.created(null).body(endereco);
 	}
 	
 	@GetMapping
-	public ResponseEntity<EnderecoResDto> detalhar(@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
-		var endereco = enderecoService.temEndereco(cliente.getEndereco());
+	@JsonView(View.Get.class)
+	public ResponseEntity<EnderecoDto> detalharEndereco(@AuthenticationPrincipal Cliente clienteLogado){
+		EnderecoDto endereco = enderecoService.detalharEndereco(clienteLogado);
 		
-		return ResponseEntity.ok(new EnderecoResDto(endereco));
+		return ResponseEntity.ok(endereco);
 	}
 	
 	@PutMapping("/atualizar")
-	public ResponseEntity<EnderecoResDto> atualizar(@RequestBody @Valid EnderecoReqDto enderecoAtualizar,@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
-		var enderecoAtualizado = enderecoService.atualizar(cliente, enderecoAtualizar);
+	@JsonView(View.Get.class)
+	public ResponseEntity<EnderecoDto> atualizarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoAtualizar,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);
 		
-		return ResponseEntity.ok(new EnderecoResDto(enderecoAtualizado));
+		return ResponseEntity.ok(enderecoAtualizado);
+	}
+	
+	@PatchMapping("/atualizar")
+	@JsonView(View.Get.class)
+	public ResponseEntity<EnderecoDto> atualizarParcialmenteEndereco(@RequestBody @Validated EnderecoDto enderecoAtualizar,
+			@AuthenticationPrincipal Cliente clienteLogado){
+		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);
+		
+		return ResponseEntity.ok(enderecoAtualizado);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<EnderecoResDto> excluir(@AuthenticationPrincipal Cliente clienteLogado){
-		var cliente = clienteService.buscarclientePorId(clienteLogado.getId());
-		clienteService.removerEndereco(cliente);
+	public ResponseEntity<Void> excluirEndereco(@AuthenticationPrincipal Cliente clienteLogado){
+		enderecoService.excluirEndereco(clienteLogado);
 		
 		return ResponseEntity.noContent().build();
 	}
