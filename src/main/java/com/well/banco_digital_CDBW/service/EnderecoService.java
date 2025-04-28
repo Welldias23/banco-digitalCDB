@@ -1,9 +1,10 @@
 package com.well.banco_digital_CDBW.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
+import com.well.banco_digital_CDBW.dto.EnderecoDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Endereco;
 import com.well.banco_digital_CDBW.exception.EnderecoCadastrarException;
@@ -15,58 +16,55 @@ import jakarta.transaction.Transactional;
 @Service
 public class EnderecoService {
 	
-	@Autowired
-	private EnderecoRepository enderecoRepository;
+	private final EnderecoRepository enderecoRepository;
 	
+	private final ClienteService clienteService;
 	
-	public Endereco cadastrar(EnderecoReqDto enderecoDto, Cliente cliente) {
-		//criar um metodo para verificar cep
-		jaTemEnderecoCadastrado(cliente.getEndereco());
-		var endereco = new Endereco(enderecoDto, cliente);
-		System.out.println("CHEGUEI AQUI");
-		enderecoRepository.save(endereco);
-
-		return endereco;
+	public EnderecoService(EnderecoRepository enderecoRepository,
+						   ClienteService clienteService) {
+		this.enderecoRepository = enderecoRepository;
+		this.clienteService = clienteService;
 	}
 	
-	public Endereco detalhar(Long id) {
-		enderedoIdExiste(id);
-		//criar metodo para verficar e o endereco pertence ao cliente logado
-		var endereco = enderecoRepository.getReferenceById(id);
-		return endereco;
-	}
-	
-	public Endereco atualizar(Cliente cliente, EnderecoReqDto enderecoAtualizar) {
-		var endereco = cliente.getEndereco();
-		endereco.atualizar(enderecoAtualizar);
-		enderecoRepository.save(endereco);
-		return endereco;
-	}
-
-	private void enderedoIdExiste(Long id) {
-		if(!enderecoRepository.existsById(id)) {
-			throw new EnderecoIdNaoExisteException();
-		}	
-	}
-
-	public void jaTemEnderecoCadastrado(Endereco endereco) {
-		if(endereco != null) {
-			throw new EnderecoCadastrarException();
-		}
-	}
-
-	public Endereco temEndereco(Endereco endereco) {
-		if(endereco == null) {
-			throw new NaotemEnderecoException();
-		}
-		
-		return endereco;
-	}
 	@Transactional
-	public void excluir(Endereco endereco) {
-		temEndereco(endereco);
+	public EnderecoDto cadastrarCliente(EnderecoDto enderecoDto, Cliente clienteLogado) {
+		Cliente cliente = clienteService.buscarclientePorId(clienteLogado.getId());
+		//criar um metodo para verificar cep
+		Endereco endereco = new Endereco(enderecoDto, cliente);
+		enderecoRepository.save(endereco);
+
+		return new EnderecoDto(endereco);
+	}
+	
+	
+	public EnderecoDto detalharEndereco(Cliente clienteLogado) {
+		Endereco endereco = buscarEnderecoPorCliente(clienteLogado);
+		return new EnderecoDto(endereco);
+	}
+
+	@Transactional
+	public EnderecoDto atualizarEndereco(Cliente clienteLogado, EnderecoDto enderecoAtualizar) {
+		Endereco endereco = buscarEnderecoPorCliente(clienteLogado);
+		endereco.atualizarCliente(enderecoAtualizar);
+		enderecoRepository.save(endereco);
+		return new EnderecoDto(endereco);
+	}
+
+	
+	@Transactional
+	public void excluirEndereco(Cliente clienteLogado) {
+		Endereco endereco = buscarEnderecoPorCliente(clienteLogado);
 		enderecoRepository.deleteById(endereco.getId());
 	}
+
+	
+	private Endereco buscarEnderecoPorCliente(Cliente clienteLogado) {
+		Endereco endereco = clienteService.buscarclientePorId(clienteLogado.getId()).getEndereco();
+		Optional.ofNullable(endereco)
+					.orElseThrow(() -> new NaotemEnderecoException());
+		return endereco;
+	}
+
 
 
 }

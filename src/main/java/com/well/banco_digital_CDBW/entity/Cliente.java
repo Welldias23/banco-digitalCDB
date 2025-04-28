@@ -65,11 +65,16 @@ public class Cliente implements UserDetails{
 
 
 	public void atualizarCliente(ClienteDto clienteReq) {
-		Optional.ofNullable(clienteReq.nome()).ifPresent(nome -> this.nome = nome);
-		Optional.ofNullable(clienteReq.email()).ifPresent(email -> this.email = email);
-		Optional.ofNullable(clienteReq.senha()).ifPresent(senha -> this.senha = senha);
-		Optional.ofNullable(clienteReq.dataNascimento()).ifPresent(dataNascimento -> this.dataNascimento = dataNascimento);
-		Optional.ofNullable(clienteReq.rendaMensal()).ifPresent(rendaMensal -> this.rendaMensal = rendaMensal);
+		Optional.ofNullable(clienteReq.nome())
+					.ifPresent(nome -> this.nome = nome);
+		Optional.ofNullable(clienteReq.email())
+					.ifPresent(email -> this.email = email);
+		Optional.ofNullable(clienteReq.senha())
+					.ifPresent(senha -> this.senha = senha);
+		Optional.ofNullable(clienteReq.dataNascimento())
+					.ifPresent(dataNascimento -> this.dataNascimento = dataNascimento);
+		Optional.ofNullable(clienteReq.rendaMensal())
+					.ifPresent(rendaMensal -> this.rendaMensal = rendaMensal);
 	}
 
 

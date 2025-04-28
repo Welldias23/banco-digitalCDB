@@ -1,6 +1,8 @@
 package com.well.banco_digital_CDBW.entity;
 
-import com.well.banco_digital_CDBW.dto.EnderecoReqDto;
+import java.util.Optional;
+
+import com.well.banco_digital_CDBW.dto.EnderecoDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,8 +28,6 @@ public class Endereco {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String cep;
-	
-	//receber os dados e verificar o cep em outra api
 	private String cidade;
 	private String estado;
 	private String rua; 
@@ -39,7 +39,7 @@ public class Endereco {
     private Cliente cliente;
 
 	
-	public Endereco(EnderecoReqDto endereco, Cliente cliente) {
+	public Endereco(EnderecoDto endereco, Cliente cliente) {
 		this.cep = endereco.cep();
 		this.cidade = endereco.cidade();
 		this.estado = endereco.estado();
@@ -51,14 +51,21 @@ public class Endereco {
 	}
 
 
-	public void atualizar(EnderecoReqDto enderecoAtualizar) {
-		this.cep = enderecoAtualizar.cep();
-		this.cidade = enderecoAtualizar.cidade();
-		this.estado = enderecoAtualizar.estado();
-		this.rua = enderecoAtualizar.rua();
-		this.numero = enderecoAtualizar.numero();
-		this.complemento = enderecoAtualizar.complemento();
-		this.bairro = enderecoAtualizar.bairro();
+	public void atualizarCliente(EnderecoDto endereco) {
+		Optional.ofNullable(endereco.cep())
+				.ifPresent(cep -> this.cep = cep);
+		Optional.ofNullable(endereco.cidade())
+				.ifPresent(cidade -> this.cidade = cidade); 
+		Optional.ofNullable(endereco.estado())
+				.ifPresent(estado -> this.estado = estado); 
+	    Optional.ofNullable(endereco.rua())
+	    		.ifPresent(rua -> this.rua = rua);	
+		Optional.ofNullable(endereco.numero())
+				.ifPresent(numero -> this.numero = numero); 
+		Optional.ofNullable(endereco.complemento())
+				.ifPresent(complemento -> this.complemento = complemento); 
+		Optional.ofNullable(endereco.bairro())
+				.ifPresent(bairro -> this.bairro = bairro); 
 	}
 
 }
