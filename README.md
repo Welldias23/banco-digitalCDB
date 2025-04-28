@@ -115,7 +115,7 @@ src/
 
 ---
 
-## 📷 Screenshots (opcional)
+<!-- ## 📷 Screenshots (opcional)
 
 | Endpoint de Criação de Cliente | Endpoint de Consulta de Saldo |
 |:-------------------------------:|:-----------------------------:|
@@ -130,9 +130,9 @@ src/
 Este projeto está licenciado sob a licença **MIT**.  
 Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
----
+--- -->
 
 ## ✍️ Autor
 
-Feito com ❤️ por [Seu Nome].  
+Feito com ❤️ por Wellington Ribeiro Dias.  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/seu-linkedin)
