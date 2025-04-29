@@ -18,9 +18,14 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 - Java 17+
 - Spring Boot
+- Spring Web
 - Spring Data JPA
-- Spring Security + JWT (opcional)
-- Banco de Dados PostgreSQL
+- Spring Security + JWT
+- Bean Validation (Hibernate Validator)
+- PostgreSQL
+- Flyway (migração de banco de dados)
+- Lombok
+- Swagger (SpringDoc OpenAPI)
 - Maven
 
 ---
@@ -64,13 +69,23 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
-## 🔒 Funcionalidades Avançadas 
+## 🔒 Funcionalidades Avançadas
 
 - **Autenticação e Autorização** via Spring Security + JWT
-<!-- - **Perfis de Usuário** (`ADMIN`, `CLIENTE`) com permissões diferentes 
-- **Integração com APIs externas**:-->
 - Validação de CPF
-<!-- - Consulta de Taxa de Câmbio -->
+- Controle de acesso baseado em perfil (em desenvolvimento)
+
+---
+
+## 📟 Documentação da API
+
+A documentação dos endpoints está disponível via **Swagger UI** utilizando **SpringDoc OpenAPI 3**.
+
+Após iniciar a aplicação, acesse:
+
+> 📌 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+Essa interface permite testar os endpoints, visualizar schemas e entender o funcionamento da API de forma interativa.
 
 ---
 
@@ -81,18 +96,19 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 git clone https://git@github.com:Welldias23/banco-digitalCDB.git
 
 # Acesse o diretório
-cd seu-repositorio
+cd banco-digitalCDB
 
 # Execute o projeto
 ./mvnw spring-boot:run
 ```
 
-A aplicação estará disponível em:  
+A aplicação estará disponível em:
+
 > http://localhost:8080
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## 📂 Estrutura do Projeto
 
 ```bash
 src/
@@ -114,25 +130,17 @@ src/
 ```
 
 ---
-
-<!-- ## 📷 Screenshots (opcional)
-
-| Endpoint de Criação de Cliente | Endpoint de Consulta de Saldo |
-|:-------------------------------:|:-----------------------------:|
-| ![POST Cliente](https://via.placeholder.com/400x200.png?text=POST+/clientes) | ![GET Saldo](https://via.placeholder.com/400x200.png?text=GET+/contas/{id}/saldo) |
-
-*(Troque as imagens acima por prints reais depois que você tiver.)*
-
----
-
+<!--
 ## 📄 Licença
 
 Este projeto está licenciado sob a licença **MIT**.  
 Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
---- -->
+-->
+---
 
 ## ✍️ Autor
 
-Feito com ❤️ por Wellington Ribeiro Dias.  
+Feito com ❤️ por **Wellington Ribeiro Dias**  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/seu-linkedin)
+
+
