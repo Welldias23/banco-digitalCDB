@@ -141,6 +141,6 @@ Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 ## ✍️ Autor
 
 Feito com ❤️ por **Wellington Ribeiro Dias**  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/seu-linkedin)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/wellington-ribeiro-dias-dev-backend/)
 
 
