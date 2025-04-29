@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.DepositoReqDto;
 import com.well.banco_digital_CDBW.dto.DepositoResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.DepositoService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/deposito")
+@Tag(name = "deposito", description = "Controlador para efetuar deposito")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class DepositoController {
 	
 	@Autowired

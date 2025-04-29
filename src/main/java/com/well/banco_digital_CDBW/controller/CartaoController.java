@@ -21,13 +21,18 @@ import com.well.banco_digital_CDBW.dto.PagamentoFatura;
 import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
 import com.well.banco_digital_CDBW.dto.PagamentoResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.CartaoService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 
 @RestController
 @RequestMapping("/cartao")
+@Tag(name = "cartao", description = "Controlador para salvar e editar dados do cartao")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class CartaoController {
 	
 	@Autowired

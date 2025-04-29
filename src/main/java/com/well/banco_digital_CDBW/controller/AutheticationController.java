@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.LoginDto;
 import com.well.banco_digital_CDBW.dto.TokenJWTDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.TokenService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "login cliente", description = "Controlador para cliente login")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AutheticationController {
 	
 	@Autowired
