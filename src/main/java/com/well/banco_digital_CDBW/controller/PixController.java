@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.PixService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pix")
+@Tag(name = "pix", description = "Controlador para efetuar pix entre contas")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class PixController {
 	
 	@Autowired

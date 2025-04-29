@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.TransferenciaService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/transferencia")
+@Tag(name = "transferencia", description = "Controlador para efetuar trasnferencia entre contas")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class TransferenciaController {
 	
 	@Autowired

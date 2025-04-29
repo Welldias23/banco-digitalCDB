@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.well.banco_digital_CDBW.dto.SaqueReqDto;
 import com.well.banco_digital_CDBW.dto.SaqueResDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.SaqueService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/saque")
+@Tag(name = "saque", description = "Controlador para efetuar saque de uma conta")
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class SaqueController {
 	
 	@Autowired
