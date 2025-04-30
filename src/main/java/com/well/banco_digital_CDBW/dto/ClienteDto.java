@@ -59,4 +59,9 @@ public record ClienteDto(
 				cliente.getRendaMensal());
 	}
 
+	public ClienteDto(int id, String string, String string2, String string3, String string4, LocalDate of,
+			BigDecimal bigDecimal) {
+		this(null, string, string2, string3, string4, of, bigDecimal);
+	}
+
 }

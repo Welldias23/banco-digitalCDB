@@ -50,11 +50,14 @@ public class ContaController {
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ContaDto> cadastrarConta( @RequestBody @Validated ContaDto contaAAbrir, 
 			@AuthenticationPrincipal Cliente clienteLogado){
 		ContaDto conta = contaService.criarConta(clienteLogado.getId(), contaAAbrir);
@@ -70,9 +73,11 @@ public class ContaController {
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "Chave pix já cadastrada", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ContaDto> cadastrarPixConta(@PathVariable Long idConta,
 			@RequestBody @Valid PixDto pix, 
 			@AuthenticationPrincipal Cliente clienteLogado){
@@ -88,7 +93,8 @@ public class ContaController {
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ContaDto> detalharUmaConta(@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		ContaDto conta = contaService.detalharConta(idConta, clienteLogado.getId());
@@ -102,7 +108,8 @@ public class ContaController {
 		content = @Content(schema = @Schema(implementation = SaldoDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<SaldoDto> consultarSaldoConta(@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		SaldoDto saldo = contaService.buscarSaldoConta(idConta, clienteLogado.getId());

@@ -103,4 +103,14 @@ public class Cliente implements UserDetails{
 						: CategoriaCliente.SUPER).orElse(categoria);
 	}
 
+
+	public Cliente(int i, String nome, String cpf, String email, String senha, LocalDate dataNascimento, BigDecimal rendaMensal) {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.email = email;
+		this.senha = senha;
+		this.dataNascimento = dataNascimento;
+		this.rendaMensal = rendaMensal;
+	}
+
 }
