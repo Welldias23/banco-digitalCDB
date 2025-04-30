@@ -49,11 +49,14 @@ public class EnderecoController {
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<EnderecoDto> cadastrarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoReq, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		EnderecoDto endereco = enderecoService.cadastrarCliente(enderecoReq, clienteLogado);
@@ -69,7 +72,8 @@ public class EnderecoController {
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<EnderecoDto> detalharEndereco(@AuthenticationPrincipal Cliente clienteLogado){
 		EnderecoDto endereco = enderecoService.detalharEndereco(clienteLogado);
 		
@@ -84,7 +88,8 @@ public class EnderecoController {
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<EnderecoDto> atualizarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoAtualizar,
 			@AuthenticationPrincipal Cliente clienteLogado){
 		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);
@@ -99,13 +104,17 @@ public class EnderecoController {
 	)
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco atualizado", 
-		content = @Content(schema = @Schema(implementation = EnderecoDto.class)))
+		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
+	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-		content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-		content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-		content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<EnderecoDto> atualizarParcialmenteEndereco(@RequestBody @Validated EnderecoDto enderecoAtualizar,
 			@AuthenticationPrincipal Cliente clienteLogado){
 		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);

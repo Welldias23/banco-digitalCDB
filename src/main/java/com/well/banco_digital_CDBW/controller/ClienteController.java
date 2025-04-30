@@ -50,11 +50,14 @@ public class ClienteController {
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteReq, 
 			UriComponentsBuilder uriBuilder){		
 		ClienteDto cliente = clienteService.cadastrarCliente(clienteReq);
@@ -71,7 +74,8 @@ public class ClienteController {
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ClienteDto> detalharCliente(@AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.detalharCliente(clienteLogado);
 		return ResponseEntity.ok(cliente);	
@@ -85,11 +89,14 @@ public class ClienteController {
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ClienteDto> atualizarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteAtualizar, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
@@ -103,13 +110,17 @@ public class ClienteController {
 	)
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente atualizado", 
-		content = @Content(schema = @Schema(implementation = ClienteDto.class)))
+		content = @Content(schema = @Schema(implementation = ClienteDto.class))
+	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "409", description = "CPF ou email já cadastrado", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
-			content = @Content(schema = @Schema(implementation = RespostaDeErros.class)))
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
 	public ResponseEntity<ClienteDto> atualizarParcialmenteCliente(@RequestBody @Validated ClienteDto clienteAtualizar, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
