@@ -8,16 +8,13 @@ import com.well.banco_digital_CDBW.dto.CartaoDto;
 import com.well.banco_digital_CDBW.dto.FaturaDto;
 import com.well.banco_digital_CDBW.dto.FaturaPaga;
 import com.well.banco_digital_CDBW.dto.PagamentoFatura;
-import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
-import com.well.banco_digital_CDBW.exception.TipoCartaoInvalidoException;
 import com.well.banco_digital_CDBW.exception.ValorMaiorQueFatura;
 import com.well.banco_digital_CDBW.repository.CartaoCreditoRepository;
-import com.well.banco_digital_CDBW.repository.CartaoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
 

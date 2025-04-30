@@ -16,11 +16,16 @@ import com.well.banco_digital_CDBW.dto.FaturaDto;
 import com.well.banco_digital_CDBW.dto.FaturaPaga;
 import com.well.banco_digital_CDBW.dto.NovoLimiteDto;
 import com.well.banco_digital_CDBW.dto.PagamentoFatura;
+import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.CartaoCreditoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -39,6 +44,17 @@ public class CartaoCreditoController {
 	
 	@PostMapping("/{idConta}/emitir")
 	@JsonView(View.Get.class)
+	@Operation(summary = "Criar cartao de credito", description = "Cria um cartao de credito relacionado a conta")
+	@ApiResponse(responseCode = "201", 
+			description = "Cartao de credito criado",
+			content = @Content(schema = @Schema(implementation = CartaoDto.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Dados invalidos",
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Conta não existe",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
 	public ResponseEntity<CartaoDto> criarCartaoCredito(@RequestBody CartaoDto cartaoACriar, 
 			@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente cliente){
@@ -48,6 +64,17 @@ public class CartaoCreditoController {
 	
 	@PutMapping("/{idCartao}/limite")
 	@JsonView(View.Get.class)
+	@Operation(summary = "Alterar limite do cartao de credito", description = "Altera o limite do cartao de credito pelo id")
+	@ApiResponse(responseCode = "201", 
+			description = "Limite de credito alteredo",
+			content = @Content(schema = @Schema(implementation = CartaoDto.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Dados invalidos",
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Cartao não existe",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
 	public ResponseEntity<CartaoDto> alterarLimiteCredito(@PathVariable Long idCartao, 
 			@RequestBody @Valid NovoLimiteDto limite, 
 			@AuthenticationPrincipal Cliente clienteLogado){
@@ -58,6 +85,17 @@ public class CartaoCreditoController {
 	
 	
 	@GetMapping("/{idCartao}/fatura")
+	@Operation(summary = "Consulta a fatura do cartao de credito", description = "Consulta a fatura do cartao de credito pelo id")
+	@ApiResponse(responseCode = "200", 
+			description = "Fatura retornada",
+			content = @Content(schema = @Schema(implementation = FaturaDto.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Dados invalidos",
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Cartao não existe",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
 	public ResponseEntity<FaturaDto> consultarFatura(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado){
 		var fatuta = cartaoCreditoService.consultarFatura(idCartao, clienteLogado);
@@ -65,6 +103,20 @@ public class CartaoCreditoController {
 	}
 	
 	@PostMapping("/{idCartao}/fatura/pagamento")
+	@Operation(summary = "Paga a fatura do cartao de credito", description = "Paga a fatura do cartao de credito pelo id")
+	@ApiResponse(responseCode = "200", 
+			description = "Fatura paga",
+			content = @Content(schema = @Schema(implementation = FaturaPaga.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Dados invalidos",
+			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Cartao não existe",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
+	@ApiResponse(responseCode = "400", description = "Valor enviado maior que o valor da fatura",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
 	public ResponseEntity<FaturaPaga> pagarFatura(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado,
 			@RequestBody PagamentoFatura pagamentoFatura){
