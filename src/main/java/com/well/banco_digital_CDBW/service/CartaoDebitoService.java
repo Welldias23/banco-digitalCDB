@@ -33,6 +33,7 @@ public class CartaoDebitoService {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoDebito cartao = buscarPorIdECliente(idCartao, clienteLogado);
 		cartao.alterarLimiteDiario(novoLimite);
+		cartaoDebitoRepository.save(cartao);
 		
 		return new CartaoDto(cartao);
 	}

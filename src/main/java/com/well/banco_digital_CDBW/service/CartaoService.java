@@ -71,7 +71,7 @@ public class CartaoService {
 	}
 
 	public Cartao buscarPorIdECliente(Long idCartao, Cliente clienteLogado) {
-		return cartaoRepository.findByIdAndContaClienteId(idCartao)
+		return cartaoRepository.findByIdAndContaClienteId(idCartao, clienteLogado.getId())
 				.orElseThrow(() -> new CartaoNaoExisteException());
 	}
 

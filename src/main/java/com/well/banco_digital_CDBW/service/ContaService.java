@@ -25,15 +25,15 @@ public class ContaService {
 	
 	private final ClienteService clienteService;
 
-	//private final CartaoService cartaoService;
+	private final CartaoDebitoService cartaoDebitoService;
 	
 	private final ContaRepository contaRepository;
 	
 	public ContaService(ClienteService clienteService,
-			//CartaoService cartaoService,
+			CartaoDebitoService cartaoDebitoService,
 			ContaRepository contaRepository) {
 		this.clienteService = clienteService;
-		//this.cartaoService = cartaoService;
+		this.cartaoDebitoService = cartaoDebitoService;
 		this.contaRepository = contaRepository;
 	}
 	
@@ -41,10 +41,10 @@ public class ContaService {
 	public ContaDto criarConta(Long id, ContaDto contaAbrir) {
 		Cliente cliente = clienteService.buscarclientePorId(id);
 		Conta conta = criar(cliente, contaAbrir);
-		//cartaoService.criar(conta);
 		conta = contaRepository.save(conta);
 		conta.gerarNumeroConta(conta.getId());
 		contaRepository.save(conta);
+		cartaoDebitoService.criarCartaoDebito(conta);
 		
 		return new ContaDto(conta);
 	}

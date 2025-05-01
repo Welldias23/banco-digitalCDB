@@ -219,6 +219,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(ContaJaPossuiCartaoDesseTipo.class)
+	public ProblemDetail tratadorContaJaPossuiCartaoDesseTipo(ContaJaPossuiCartaoDesseTipo ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("Essa conta ja possui um cartao desse tipo.");
+		problemDetail.setDetail("Entre em contato com seu gerente.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

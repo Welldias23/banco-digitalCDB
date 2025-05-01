@@ -44,13 +44,16 @@ public class CartaoCreditoController {
 	
 	@PostMapping("/{idConta}/emitir")
 	@JsonView(View.Get.class)
-	@Operation(summary = "Criar cartao de credito", description = "Cria um cartao de credito relacionado a conta")
+	@Operation(summary = "Criar cartao de credito", description = "Cria um cartao de credito relacionado a conta e valida se ja existe um")
 	@ApiResponse(responseCode = "201", 
 			description = "Cartao de credito criado",
 			content = @Content(schema = @Schema(implementation = CartaoDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados invalidos",
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Conta ja possui um cartao desse tipo",
+	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Conta não existe",
 	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))

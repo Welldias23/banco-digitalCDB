@@ -33,6 +33,9 @@ public record CartaoDto(
 		BigDecimal limiteCredito,
 		
 		@JsonView(View.Get.class)
+		BigDecimal limiteCreditoUsado,
+		
+		@JsonView(View.Get.class)
 		LocalDate dataCriacao,
 		
 		@JsonView(View.Get.class)
@@ -47,7 +50,8 @@ public record CartaoDto(
 				null,
 				cartao.getNumeroCartao(), 
 				null,
-				cartao.getLimiteCreditoDisponivel(), 
+				cartao.getLimiteCreditoTotal(),
+				cartao.getLimiteCreditoUsado(),
 				cartao.getDataCriacao(), 
 				cartao.getHoraCriacao(), 
 				cartao.getAtivo());
@@ -60,6 +64,7 @@ public record CartaoDto(
 				cartao.getNumeroCartao(), 
 				cartao.getLimiteDiario(),
 				null, 
+				null,
 				cartao.getDataCriacao(), 
 				cartao.getHoraCriacao(), 
 				cartao.getAtivo());
@@ -72,6 +77,7 @@ public record CartaoDto(
 				cartao.getNumeroCartao(), 
 				null,
 				null, 
+				null,
 				cartao.getDataCriacao(), 
 				cartao.getHoraCriacao(), 
 				cartao.getAtivo());
