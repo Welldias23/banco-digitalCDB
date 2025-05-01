@@ -2,15 +2,13 @@ package com.well.banco_digital_CDBW.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import com.well.banco_digital_CDBW.dto.ContaDto;
 import com.well.banco_digital_CDBW.exception.CategoriaNaoExisteException;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,20 +29,9 @@ public class CartaoCredito extends Cartao{
 	private List<PagamentoCredito> fatura;
 	
 	
-	public CartaoCredito(Conta conta, Cliente cliente, String senha, String numeroCartao) {
+	public CartaoCredito(Conta conta, String senha, String numeroCartao) {
 		super(conta, senha, numeroCartao);
 		this.taxaAnuidade = new BigDecimal("150.00");
-		//tirar essa regra do construtor
-		if(cliente.getCategoria() == CategoriaCliente.COMUM) {
-			this.limiteCreditoTotal = new BigDecimal("1000.00");
-		} else if(cliente.getCategoria() == CategoriaCliente.SUPER) {
-			this.limiteCreditoTotal = new BigDecimal("5000.00");
-		} else if(cliente.getCategoria() == CategoriaCliente.PREMIUM) {
-			this.limiteCreditoTotal = new BigDecimal("10000.00");
-		}else {
-			throw new CategoriaNaoExisteException();
-		}
-		this.limiteCreditoDisponivel = this.limiteCreditoTotal;
 		
 	}
 
@@ -53,6 +40,17 @@ public class CartaoCredito extends Cartao{
 		//colocar a logica 
 		this.limiteCreditoTotal = limite;
 		
+	}
+	
+	public void calcularLimiteInicial(Cliente cliente) {
+		this.limiteCreditoTotal = Optional.ofNullable(cliente.getCategoria())
+				.map(c -> c.equals(CategoriaCliente.COMUM) ? new BigDecimal("1000")
+						: c.equals(CategoriaCliente.SUPER) ? new BigDecimal("5000")
+						: c.equals(CategoriaCliente.PREMIUM) ? new BigDecimal("10000")
+						: new BigDecimal("200"))
+						.orElseThrow(() -> new CategoriaNaoExisteException());
+		
+		this.limiteCreditoDisponivel = this.limiteCreditoTotal;
 	}
 
 

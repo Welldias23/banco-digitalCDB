@@ -33,8 +33,7 @@ public class PagamentoService {
 
 	public PagamentoResDto pagar(Long idCartao, Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
-		var cartao = cartaoService.buscarPorId(idCartao);
-		cartaoService.cartaoPertenceCliente(cartao, clienteLogado);
+		var cartao = cartaoService.buscarPorIdECliente(idCartao, clienteLogado);
 		var pagamento = tipoPagamento(cartao, pagamentoReq);
 		pagamentoRepository.save(pagamento);
 
