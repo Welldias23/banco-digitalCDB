@@ -229,6 +229,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(FormaDePagamentoInvalidaException.class)
+	public ProblemDetail tratadorFormaDePagamentoInvalidaException(FormaDePagamentoInvalidaException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("Essa forma de pagamento não é aceita.");
+		problemDetail.setDetail("Informe uma forma de pagamento valida: Cartao de debito, Cartao de credito ou Pix.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 

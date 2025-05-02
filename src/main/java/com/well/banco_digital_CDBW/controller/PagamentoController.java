@@ -20,19 +20,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/cartao")
-@Tag(name = "cartao", description = "Controlador para efetuar pagamento com cartao")
+@RequestMapping("/pagamento")
+@Tag(name = "pagamento", description = "Controlador para efetuar pagamento")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
-public class PagamentoCartaoController {
+public class PagamentoController {
 	
 	@Autowired
 	private PagamentoService pagamentoService;
 	
-	@PostMapping("/{idCartao}/pagamento")
+	@PostMapping
 	public ResponseEntity<PagamentoResDto> realizarPagamento(@RequestBody @Valid PagamentoReqDto pagamentoReq, 
-			@AuthenticationPrincipal Cliente clienteLogado,
-			@PathVariable Long idCartao){
-		var pagamento = pagamentoService.pagar(idCartao, clienteLogado, pagamentoReq);
+			@AuthenticationPrincipal Cliente clienteLogado){
+		var pagamento = pagamentoService.pagar(clienteLogado, pagamentoReq);
 		
 		return ResponseEntity.ok(pagamento);
 	}

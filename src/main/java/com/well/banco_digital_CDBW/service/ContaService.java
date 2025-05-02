@@ -118,7 +118,10 @@ public class ContaService {
 		return contaRepository.findAllByDayMonth(diaDoMes);
 	}
 
-	public void atualizarSaldoConta(Conta conta) {
+
+	public void debitarSaldoConta(Conta conta, BigDecimal valor) {
+		validarSaldoSufuciente(conta.getSaldo(), valor);
+		conta.debitar(valor);
 		contaRepository.save(conta);		
 	}
 
