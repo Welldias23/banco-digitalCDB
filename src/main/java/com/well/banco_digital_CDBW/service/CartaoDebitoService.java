@@ -48,7 +48,7 @@ public class CartaoDebitoService {
 
 	
 
-	private CartaoDebito buscarPorIdECliente(Long idCartao, Cliente clienteLogado) {
+	public CartaoDebito buscarPorIdECliente(Long idCartao, Cliente clienteLogado) {
 		return cartaoDebitoRepository.findByIdAndContaClienteId(idCartao, clienteLogado.getId())
 				.orElseThrow(() -> new CartaoNaoExisteException());
 	}
