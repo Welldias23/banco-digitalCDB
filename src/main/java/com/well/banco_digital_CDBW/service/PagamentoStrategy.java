@@ -7,5 +7,5 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 
 public interface PagamentoStrategy {
 
-	PagamentoResDto pagar(Long idCartao, Cliente clienteLogado, PagamentoReqDto pagamentoReq);
+	PagamentoResDto pagar(Cliente clienteLogado, PagamentoReqDto pagamentoReq);
 }

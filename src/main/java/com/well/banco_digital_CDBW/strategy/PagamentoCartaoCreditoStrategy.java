@@ -1,7 +1,6 @@
 package com.well.banco_digital_CDBW.strategy;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
 import com.well.banco_digital_CDBW.dto.PagamentoResDto;
@@ -13,24 +12,28 @@ import com.well.banco_digital_CDBW.service.CartaoCreditoService;
 import com.well.banco_digital_CDBW.service.ClienteService;
 import com.well.banco_digital_CDBW.service.PagamentoStrategy;
 
+@Component
 public class PagamentoCartaoCreditoStrategy implements PagamentoStrategy{
 	
-	@Autowired
-	private ClienteService clienteService;
+	private final ClienteService clienteService;
 	
-	@Autowired
-	private CartaoCreditoService cartaoCreditoService;
+	private final CartaoCreditoService cartaoCreditoService;
 	
-	@Autowired
-	private PagamentoRepository pagamentoRepository;
+	private final PagamentoRepository pagamentoRepository;
 	
-		
+	public PagamentoCartaoCreditoStrategy(ClienteService clienteService,CartaoCreditoService cartaoCreditoService,
+			PagamentoRepository pagamentoRepository) {
+		this.clienteService = clienteService;
+		this.cartaoCreditoService = cartaoCreditoService;
+		this.pagamentoRepository = pagamentoRepository;
+	}
 
 	@Override
-	public PagamentoResDto pagar(Long idCartao, Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
+	public PagamentoResDto pagar(Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
-		CartaoCredito cartao = cartaoCreditoService.buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
+		CartaoCredito cartao = cartaoCreditoService.buscarCartaoCreditoPorIdECliente(pagamentoReq.idDaFormaDePagamento(), clienteLogado);
 		PagamentoCredito pagamento = new PagamentoCredito(cartao, pagamentoReq);
+		cartao.debitarNoLimite(pagamento.getValor());
 		pagamentoRepository.save(pagamento);
 
 		return new PagamentoResDto(pagamento);
