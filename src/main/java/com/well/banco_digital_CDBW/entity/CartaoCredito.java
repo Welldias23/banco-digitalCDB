@@ -24,7 +24,7 @@ public class CartaoCredito extends Cartao{
 
 	private BigDecimal taxaAnuidade;
 	private BigDecimal limiteCreditoTotal;
-	private BigDecimal limiteCreditoDisponivel;
+	private BigDecimal limiteCreditoUsado;
 	@OneToMany(mappedBy = "cartao")
 	private List<PagamentoCredito> fatura;
 	
@@ -39,7 +39,6 @@ public class CartaoCredito extends Cartao{
 	public void alterarLimite(BigDecimal limite) {
 		//colocar a logica 
 		this.limiteCreditoTotal = limite;
-		
 	}
 	
 	public void calcularLimiteInicial(Cliente cliente) {
@@ -50,21 +49,17 @@ public class CartaoCredito extends Cartao{
 						: new BigDecimal("200"))
 						.orElseThrow(() -> new CategoriaNaoExisteException());
 		
-		this.limiteCreditoDisponivel = this.limiteCreditoTotal;
+		this.limiteCreditoUsado = new BigDecimal("0");
 	}
 
 
 	public void debitarNoLimite(BigDecimal valor) {
-		this.limiteCreditoDisponivel = limiteCreditoDisponivel.subtract(valor);
-	}
-	
-	public BigDecimal calcularFatura() {
-		return limiteCreditoDisponivel.subtract(limiteCreditoTotal).abs();
+		this.limiteCreditoUsado = limiteCreditoUsado.add(valor);
 	}
 
 
 	public void creditarNoLimite(BigDecimal valor) {
-		this.limiteCreditoDisponivel = limiteCreditoDisponivel.add(valor);
+		this.limiteCreditoUsado = limiteCreditoUsado.subtract(valor);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.well.banco_digital_CDBW.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -8,10 +9,12 @@ import com.well.banco_digital_CDBW.dto.CartaoDto;
 import com.well.banco_digital_CDBW.dto.FaturaDto;
 import com.well.banco_digital_CDBW.dto.FaturaPaga;
 import com.well.banco_digital_CDBW.dto.PagamentoFatura;
+import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
+import com.well.banco_digital_CDBW.exception.ContaJaPossuiCartaoDesseTipo;
 import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
 import com.well.banco_digital_CDBW.exception.ValorMaiorQueFatura;
 import com.well.banco_digital_CDBW.repository.CartaoCreditoRepository;
@@ -41,6 +44,7 @@ public class CartaoCreditoService {
 	
 	public CartaoDto criarCartaoCredito(Cliente cliente, Long idConta, CartaoDto cartaoACriar) {
 		Conta conta = contaService.buscarContaPorIdContaIdCliente(idConta, cliente.getId());
+		validarSeJaTemCartaoCredito(conta);
 		String numeroCartao = geraNumero.criarNumeroCartao(cartaoACriar.bandeira());
 		CartaoCredito cartao = new CartaoCredito(
 				conta, 
@@ -67,20 +71,18 @@ public class CartaoCreditoService {
 	public FaturaDto consultarFatura(Long idCartao, Cliente clienteLogado) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
-		BigDecimal valorFatura =cartao.calcularFatura();
 		
-		return new FaturaDto(valorFatura, cartao.getFatura());
+		return new FaturaDto(cartao.getLimiteCreditoUsado(), cartao.getFatura());
 	}
 
 	public FaturaPaga pagarFatura(Long idCartao, Cliente clienteLogado, PagamentoFatura pagamentoFatura) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
-		BigDecimal valorFatura =cartao.calcularFatura();
 		valorDePagamentoMaiorValorFatura(cartao, pagamentoFatura.valor());
 		cartao.creditarNoLimite(pagamentoFatura.valor());
 		cartaoRepository.save(cartao);
 		
-		return new FaturaPaga(valorFatura, pagamentoFatura.valor(), cartao.getLimiteCreditoDisponivel());
+		return new FaturaPaga(cartao.getLimiteCreditoUsado(), pagamentoFatura.valor(), cartao.getLimiteCreditoUsado());
 	}
 	
 	
@@ -91,19 +93,30 @@ public class CartaoCreditoService {
 
 	
 	private void valorDePagamentoMaiorValorFatura(CartaoCredito cartao, BigDecimal valor) {
-		var valorFatura = cartao.calcularFatura();
-		if(valor.compareTo(valorFatura) > 0) {
+		if(valor.compareTo(cartao.getLimiteCreditoUsado()) > 0) {
 			throw new ValorMaiorQueFatura();
 		}
 	}
 
 	
 	public void limiteESuficiente(CartaoCredito cartao, BigDecimal valor) {
-		var resto = cartao.getLimiteCreditoDisponivel().subtract(valor);
-		if (resto.compareTo(BigDecimal.ZERO) <= 0) {
+		BigDecimal limiteDisponivel =  cartao.getLimiteCreditoTotal()
+				.subtract(cartao.getLimiteCreditoUsado());		
+		if (limiteDisponivel.compareTo(valor) < 0) {
 			throw new LimiteDeCreditoInsuficiente();
 		}
 	}
+	
+	private void validarSeJaTemCartaoCredito(Conta conta) {
+		List<Cartao> contas = cartaoRepository.findByContaId(conta.getId());
+		contas.stream()
+			.filter(cartao -> cartao instanceof CartaoCredito)
+			.findFirst()
+			.ifPresent(cartao -> {
+				throw new ContaJaPossuiCartaoDesseTipo();
+			});
+	}
+
 
 
 
