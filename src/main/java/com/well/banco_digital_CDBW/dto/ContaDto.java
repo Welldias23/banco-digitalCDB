@@ -5,29 +5,36 @@ import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.entity.Conta;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record ContaDto(
-		@JsonView(View.Post.class)
+		@JsonView(View.Persistir.class)
 		@NotBlank(groups = Complete.class, message = "Você deve informar o tipo da: conta corrente ou conta poupança")
 		String tipoConta,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long agencia,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		String numeroConta,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal saldo,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		String chavePix,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Boolean ativa
 		) {
 

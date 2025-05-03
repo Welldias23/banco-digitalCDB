@@ -1,6 +1,6 @@
 package com.well.banco_digital_CDBW.entity;
 
-import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
+import com.well.banco_digital_CDBW.dto.PagamentoDto;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -20,7 +20,7 @@ public class PagamentoDebito extends Pagamento {
 	@JoinColumn(name = "cartao_debito_id")
 	private CartaoDebito cartao;
 
-	public PagamentoDebito(CartaoDebito cartao, PagamentoReqDto pagamentoReq) {
+	public PagamentoDebito(CartaoDebito cartao, PagamentoDto pagamentoReq) {
 		super(pagamentoReq);
 		this.cartao = cartao;
 	}

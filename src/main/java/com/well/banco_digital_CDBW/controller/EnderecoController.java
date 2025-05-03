@@ -42,7 +42,7 @@ public class EnderecoController {
 	}
 	
 	@PostMapping("/cadastrar")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar endereco", description = "Cria um novo endereco")
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco cadastrado", 
@@ -65,7 +65,7 @@ public class EnderecoController {
 	}
 	
 	@GetMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Detalhar endereco", description = "Detalha endereco do cliente logado")
 	@ApiResponse(responseCode = "200", 
 		description = "Endereco detalhado", 
@@ -81,7 +81,7 @@ public class EnderecoController {
 	}
 	
 	@PutMapping("/atualizar")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar endereco", description = "Atualiza o endereco do cliente logado")
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco atualizado", 
@@ -98,7 +98,7 @@ public class EnderecoController {
 	}
 	
 	@PatchMapping("/atualizar")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar endereco parcialmente", 
 	description = "atualiza o endereco do cliente logado parcialmente"
 	)
