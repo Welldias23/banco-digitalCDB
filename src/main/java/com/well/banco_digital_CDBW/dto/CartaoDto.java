@@ -9,39 +9,48 @@ import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record CartaoDto(	
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
-		@JsonView(View.Post.class)
+		@JsonView(View.Persistir.class)
 		@NotBlank(groups = Complete.class, message = "A bandeira do cartão é obrigatoria escolha MasterCard ou Visa.")
 		String bandeira,
 		
-		@JsonView(View.Post.class)
+		@JsonView(View.Persistir.class)
 		@NotBlank(groups = Complete.class, message = "A senha do cartão é obrigatoria.")
 		String senha,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		String numeroCartao,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteDiario,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteCredito,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteCreditoUsado,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalDate dataCriacao,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalTime horaCriacao,
 		
-		@JsonView(View.Get.class)
+		@JsonView(View.Detalhar.class)
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Boolean ativo) {
 
 	public CartaoDto(CartaoCredito cartao) {

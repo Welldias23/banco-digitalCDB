@@ -2,8 +2,7 @@ package com.well.banco_digital_CDBW.strategy;
 
 import org.springframework.stereotype.Component;
 
-import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
-import com.well.banco_digital_CDBW.dto.PagamentoResDto;
+import com.well.banco_digital_CDBW.dto.PagamentoDto;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.PagamentoCredito;
@@ -29,14 +28,14 @@ public class PagamentoCartaoCreditoStrategy implements PagamentoStrategy{
 	}
 
 	@Override
-	public PagamentoResDto pagar(Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
+	public PagamentoDto pagar(Cliente clienteLogado, PagamentoDto pagamentoReq) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = cartaoCreditoService.buscarCartaoCreditoPorIdECliente(pagamentoReq.idDaFormaDePagamento(), clienteLogado);
 		PagamentoCredito pagamento = new PagamentoCredito(cartao, pagamentoReq);
 		cartao.debitarNoLimite(pagamento.getValor());
 		pagamentoRepository.save(pagamento);
 
-		return new PagamentoResDto(pagamento);
+		return new PagamentoDto(pagamento);
 	}
 
 }

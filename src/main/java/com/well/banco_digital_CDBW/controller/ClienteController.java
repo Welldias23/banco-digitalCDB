@@ -26,6 +26,7 @@ import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.ClienteService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,7 +44,7 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@PostMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar cliente", description = "Cria um novo cliente validando idade mínima, CPF e email")
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente cadastrado", 
@@ -67,7 +68,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Detalhar cliente", description = "Detalha o cliente logado")
 	@ApiResponse(responseCode = "200", 
 		description = "Cliente detalhado", 
@@ -76,13 +77,14 @@ public class ClienteController {
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<ClienteDto> detalharCliente(@AuthenticationPrincipal Cliente clienteLogado) {
+	public ResponseEntity<ClienteDto> detalharCliente(
+			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.detalharCliente(clienteLogado);
 		return ResponseEntity.ok(cliente);	
 	}
 	
 	@PutMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar cliente", description = "Atualiza o cliente logado validando idade mínima, CPF e email")
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente atualizado", 
@@ -98,13 +100,13 @@ public class ClienteController {
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	public ResponseEntity<ClienteDto> atualizarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteAtualizar, 
-			@AuthenticationPrincipal Cliente clienteLogado) {
+			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
 		return ResponseEntity.ok(cliente);
 	}
 	
 	@PatchMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar cliente parcialmente", 
 		description = "atualiza o cliente logado parcialmente validando idade mínima, CPF e email"
 	)
@@ -122,7 +124,7 @@ public class ClienteController {
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	public ResponseEntity<ClienteDto> atualizarParcialmenteCliente(@RequestBody @Validated ClienteDto clienteAtualizar, 
-			@AuthenticationPrincipal Cliente clienteLogado) {
+			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
 		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
 		return ResponseEntity.ok(cliente);
 	}
@@ -130,7 +132,8 @@ public class ClienteController {
 	@DeleteMapping
 	@Operation(summary = "Excluir cliente", description = "Excluir cliente logado")
 	@ApiResponse(responseCode = "204", description = "Cliente excluido")
-	public ResponseEntity<ClienteDto> excluirCliente(@AuthenticationPrincipal Cliente clienteLogado) {
+	public ResponseEntity<ClienteDto> excluirCliente(
+			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
 		clienteService.excluirCliente(clienteLogado);
 		return ResponseEntity.noContent().build();
 	}

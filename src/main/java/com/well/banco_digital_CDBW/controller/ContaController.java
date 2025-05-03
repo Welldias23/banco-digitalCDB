@@ -43,7 +43,7 @@ public class ContaController {
 	
 
 	@PostMapping
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Criar conta", description = "Cria uma nova conta")
 	@ApiResponse(responseCode = "201", 
 		description = "Conta criada", 
@@ -66,7 +66,7 @@ public class ContaController {
 	}
 	
 	@PostMapping("/pix/{idConta}")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Criar pix na conta", description = "Cria uma chave pix na conta e valida se ela é unica")
 	@ApiResponse(responseCode = "201", 
 		description = "Pix criado", 
@@ -86,7 +86,7 @@ public class ContaController {
 	}
 	
 	@GetMapping("/{idConta}")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Detalhar conta", description = "Detalha conta por id")
 	@ApiResponse(responseCode = "200", 
 		description = "Conta detalhada", 

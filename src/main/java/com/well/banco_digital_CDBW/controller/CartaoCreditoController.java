@@ -43,7 +43,7 @@ public class CartaoCreditoController {
 	}
 	
 	@PostMapping("/{idConta}/emitir")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Criar cartao de credito", description = "Cria um cartao de credito relacionado a conta e valida se ja existe um")
 	@ApiResponse(responseCode = "201", 
 			description = "Cartao de credito criado",
@@ -66,7 +66,7 @@ public class CartaoCreditoController {
 	}
 	
 	@PutMapping("/{idCartao}/limite")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Alterar limite do cartao de credito", description = "Altera o limite do cartao de credito pelo id")
 	@ApiResponse(responseCode = "201", 
 			description = "Limite de credito alteredo",

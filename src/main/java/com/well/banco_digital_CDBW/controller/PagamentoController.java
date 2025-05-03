@@ -1,23 +1,28 @@
 package com.well.banco_digital_CDBW.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
-import com.well.banco_digital_CDBW.dto.PagamentoResDto;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.well.banco_digital_CDBW.dto.Complete;
+import com.well.banco_digital_CDBW.dto.PagamentoDto;
+import com.well.banco_digital_CDBW.dto.RespostaDeErros;
+import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.PagamentoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pagamento")
@@ -25,13 +30,31 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class PagamentoController {
 	
-	@Autowired
-	private PagamentoService pagamentoService;
+	private final PagamentoService pagamentoService;
+	
+	public PagamentoController(PagamentoService pagamentoService) {
+		this.pagamentoService = pagamentoService;
+	}
 	
 	@PostMapping
-	public ResponseEntity<PagamentoResDto> realizarPagamento(@RequestBody @Valid PagamentoReqDto pagamentoReq, 
+	@JsonView(View.Detalhar.class)
+	@Operation(summary = "Realiza pagamento", description = "Realiza pagamentos com cartoes do cliente logado")
+	@ApiResponse(responseCode = "201",
+			description = "Pagamento realizado",
+			content = @Content(schema = @Schema(implementation = PagamentoDto.class))
+	)
+	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+	)
+	@ApiResponse(responseCode = "409", description = "Forma de pagamento invalida", 
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
+	@ApiResponse(responseCode = "400", description = "Sem saldo ou limite de credito", 
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+    )
+	public ResponseEntity<PagamentoDto> realizarPagamento(@RequestBody @Validated(Complete.class) PagamentoDto pagamentoReq, 
 			@AuthenticationPrincipal Cliente clienteLogado){
-		var pagamento = pagamentoService.pagar(clienteLogado, pagamentoReq);
+		PagamentoDto pagamento = pagamentoService.pagar(clienteLogado, pagamentoReq);
 		
 		return ResponseEntity.ok(pagamento);
 	}

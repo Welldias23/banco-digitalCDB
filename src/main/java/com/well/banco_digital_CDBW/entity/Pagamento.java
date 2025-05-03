@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
+import com.well.banco_digital_CDBW.dto.PagamentoDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +34,7 @@ public abstract class Pagamento{
 	private LocalDate data;
 	private LocalTime hora;
 	
-	public Pagamento(PagamentoReqDto pagamentoReq) {
+	public Pagamento(PagamentoDto pagamentoReq) {
 		this.nomeEstabelecimento = pagamentoReq.nomeEstabelecimento();
 		this.nomeObjeto = pagamentoReq.nomeObjeto();
 		this.valor = pagamentoReq.valor();

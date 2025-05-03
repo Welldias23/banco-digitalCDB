@@ -4,8 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.well.banco_digital_CDBW.dto.PagamentoReqDto;
-import com.well.banco_digital_CDBW.dto.PagamentoResDto;
+import com.well.banco_digital_CDBW.dto.PagamentoDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.FormaDePagamentoInvalidaException;
 import com.well.banco_digital_CDBW.strategy.PagamentoCartaoCreditoStrategy;
@@ -24,7 +23,7 @@ public class PagamentoService {
 			);
 	}
 
-	public PagamentoResDto pagar(Cliente clienteLogado, PagamentoReqDto pagamentoReq) {
+	public PagamentoDto pagar(Cliente clienteLogado, PagamentoDto pagamentoReq) {
 		PagamentoStrategy formaPagamento = mapStrategy.get(pagamentoReq
 				.tipoPagamento()
 				.toUpperCase()

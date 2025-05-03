@@ -40,7 +40,7 @@ public class CartaoController {
 	}
 	
 	@GetMapping("/{idCartao}")
-	@JsonView(View.Get.class)
+	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Detalha um cartao", description = "Detalha um cartao pelo id, e que pertenca ao cliente logado")
 	@ApiResponse(responseCode = "200", 
 			description = "Cartao retornado",
