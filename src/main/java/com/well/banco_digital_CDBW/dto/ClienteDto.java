@@ -23,33 +23,34 @@ public record ClienteDto(
 		Long id,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
-		@NotBlank(groups = Complete.class, message = "O campo nome é obrigatorio.")
+		@NotBlank(groups = {Creat.class, UpDate.class}, message = "O campo nome é obrigatorio.")
 		@Size(min = 2, max = 200, message = "o campo nome deve conter no mínimo 2 caracteres e máximo de 100 caracteres.")
 		@Pattern(regexp = "^[a-zA-ZÀ-ú ]+$", message = "O campo nome deve conter apenas letras.")
 		String nome,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
-		@NotBlank(groups = Complete.class, message = "O campo cpf é obrigatorio.")
+		@NotBlank(groups = Creat.class, message = "O campo cpf é obrigatorio.")
+		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		@CPF
 		String cpf,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
-		@NotBlank(groups = Complete.class, message = "O campo email é obrigatorio.")
+		@NotBlank(groups = {Creat.class, UpDate.class}, message = "O campo email é obrigatorio.")
 		@Email(message = "Deve ser um emai valido.")
 		String email,
 		
 		@JsonView(View.Persistir.class)
-		@NotBlank(groups = Complete.class, message = "O campo senha é obrigatorio.")
+		@NotBlank(groups = {Creat.class, UpDate.class}, message = "O campo senha é obrigatorio.")
 		@Size(min = 6, message = "A senha deve ter no minimo 6 digitos.")
 		String senha,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
-		@NotNull(groups = Complete.class, message = "O campo data de nascimento é obrigatorio.")
+		@NotNull(groups = {Creat.class, UpDate.class}, message = "O campo data de nascimento é obrigatorio.")
 		@Past(message = "A data de nascimento deve estar no passado.")
 		LocalDate dataNascimento,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
-		@NotNull(groups = Complete.class, message = "O campo renda mensal é obrigatorio.")
+		@NotNull(groups = {Creat.class, UpDate.class}, message = "O campo renda mensal é obrigatorio.")
 		BigDecimal rendaMensal) {
 
 	public ClienteDto(Cliente cliente) {

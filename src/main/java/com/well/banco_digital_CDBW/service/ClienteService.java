@@ -54,6 +54,7 @@ public class ClienteService {
 		Cliente cliente = buscarclientePorId(clienteLogado.getId());
 		cliente.atualizarCliente(clienteAtualizar);
 		cliente.definirCategoria(clienteAtualizar);
+		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		return new ClienteDto(cliente);
 	}
 	

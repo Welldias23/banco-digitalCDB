@@ -19,7 +19,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.Complete;
+import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
+import com.well.banco_digital_CDBW.dto.UpDate;
 import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.security.SecurityConfigurations;
@@ -59,10 +61,8 @@ public class ClienteController {
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteReq, 
-			UriComponentsBuilder uriBuilder){		
-
-		System.out.println("CHEGUEI AQUI!!!");
+	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Validated(Creat.class) ClienteDto clienteReq, 
+			UriComponentsBuilder uriBuilder){	
 		ClienteDto cliente = clienteService.cadastrarCliente(clienteReq);
 		URI uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.id()).toUri();
 		return ResponseEntity.created(uri).body(cliente);
@@ -81,8 +81,7 @@ public class ClienteController {
 	)
 	public ResponseEntity<ClienteDto> detalharCliente(
 			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
-		ClienteDto cliente = clienteService.detalharCliente(clienteLogado);
-		return ResponseEntity.ok(cliente);	
+		return ResponseEntity.ok(clienteService.detalharCliente(clienteLogado));	
 	}
 	
 	@PutMapping
@@ -101,10 +100,9 @@ public class ClienteController {
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<ClienteDto> atualizarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteAtualizar, 
+	public ResponseEntity<ClienteDto> atualizarCliente(@RequestBody @Validated(UpDate.class) ClienteDto clienteAtualizar, 
 			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
-		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
-		return ResponseEntity.ok(cliente);
+		return ResponseEntity.ok(clienteService.atualizarCliente(clienteAtualizar, clienteLogado));
 	}
 	
 	@PatchMapping
