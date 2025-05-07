@@ -61,6 +61,8 @@ public class ClienteController {
 	)
 	public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Validated(Complete.class) ClienteDto clienteReq, 
 			UriComponentsBuilder uriBuilder){		
+
+		System.out.println("CHEGUEI AQUI!!!");
 		ClienteDto cliente = clienteService.cadastrarCliente(clienteReq);
 		URI uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.id()).toUri();
 		return ResponseEntity.created(uri).body(cliente);

@@ -23,5 +23,9 @@ public class Deposito extends Transacao{
 		getContaDestino().creditar(getValor());
 		
 	}
+	
+    public Deposito() {
+		
+	}
 
 }

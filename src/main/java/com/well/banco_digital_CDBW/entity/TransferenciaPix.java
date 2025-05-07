@@ -23,4 +23,8 @@ public class TransferenciaPix extends Transacao{
 		getContaOrigem().debitar(getValor());
 		
 	}
+	
+	public TransferenciaPix() {
+		
+	}
 }
