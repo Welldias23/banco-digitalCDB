@@ -125,8 +125,7 @@ public class ClienteController {
 	)
 	public ResponseEntity<ClienteDto> atualizarParcialmenteCliente(@RequestBody @Validated ClienteDto clienteAtualizar, 
 			@Parameter(hidden = true) @AuthenticationPrincipal Cliente clienteLogado) {
-		ClienteDto cliente = clienteService.atualizarCliente(clienteAtualizar, clienteLogado);
-		return ResponseEntity.ok(cliente);
+		return ResponseEntity.ok(clienteService.atualizarCliente(clienteAtualizar, clienteLogado));
 	}
 
 	@DeleteMapping

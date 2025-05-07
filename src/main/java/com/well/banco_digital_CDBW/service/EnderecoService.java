@@ -59,10 +59,8 @@ public class EnderecoService {
 
 	
 	private Endereco buscarEnderecoPorCliente(Cliente clienteLogado) {
-		Endereco endereco = clienteService.buscarclientePorId(clienteLogado.getId()).getEndereco();
-		Optional.ofNullable(endereco)
-					.orElseThrow(() -> new NaotemEnderecoException());
-		return endereco;
+		return Optional.ofNullable(clienteLogado.getEndereco())
+				.orElseThrow(() -> new NaotemEnderecoException());
 	}
 
 

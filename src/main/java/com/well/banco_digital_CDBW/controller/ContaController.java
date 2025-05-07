@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/contas")
+@RequestMapping("/conta")
 @Tag(name = "contas", description = "Controlador para salvar e editar dados da conta")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class ContaController {
@@ -60,16 +60,15 @@ public class ContaController {
 	)
 	public ResponseEntity<ContaDto> cadastrarConta( @RequestBody @Validated ContaDto contaAAbrir, 
 			@AuthenticationPrincipal Cliente clienteLogado){
-		ContaDto conta = contaService.criarConta(clienteLogado.getId(), contaAAbrir);
 		
-		return ResponseEntity.ok(conta);	
+		return ResponseEntity.ok(contaService.criarConta(clienteLogado.getId(), contaAAbrir));	
 	}
 	
 	@PostMapping("/pix/{idConta}")
 	@JsonView(View.Detalhar.class)
-	@Operation(summary = "Criar pix na conta", description = "Cria uma chave pix na conta e valida se ela é unica")
+	@Operation(summary = "Cadastrar chave pix na conta", description = "Cadastrar chave pix e valida se ela é unica")
 	@ApiResponse(responseCode = "201", 
-		description = "Pix criado", 
+		description = "Pix cadastrado", 
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
@@ -79,10 +78,10 @@ public class ContaController {
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	public ResponseEntity<ContaDto> cadastrarPixConta(@PathVariable Long idConta,
-			@RequestBody @Valid PixDto pix, 
+			@RequestBody @Validated PixDto pix, 
 			@AuthenticationPrincipal Cliente clienteLogado){
-		ContaDto conta = contaService.cadastrarPixConta(idConta, clienteLogado.getId(), pix);
-		return ResponseEntity.ok(conta);
+
+		return ResponseEntity.ok(contaService.cadastrarPixConta(idConta, clienteLogado.getId(), pix));
 	}
 	
 	@GetMapping("/{idConta}")
@@ -97,8 +96,8 @@ public class ContaController {
 	)
 	public ResponseEntity<ContaDto> detalharUmaConta(@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
-		ContaDto conta = contaService.detalharConta(idConta, clienteLogado.getId());
-		return ResponseEntity.ok(conta);
+
+		return ResponseEntity.ok(contaService.detalharConta(idConta, clienteLogado.getId()));
 	}
 	
 	@GetMapping("/saldo/{idConta}")
@@ -112,9 +111,8 @@ public class ContaController {
 	)
 	public ResponseEntity<SaldoDto> consultarSaldoConta(@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
-		SaldoDto saldo = contaService.buscarSaldoConta(idConta, clienteLogado.getId());
 		
-		return ResponseEntity.ok(saldo);
+		return ResponseEntity.ok(contaService.buscarSaldoConta(idConta, clienteLogado.getId()));
 	}
 	
 	

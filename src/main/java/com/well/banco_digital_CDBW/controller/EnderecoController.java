@@ -41,7 +41,7 @@ public class EnderecoController {
 		this.enderecoService = enderecoService;
 	}
 	
-	@PostMapping("/cadastrar")
+	@PostMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar endereco", description = "Cria um novo endereco")
 	@ApiResponse(responseCode = "201", 
@@ -59,9 +59,7 @@ public class EnderecoController {
 	)
 	public ResponseEntity<EnderecoDto> cadastrarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoReq, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
-		EnderecoDto endereco = enderecoService.cadastrarCliente(enderecoReq, clienteLogado);
-		
-		return ResponseEntity.created(null).body(endereco);
+		return ResponseEntity.created(null).body(enderecoService.cadastrarCliente(enderecoReq, clienteLogado));
 	}
 	
 	@GetMapping
@@ -75,12 +73,11 @@ public class EnderecoController {
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	public ResponseEntity<EnderecoDto> detalharEndereco(@AuthenticationPrincipal Cliente clienteLogado){
-		EnderecoDto endereco = enderecoService.detalharEndereco(clienteLogado);
 		
-		return ResponseEntity.ok(endereco);
+		return ResponseEntity.ok(enderecoService.detalharEndereco(clienteLogado));
 	}
 	
-	@PutMapping("/atualizar")
+	@PutMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar endereco", description = "Atualiza o endereco do cliente logado")
 	@ApiResponse(responseCode = "201", 
@@ -92,12 +89,11 @@ public class EnderecoController {
 	)
 	public ResponseEntity<EnderecoDto> atualizarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoAtualizar,
 			@AuthenticationPrincipal Cliente clienteLogado){
-		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);
 		
-		return ResponseEntity.ok(enderecoAtualizado);
+		return ResponseEntity.ok(enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar));
 	}
 	
-	@PatchMapping("/atualizar")
+	@PatchMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar endereco parcialmente", 
 	description = "atualiza o endereco do cliente logado parcialmente"
@@ -117,9 +113,8 @@ public class EnderecoController {
 	)
 	public ResponseEntity<EnderecoDto> atualizarParcialmenteEndereco(@RequestBody @Validated EnderecoDto enderecoAtualizar,
 			@AuthenticationPrincipal Cliente clienteLogado){
-		EnderecoDto enderecoAtualizado = enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar);
 		
-		return ResponseEntity.ok(enderecoAtualizado);
+		return ResponseEntity.ok(enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar));
 	}
 	
 	@DeleteMapping
