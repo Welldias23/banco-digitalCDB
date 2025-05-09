@@ -2,7 +2,6 @@ package com.well.banco_digital_CDBW.entity;
 
 import java.util.Optional;
 
-import com.well.banco_digital_CDBW.dto.EnderecoDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,32 +38,32 @@ public class Endereco {
     private Cliente cliente;
 
 	
-	public Endereco(EnderecoDto endereco, Cliente cliente) {
-		this.cep = endereco.cep();
-		this.cidade = endereco.cidade();
-		this.estado = endereco.estado();
-		this.rua = endereco.rua();
-		this.numero = endereco.numero();
-		this.complemento = endereco.complemento();
-		this.bairro = endereco.bairro();
+	public Endereco(Endereco endereco, Cliente cliente) {
+		this.cep = endereco.getCep();
+		this.cidade = endereco.getCidade();
+		this.estado = endereco.getEstado();
+		this.rua = endereco.getRua();
+		this.numero = endereco.getNumero();
+		this.complemento = endereco.getComplemento();
+		this.bairro = endereco.getBairro();
 		this.cliente = cliente;
 	}
 
 
-	public void atualizarCliente(EnderecoDto endereco) {
-		Optional.ofNullable(endereco.cep())
+	public void atualizarCliente(Endereco endereco) {
+		Optional.ofNullable(endereco.getCep())
 				.ifPresent(cep -> this.cep = cep);
-		Optional.ofNullable(endereco.cidade())
+		Optional.ofNullable(endereco.getCidade())
 				.ifPresent(cidade -> this.cidade = cidade); 
-		Optional.ofNullable(endereco.estado())
+		Optional.ofNullable(endereco.getEstado())
 				.ifPresent(estado -> this.estado = estado); 
-	    Optional.ofNullable(endereco.rua())
+	    Optional.ofNullable(endereco.getRua())
 	    		.ifPresent(rua -> this.rua = rua);	
-		Optional.ofNullable(endereco.numero())
+		Optional.ofNullable(endereco.getNumero())
 				.ifPresent(numero -> this.numero = numero); 
-		Optional.ofNullable(endereco.complemento())
+		Optional.ofNullable(endereco.getComplemento())
 				.ifPresent(complemento -> this.complemento = complemento); 
-		Optional.ofNullable(endereco.bairro())
+		Optional.ofNullable(endereco.getBairro())
 				.ifPresent(bairro -> this.bairro = bairro); 
 	}
 

@@ -239,6 +239,16 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 	
+	@ExceptionHandler(ClienteJaPossuiEnderecoException.class)
+	public ProblemDetail tratadorClienteJaPossuiEnderecoException(ClienteJaPossuiEnderecoException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+		problemDetail.setTitle("Esse cliente ja possui um endereço cadastrado.");
+		problemDetail.setDetail("Atualize o seu endereco.");
+		problemDetail.setProperty("TimesTemp", Instant.now());
+		
+		return problemDetail;
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, 
