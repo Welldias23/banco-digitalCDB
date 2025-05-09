@@ -18,23 +18,22 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ClienteDto(
-		@JsonView(View.Detalhar.class)
+		@JsonView(View.Resumo.class)
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
-		@JsonView({View.Detalhar.class, View.Persistir.class})
+		@JsonView({View.Resumo.class, View.Persistir.class})
 		@NotBlank(groups = {Creat.class, UpDate.class}, message = "O campo nome é obrigatorio.")
 		@Size(min = 2, max = 200, message = "o campo nome deve conter no mínimo 2 caracteres e máximo de 100 caracteres.")
 		@Pattern(regexp = "^[a-zA-ZÀ-ú ]+$", message = "O campo nome deve conter apenas letras.")
 		String nome,
 		
-		@JsonView({View.Detalhar.class, View.Persistir.class})
+		@JsonView({View.Resumo.class, View.Persistir.class})
 		@NotBlank(groups = Creat.class, message = "O campo cpf é obrigatorio.")
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		@CPF
 		String cpf,
 		
-		@JsonView({View.Detalhar.class, View.Persistir.class})
+		@JsonView({View.Resumo.class, View.Persistir.class})
 		@NotBlank(groups = {Creat.class, UpDate.class}, message = "O campo email é obrigatorio.")
 		@Email(message = "Deve ser um emai valido.")
 		String email,
@@ -44,28 +43,14 @@ public record ClienteDto(
 		@Size(min = 6, message = "A senha deve ter no minimo 6 digitos.")
 		String senha,
 		
-		@JsonView({View.Detalhar.class, View.Persistir.class})
+		@JsonView({View.Resumo.class, View.Persistir.class})
 		@NotNull(groups = {Creat.class, UpDate.class}, message = "O campo data de nascimento é obrigatorio.")
 		@Past(message = "A data de nascimento deve estar no passado.")
 		LocalDate dataNascimento,
 		
-		@JsonView({View.Detalhar.class, View.Persistir.class})
+		@JsonView({View.Resumo.class, View.Persistir.class})
 		@NotNull(groups = {Creat.class, UpDate.class}, message = "O campo renda mensal é obrigatorio.")
 		BigDecimal rendaMensal) {
 
-	public ClienteDto(Cliente cliente) {
-		this(cliente.getId(), 
-				cliente.getNome(), 
-				cliente.getCpf(), 
-				cliente.getEmail(), 
-				cliente.getSenha(), 
-				cliente.getDataNascimento(), 
-				cliente.getRendaMensal());
-	}
-
-	public ClienteDto(int id, String string, String string2, String string3, String string4, LocalDate of,
-			BigDecimal bigDecimal) {
-		this(null, string, string2, string3, string4, of, bigDecimal);
-	}
 
 }

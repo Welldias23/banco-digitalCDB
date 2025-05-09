@@ -39,7 +39,7 @@ public class ClienteService {
 	@Transactional
 	public ClienteDto cadastrarCliente(ClienteDto clienteReq) {		
 		validarCliente(clienteReq);
-		var cliente = new Cliente(clienteReq);
+		var cliente = new Cliente(mapper.toCliente(clienteReq));
 		cliente.definirCategoria(clienteReq);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
@@ -58,7 +58,7 @@ public class ClienteService {
 	public ClienteDto atualizarCliente(ClienteDto clienteAtualizar, Cliente clienteLogado) {
 		validarCliente(clienteAtualizar);
 		Cliente cliente = buscarclientePorId(clienteLogado.getId());
-		cliente.atualizarCliente(clienteAtualizar);
+		cliente.atualizarCliente(mapper.toCliente(clienteAtualizar));
 		cliente.definirCategoria(clienteAtualizar);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		

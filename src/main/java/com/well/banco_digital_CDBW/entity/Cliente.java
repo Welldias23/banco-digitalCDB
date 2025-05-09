@@ -53,27 +53,27 @@ public class Cliente implements UserDetails{
 	private List<Conta> contas;
 	
 	
-	public Cliente(ClienteDto clienteReq) {
-		this.nome = clienteReq.nome();
-		this.cpf = clienteReq.cpf();
-		this.email = clienteReq.email();
-		this.senha = clienteReq.senha();
-		this.dataNascimento = clienteReq.dataNascimento();
-		this.rendaMensal = clienteReq.rendaMensal();
+	public Cliente(Cliente clienteReq) {
+		this.nome = clienteReq.getNome();
+		this.cpf = clienteReq.getCpf();
+		this.email = clienteReq.getEmail();
+		this.senha = clienteReq.getSenha();
+		this.dataNascimento = clienteReq.getDataNascimento();
+		this.rendaMensal = clienteReq.getRendaMensal();
 		
 	}
 
 
-	public void atualizarCliente(ClienteDto clienteReq) {
-		Optional.ofNullable(clienteReq.nome())
+	public void atualizarCliente(Cliente clienteReq) {
+		Optional.ofNullable(clienteReq.getNome())
 					.ifPresent(nome -> this.nome = nome);
-		Optional.ofNullable(clienteReq.email())
+		Optional.ofNullable(clienteReq.getEmail())
 					.ifPresent(email -> this.email = email);
-		Optional.ofNullable(clienteReq.senha())
+		Optional.ofNullable(clienteReq.getSenha())
 					.ifPresent(senha -> this.senha = senha);
-		Optional.ofNullable(clienteReq.dataNascimento())
+		Optional.ofNullable(clienteReq.getDataNascimento())
 					.ifPresent(dataNascimento -> this.dataNascimento = dataNascimento);
-		Optional.ofNullable(clienteReq.rendaMensal())
+		Optional.ofNullable(clienteReq.getRendaMensal())
 					.ifPresent(rendaMensal -> this.rendaMensal = rendaMensal);
 	}
 
