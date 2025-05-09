@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
+import com.well.banco_digital_CDBW.mapper.ClienteMapper;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +32,9 @@ class ClienteServiceTest {
 	
 	@Mock
 	private  PasswordEncoder passwordEncoder;
+	
+	@Mock
+	private ClienteMapper mapper;
 	
 	@InjectMocks
 	private ClienteService clienteService;
@@ -53,7 +57,7 @@ class ClienteServiceTest {
 					new BigDecimal("3000")
 			);
 			
-			Cliente cliente = new Cliente(clienteDto);
+			Cliente cliente = new Cliente(mapper.toCliente(clienteDto));
 			cliente.setSenha("senhaCriptografada");
 
 			when(passwordEncoder.encode("senha123")).thenReturn("senhaCriptografada");
