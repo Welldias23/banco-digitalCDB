@@ -13,6 +13,7 @@ import com.well.banco_digital_CDBW.exception.ClienteIdNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CpfUnicoException;
 import com.well.banco_digital_CDBW.exception.EmailUnicoException;
 import com.well.banco_digital_CDBW.exception.MenorDeIdadeException;
+import com.well.banco_digital_CDBW.mapper.ClienteMapper;
 import com.well.banco_digital_CDBW.repository.ClienteRepository;
 
 import jakarta.transaction.Transactional;
@@ -24,10 +25,13 @@ public class ClienteService {
 
 	private final ClienteRepository clienteRepository;	
 	private final PasswordEncoder passwordEncoder;
+	private final ClienteMapper mapper;
 	
-	public ClienteService(ClienteRepository clienteRepository,PasswordEncoder passwordEncoder) {
+	public ClienteService(ClienteRepository clienteRepository,PasswordEncoder passwordEncoder,
+			ClienteMapper mapper) {
 		this.clienteRepository = clienteRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.mapper = mapper;
 	}
 	
 	
@@ -39,13 +43,15 @@ public class ClienteService {
 		cliente.definirCategoria(clienteReq);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
 		clienteRepository.save(cliente);
-		return new ClienteDto(cliente);
+		
+		return mapper.toClienteDto(cliente);
 	}
 
 
 	public ClienteDto detalharCliente(Cliente clienteLogado) {		
 		 Cliente cliente = buscarclientePorId(clienteLogado.getId());
-		 return new ClienteDto(cliente);
+		 
+		 return mapper.toClienteDto(cliente);
 	}
 	
 	@Transactional
@@ -55,7 +61,8 @@ public class ClienteService {
 		cliente.atualizarCliente(clienteAtualizar);
 		cliente.definirCategoria(clienteAtualizar);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
-		return new ClienteDto(cliente);
+		
+		return mapper.toClienteDto(cliente);
 	}
 	
 	@Transactional
