@@ -18,24 +18,24 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 Este projeto utiliza Docker e Docker Compose para facilitar o setup do ambiente de desenvolvimento, especialmente o banco de dados PostgreSQL.
 
-# 📦 Subindo o ambiente
-Certifique-se de ter o Docker e o Docker Compose instalados.
+### 📦 Subindo o ambiente
 
-Para subir os containers, execute o comando abaixo na raiz do projeto (onde está o docker-compose.yml):
+Certifique-se de ter o [Docker](https://www.docker.com/) e o [Docker Compose](https://docs.docker.com/compose/) instalados.
 
-bash
-Copiar
-Editar
+Para subir os containers, execute o comando abaixo na raiz do projeto (onde está o `docker-compose.yml`):
+
+```bash
 docker compose up -d
-Isso iniciará um container com a imagem oficial do PostgreSQL 15.
 
-📂 Configurações do banco de dados
-Chave	Valor
-Host	localhost
-Porta	5432
-Banco de Dados	bancodigital
-Usuário	postgres
-Senha	postgres
+### 📂 Configurações do banco de dados
+| Chave          | Valor          |
+| -------------- | -------------- |
+| Host           | `localhost`    |
+| Porta          | `5432`         |
+| Banco de Dados | `bancodigital` |
+| Usuário        | `postgres`     |
+| Senha          | `postgres`     |
+
 
 Os dados do banco serão persistidos no volume Docker postgres-data.
 
