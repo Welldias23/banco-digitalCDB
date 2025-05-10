@@ -26,6 +26,7 @@ Para subir os containers, execute o comando abaixo na raiz do projeto (onde est�
 
 ```bash
 docker compose up -d
+```
 
 ### 📂 Configurações do banco de dados
 | Chave          | Valor          |
