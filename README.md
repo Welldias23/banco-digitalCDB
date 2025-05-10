@@ -14,10 +14,11 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
-🐳 Docker
+## 🐳 Docker
+
 Este projeto utiliza Docker e Docker Compose para facilitar o setup do ambiente de desenvolvimento, especialmente o banco de dados PostgreSQL.
 
-📦 Subindo o ambiente
+# 📦 Subindo o ambiente
 Certifique-se de ter o Docker e o Docker Compose instalados.
 
 Para subir os containers, execute o comando abaixo na raiz do projeto (onde está o docker-compose.yml):
