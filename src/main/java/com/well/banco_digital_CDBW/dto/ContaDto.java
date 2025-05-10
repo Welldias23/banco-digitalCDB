@@ -25,7 +25,7 @@ public record ContaDto(
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		String numeroConta,
 		
-		@JsonView(View.Detalhar.class)
+		@JsonView(View.Resumo.class)
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal saldo,
 		

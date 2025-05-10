@@ -17,6 +17,7 @@ import com.well.banco_digital_CDBW.exception.ChavePixNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaNaoExisteException;
 import com.well.banco_digital_CDBW.exception.CriarContaException;
 import com.well.banco_digital_CDBW.exception.SaldoInsuficienteException;
+import com.well.banco_digital_CDBW.mapper.ContaMapper;
 import com.well.banco_digital_CDBW.repository.ContaRepository;
 
 @Service
@@ -24,17 +25,18 @@ public class ContaService {
 	
 	
 	private final ClienteService clienteService;
-
-	private final CartaoDebitoService cartaoDebitoService;
-	
+	private final CartaoDebitoService cartaoDebitoService;	
 	private final ContaRepository contaRepository;
+	private final ContaMapper mapper;
 	
 	public ContaService(ClienteService clienteService,
 			CartaoDebitoService cartaoDebitoService,
-			ContaRepository contaRepository) {
+			ContaRepository contaRepository,
+			ContaMapper mapper) {
 		this.clienteService = clienteService;
 		this.cartaoDebitoService = cartaoDebitoService;
 		this.contaRepository = contaRepository;
+		this.mapper = mapper;
 	}
 	
 	
@@ -46,7 +48,7 @@ public class ContaService {
 		contaRepository.save(conta);
 		cartaoDebitoService.criarCartaoDebito(conta);
 		
-		return new ContaDto(conta);
+		return mapper.toContaDto(conta);
 	}
 	
 	public ContaDto cadastrarPixConta(Long idConta, Long idCliente, PixDto pix) {
@@ -56,19 +58,19 @@ public class ContaService {
 		conta.setChavePix(pix.chavePix());
 		contaRepository.save(conta);
 		
-		return new ContaDto(conta);
+		return mapper.toContaDto(conta);
 	}
 	
 
 	public ContaDto detalharConta(Long idConta, Long idCliente) {
 		Conta conta = buscarContaPorIdContaIdCliente(idConta, idCliente);
-		return new ContaDto(conta);
+		return mapper.toContaDto(conta);
 	}
 	
-	public SaldoDto buscarSaldoConta(Long idConta, Long idCliente) {
-		BigDecimal saldo = buscarContaPorIdContaIdCliente(idConta, idCliente)
-				.getSaldo();		
-		return new SaldoDto(saldo);
+	public ContaDto buscarSaldoConta(Long idConta, Long idCliente) {
+		Conta conta = buscarContaPorIdContaIdCliente(idConta, idCliente);	
+		
+		return mapper.toContaDto(conta);
 	}
 	
 	public Conta buscarContaPorIdContaIdCliente(Long idConta, Long id) {

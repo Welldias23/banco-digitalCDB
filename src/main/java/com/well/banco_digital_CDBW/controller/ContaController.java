@@ -101,6 +101,7 @@ public class ContaController {
 	}
 	
 	@GetMapping("/saldo/{idConta}")
+	@JsonView(View.Resumo.class)
 	@Operation(summary = "Saldo da conta", description = "Detalha saldo da conta por id")
 	@ApiResponse(responseCode = "200", 
 		description = "Saldo detalhado", 
@@ -109,7 +110,7 @@ public class ContaController {
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<SaldoDto> consultarSaldoConta(@PathVariable Long idConta, 
+	public ResponseEntity<ContaDto> consultarSaldoConta(@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		
 		return ResponseEntity.ok(contaService.buscarSaldoConta(idConta, clienteLogado.getId()));
