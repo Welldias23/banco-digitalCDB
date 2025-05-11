@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.dto.ContaDto;
 import com.well.banco_digital_CDBW.dto.PixDto;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
-import com.well.banco_digital_CDBW.dto.SaldoDto;
 import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.security.SecurityConfigurations;
@@ -27,7 +26,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/conta")
@@ -64,7 +62,7 @@ public class ContaController {
 		return ResponseEntity.ok(contaService.criarConta(clienteLogado.getId(), contaAAbrir));	
 	}
 	
-	@PostMapping("/pix/{idConta}")
+	@PostMapping("/{idConta}/pix")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar chave pix na conta", description = "Cadastrar chave pix e valida se ela é unica")
 	@ApiResponse(responseCode = "201", 
@@ -100,12 +98,12 @@ public class ContaController {
 		return ResponseEntity.ok(contaService.detalharConta(idConta, clienteLogado.getId()));
 	}
 	
-	@GetMapping("/saldo/{idConta}")
+	@GetMapping("/{idConta}/saldo")
 	@JsonView(View.Resumo.class)
 	@Operation(summary = "Saldo da conta", description = "Detalha saldo da conta por id")
 	@ApiResponse(responseCode = "200", 
 		description = "Saldo detalhado", 
-		content = @Content(schema = @Schema(implementation = SaldoDto.class))
+		content = @Content(schema = @Schema(implementation = ContaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))

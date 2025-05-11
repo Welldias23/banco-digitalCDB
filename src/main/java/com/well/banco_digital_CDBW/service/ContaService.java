@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.ContaDto;
 import com.well.banco_digital_CDBW.dto.PixDto;
-import com.well.banco_digital_CDBW.dto.SaldoDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.entity.ContaCorrente;
