@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.dto.ClienteDto;
-import com.well.banco_digital_CDBW.dto.Complete;
 import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.UpDate;
