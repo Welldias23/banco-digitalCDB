@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.dto.TransferenciaReqDto;
 import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.TransferenciaDto;
@@ -52,7 +51,7 @@ public class TransferenciaController {
 		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	public ResponseEntity<TransferenciaDto> transferir(@PathVariable Long idConta,
-			@RequestBody @Validated(Creat.class) TransferenciaReqDto transferenciaAFazer, 
+			@RequestBody @Validated(Creat.class) TransferenciaDto transferenciaAFazer, 
 			@AuthenticationPrincipal Cliente clienteLogado){
 		
 		return ResponseEntity.ok(transferenciaService.transferir(clienteLogado, idConta, transferenciaAFazer));
