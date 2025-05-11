@@ -5,9 +5,8 @@ import java.math.BigDecimal;
 import jakarta.validation.constraints.NotNull;
 
 public record TransferenciaPixReqDto(
-		@NotNull(message = "A chave pix é obrigatorio.")
-		String chavePix,
-		@NotNull(message = "O valor da tranferencia é obrigatorio.")
-		BigDecimal valor) {
-
+	@NotNull(message = "A chave pix é obrigatorio.")
+	String chavePix,
+	@NotNull(message = "O valor da tranferencia é obrigatorio.")
+	BigDecimal valor) {
 }

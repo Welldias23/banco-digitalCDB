@@ -4,24 +4,32 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.entity.Transferencia;
 import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 
-public record TransferenciaResDto(
+import jakarta.validation.constraints.NotNull;
+
+public record TransferenciaDto(
+		@JsonView(View.Persistir.class)
+		@NotNull(groups = Creat.class, message = "O id da conta de destino é obrigatorio.")
+		Long idContaDestino,
+		
+		@JsonView(View.Detalhar.class)
 		String nomeOrigem,
-		String nomeDestino,
+		
+		@JsonView(View.Detalhar.class)
+		String nomeDestino, 
+		
+		@JsonView({View.Persistir.class, View.Detalhar.class})
+		@NotNull(groups = Creat.class, message = "O valor da tranferencia é obrigatorio.")
 		BigDecimal valor,
+		
+		@JsonView(View.Detalhar.class)
 		LocalDate data,
+		
+		@JsonView(View.Detalhar.class)
 		LocalTime horario) {
-
-	public TransferenciaResDto(Transferencia transferencia) {
-		this(transferencia.getNomeOrigem(), transferencia.getNomeDestino(), transferencia.getValor(), transferencia.getData(), transferencia.getHorario());
-	}
-
-	public TransferenciaResDto(TransferenciaPix transferenciaPix) {
-		this(transferenciaPix.getNomeOrigem(), transferenciaPix.getNomeDestino(), transferenciaPix.getValor(), transferenciaPix.getData(), transferenciaPix.getHorario());
-	}
-
 
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.well.banco_digital_CDBW.dto.TransferenciaPixReqDto;
-import com.well.banco_digital_CDBW.dto.TransferenciaResDto;
+import com.well.banco_digital_CDBW.dto.TransferenciaDto;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.security.SecurityConfigurations;
 import com.well.banco_digital_CDBW.service.PixService;
@@ -29,12 +29,13 @@ public class PixController {
 	private PixService pixService;
 	
 	@PostMapping("/{idConta}")
-	public ResponseEntity<TransferenciaResDto> pix(@PathVariable Long idConta, 
+	public ResponseEntity<TransferenciaDto> pix(@PathVariable Long idConta, 
 			@RequestBody @Valid TransferenciaPixReqDto transferenciaPixAFazer,
 			@AuthenticationPrincipal Cliente clienteLogado){
 		var transferenciaPix = pixService.transferir(clienteLogado, idConta, transferenciaPixAFazer);
 		
-		return ResponseEntity.ok(new TransferenciaResDto(transferenciaPix));
+		//return ResponseEntity.ok(new TransferenciaDto(transferenciaPix));
+		return null;
 	}
 
 }
