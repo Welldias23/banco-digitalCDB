@@ -54,8 +54,8 @@ public class CartaoController {
     )
 	public ResponseEntity<CartaoDto> buscarCartao(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado){
-		var cartao = cartaoService.detalharCartao(idCartao, clienteLogado);
-		return ResponseEntity.ok(cartao);
+
+		return ResponseEntity.ok(cartaoService.detalharCartao(idCartao, clienteLogado));
 	}
 	
 	

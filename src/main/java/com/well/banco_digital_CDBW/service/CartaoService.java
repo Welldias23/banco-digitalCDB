@@ -13,6 +13,7 @@ import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.exception.LimiteDiarioInsuficiente;
 import com.well.banco_digital_CDBW.exception.TipoCartaoInvalidoException;
+import com.well.banco_digital_CDBW.mapper.CartaoMapper;
 import com.well.banco_digital_CDBW.repository.CartaoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
@@ -24,12 +25,15 @@ public class CartaoService {
 
     private final CartaoRepository cartaoRepository;
     private final ClienteService clienteService;
+    private final CartaoMapper mapper;
 
     public CartaoService(CartaoRepository cartaoRepository,
                          ClienteService clienteService, 
-                         CriarNumeroCartao geraNumero) {
+                         CriarNumeroCartao geraNumero,
+                         CartaoMapper mapper) {
         this.cartaoRepository = cartaoRepository;
         this.clienteService = clienteService;
+        this.mapper = mapper;
     }
     
     
@@ -49,7 +53,7 @@ public class CartaoService {
 		cartao.ativarStatus();
 		cartaoRepository.save(cartao);
 		
-		return new CartaoDto(cartao);
+		return mapper.toCartaoDto(cartao);
 	}
 	
 	public CartaoDto desativarStatusCartao(Long idCartao, Cliente clienteLogado) {
@@ -58,7 +62,7 @@ public class CartaoService {
 		cartao.desativarStatus();
 		cartaoRepository.save(cartao);		
 		
-		return new CartaoDto(cartao);
+		return mapper.toCartaoDto(cartao);
 	}	
 
 	public CartaoDto alterarSenhaCartao(Long idCartao, Cliente clienteLogado, String senha) {
@@ -67,7 +71,7 @@ public class CartaoService {
 		cartao.mudarSenha(senha);
 		cartaoRepository.save(cartao);
 		
-		return new CartaoDto(cartao);
+		return mapper.toCartaoDto(cartao);
 	}
 
 	public Cartao buscarPorIdECliente(Long idCartao, Cliente clienteLogado) {
@@ -80,9 +84,9 @@ public class CartaoService {
 		cartao = (Cartao) Hibernate.unproxy(cartao);
 		//
 		if(cartao instanceof CartaoDebito cartaoDebito) {
-			return new CartaoDto(cartaoDebito);
+			return mapper.toCartaoDto(cartaoDebito);
 		}else if(cartao instanceof CartaoCredito cartaoCredito) {
-			return new CartaoDto(cartaoCredito);
+			return mapper.toCartaoDto(cartaoCredito);
 		}
 		throw new TipoCartaoInvalidoException(); 		
 	}

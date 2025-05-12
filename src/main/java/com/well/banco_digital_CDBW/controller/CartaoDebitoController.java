@@ -36,10 +36,10 @@ public class CartaoDebitoController {
 		content = @Content(schema = @Schema(implementation = Void.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
-	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Cartao não existe",
-	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
+		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
     )
 	public ResponseEntity<Void> alterarLimiteDiario(@PathVariable Long idCartao, 
 			@AuthenticationPrincipal Cliente clienteLogado,

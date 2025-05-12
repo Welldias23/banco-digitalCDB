@@ -61,8 +61,8 @@ public class CartaoCreditoController {
 	public ResponseEntity<CartaoDto> criarCartaoCredito(@RequestBody CartaoDto cartaoACriar, 
 			@PathVariable Long idConta, 
 			@AuthenticationPrincipal Cliente cliente){
-		var cartao = cartaoCreditoService.criarCartaoCredito(cliente, idConta, cartaoACriar);
-		return ResponseEntity.ok(cartao);
+
+		return ResponseEntity.ok(cartaoCreditoService.criarCartaoCredito(cliente, idConta, cartaoACriar));
 	}
 	
 	@PutMapping("/{idCartao}/limite")
@@ -81,9 +81,8 @@ public class CartaoCreditoController {
 	public ResponseEntity<CartaoDto> alterarLimiteCredito(@PathVariable Long idCartao, 
 			@RequestBody @Valid NovoLimiteDto limite, 
 			@AuthenticationPrincipal Cliente clienteLogado){
-		var cartao = cartaoCreditoService.alterarLimiteCredito(idCartao, clienteLogado, limite.novoLimite());
 		
-		return ResponseEntity.ok(cartao);
+		return ResponseEntity.ok(cartaoCreditoService.alterarLimiteCredito(idCartao, clienteLogado, limite.novoLimite()));
 	}
 	
 	
@@ -101,8 +100,8 @@ public class CartaoCreditoController {
     )
 	public ResponseEntity<FaturaDto> consultarFatura(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado){
-		var fatuta = cartaoCreditoService.consultarFatura(idCartao, clienteLogado);
-		return ResponseEntity.ok(fatuta);
+
+		return ResponseEntity.ok(cartaoCreditoService.consultarFatura(idCartao, clienteLogado));
 	}
 	
 	@PostMapping("/{idCartao}/fatura/pagamento")
@@ -123,9 +122,8 @@ public class CartaoCreditoController {
 	public ResponseEntity<FaturaPaga> pagarFatura(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado,
 			@RequestBody PagamentoFatura pagamentoFatura){
-		var faturaPaga = cartaoCreditoService.pagarFatura(idCartao, clienteLogado, pagamentoFatura);
 		
-		return ResponseEntity.ok(faturaPaga);
+		return ResponseEntity.ok(cartaoCreditoService.pagarFatura(idCartao, clienteLogado, pagamentoFatura));
 	}
 
 }

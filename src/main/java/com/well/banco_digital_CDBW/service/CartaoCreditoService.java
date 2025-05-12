@@ -17,6 +17,7 @@ import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaJaPossuiCartaoDesseTipo;
 import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
 import com.well.banco_digital_CDBW.exception.ValorMaiorQueFatura;
+import com.well.banco_digital_CDBW.mapper.CartaoMapper;
 import com.well.banco_digital_CDBW.repository.CartaoCreditoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
@@ -24,22 +25,22 @@ import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 @Service
 public class CartaoCreditoService {
 	
-	private final ContaService contaService;
-	
-	private final ClienteService clienteService;
-	
-	private final CriarNumeroCartao geraNumero;
-	
+	private final ContaService contaService;	
+	private final ClienteService clienteService;	
+	private final CriarNumeroCartao geraNumero;	
 	private final CartaoCreditoRepository cartaoRepository;
+	private final CartaoMapper mapper;
 	
 	public CartaoCreditoService(ContaService contaService,
 			             ClienteService clienteService,
 						 CriarNumeroCartao geraNumero,
-						 CartaoCreditoRepository cartaoRepository) {
+						 CartaoCreditoRepository cartaoRepository,
+						 CartaoMapper mapper) {
 		this.contaService = contaService;
 		this.clienteService = clienteService;
 		this.geraNumero = geraNumero;
 		this.cartaoRepository = cartaoRepository;
+		this.mapper = mapper;
 	}
 	
 	public CartaoDto criarCartaoCredito(Cliente cliente, Long idConta, CartaoDto cartaoACriar) {
@@ -54,7 +55,7 @@ public class CartaoCreditoService {
 		cartao.calcularLimiteInicial(cliente);
 		cartaoRepository.save(cartao);
 		
-		return new CartaoDto(cartao);
+		return mapper.toCartaoDto(cartao);
 	}
 	
 	
@@ -64,7 +65,7 @@ public class CartaoCreditoService {
 		cartao.alterarLimite(limite);
 		cartaoRepository.save(cartao);
 		
-		return new CartaoDto(cartao);
+		return mapper.toCartaoDto(cartao);
 	}
 	
 
