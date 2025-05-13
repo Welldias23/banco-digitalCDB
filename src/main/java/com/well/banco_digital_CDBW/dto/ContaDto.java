@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ContaDto(
 		@JsonView(View.Persistir.class)
-		@NotBlank(groups = Complete.class, message = "Você deve informar o tipo da: conta corrente ou conta poupança")
+		@NotBlank(groups = Creat.class, message = "Você deve informar o tipo da: conta corrente ou conta poupança")
 		String tipoConta,
 		
 		@JsonView(View.Detalhar.class)

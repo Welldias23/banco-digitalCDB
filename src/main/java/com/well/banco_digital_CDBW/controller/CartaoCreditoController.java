@@ -2,6 +2,7 @@ package com.well.banco_digital_CDBW.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.well.banco_digital_CDBW.dto.CartaoDto;
+import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.FaturaDto;
-import com.well.banco_digital_CDBW.dto.FaturaPaga;
 import com.well.banco_digital_CDBW.dto.NovoLimiteDto;
-import com.well.banco_digital_CDBW.dto.PagamentoFatura;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.View;
 import com.well.banco_digital_CDBW.entity.Cliente;
@@ -108,7 +108,7 @@ public class CartaoCreditoController {
 	@Operation(summary = "Paga a fatura do cartao de credito", description = "Paga a fatura do cartao de credito pelo id")
 	@ApiResponse(responseCode = "200", 
 			description = "Fatura paga",
-			content = @Content(schema = @Schema(implementation = FaturaPaga.class))
+			content = @Content(schema = @Schema(implementation = FaturaDto.class))
 	)
 	@ApiResponse(responseCode = "400", description = "Dados invalidos",
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
@@ -119,9 +119,9 @@ public class CartaoCreditoController {
 	@ApiResponse(responseCode = "400", description = "Valor enviado maior que o valor da fatura",
 	content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
     )
-	public ResponseEntity<FaturaPaga> pagarFatura(@PathVariable Long idCartao,
+	public ResponseEntity<FaturaDto> pagarFatura(@PathVariable Long idCartao,
 			@AuthenticationPrincipal Cliente clienteLogado,
-			@RequestBody PagamentoFatura pagamentoFatura){
+			@RequestBody @Validated(Creat.class) FaturaDto pagamentoFatura){
 		
 		return ResponseEntity.ok(cartaoCreditoService.pagarFatura(idCartao, clienteLogado, pagamentoFatura));
 	}

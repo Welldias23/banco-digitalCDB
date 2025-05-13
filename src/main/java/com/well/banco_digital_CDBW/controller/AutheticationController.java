@@ -25,9 +25,8 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class AutheticationController {
 	
-	private AuthenticationManager manager;
-	
-	private TokenService tokenService;
+	private final AuthenticationManager manager;	
+	private final TokenService tokenService;
 	
 	public AutheticationController(AuthenticationManager manager,
 								   TokenService tokenService) {

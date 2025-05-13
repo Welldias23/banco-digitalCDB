@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.dto.Complete;
+import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.PagamentoDto;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.View;
@@ -52,10 +52,9 @@ public class PagamentoController {
 	@ApiResponse(responseCode = "400", description = "Sem saldo ou limite de credito", 
 		content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
     )
-	public ResponseEntity<PagamentoDto> realizarPagamento(@RequestBody @Validated(Complete.class) PagamentoDto pagamentoReq, 
+	public ResponseEntity<PagamentoDto> realizarPagamento(@RequestBody @Validated(Creat.class) PagamentoDto pagamentoReq, 
 			@AuthenticationPrincipal Cliente clienteLogado){
-		PagamentoDto pagamento = pagamentoService.pagar(clienteLogado, pagamentoReq);
 		
-		return ResponseEntity.ok(pagamento);
+		return ResponseEntity.ok(pagamentoService.pagar(clienteLogado, pagamentoReq));
 	}
 }

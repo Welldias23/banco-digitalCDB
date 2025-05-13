@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.CartaoDto;
 import com.well.banco_digital_CDBW.dto.FaturaDto;
-import com.well.banco_digital_CDBW.dto.FaturaPaga;
-import com.well.banco_digital_CDBW.dto.PagamentoFatura;
 import com.well.banco_digital_CDBW.entity.Cartao;
 import com.well.banco_digital_CDBW.entity.CartaoCredito;
 import com.well.banco_digital_CDBW.entity.Cliente;
@@ -72,18 +70,29 @@ public class CartaoCreditoService {
 	public FaturaDto consultarFatura(Long idCartao, Cliente clienteLogado) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
+		FaturaDto fatura = new FaturaDto(
+				cartao.getLimiteCreditoUsado(), 
+				null, 
+				cartao.getLimiteCreditoTotal().subtract(cartao.getLimiteCreditoUsado()),
+				null,
+				cartao.getFatura());
 		
-		return new FaturaDto(cartao.getLimiteCreditoUsado(), cartao.getFatura());
+		return fatura;
 	}
 
-	public FaturaPaga pagarFatura(Long idCartao, Cliente clienteLogado, PagamentoFatura pagamentoFatura) {
+	public FaturaDto pagarFatura(Long idCartao, Cliente clienteLogado, FaturaDto pagamentoFatura) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
 		valorDePagamentoMaiorValorFatura(cartao, pagamentoFatura.valor());
 		cartao.creditarNoLimite(pagamentoFatura.valor());
 		cartaoRepository.save(cartao);
 		
-		return new FaturaPaga(cartao.getLimiteCreditoUsado(), pagamentoFatura.valor(), cartao.getLimiteCreditoUsado());
+		return new FaturaDto(
+				cartao.getLimiteCreditoUsado(),
+				pagamentoFatura.valorPago(),
+				cartao.getLimiteCreditoTotal().subtract(cartao.getLimiteCreditoUsado()),
+				null,
+				null);
 	}
 	
 	

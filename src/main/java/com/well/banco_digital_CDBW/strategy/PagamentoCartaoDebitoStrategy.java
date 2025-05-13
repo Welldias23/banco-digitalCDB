@@ -6,6 +6,7 @@ import com.well.banco_digital_CDBW.dto.PagamentoDto;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.PagamentoDebito;
+import com.well.banco_digital_CDBW.mapper.PagamentoMapper;
 import com.well.banco_digital_CDBW.repository.PagamentoRepository;
 import com.well.banco_digital_CDBW.service.CartaoDebitoService;
 import com.well.banco_digital_CDBW.service.ClienteService;
@@ -15,20 +16,19 @@ import com.well.banco_digital_CDBW.service.PagamentoStrategy;
 @Component
 public class PagamentoCartaoDebitoStrategy implements PagamentoStrategy{
 	
-	private final ClienteService clienteService;
-	
-	private final CartaoDebitoService cartaoDebitoService;
-	
-	private final ContaService contaService;
-	
+	private final ClienteService clienteService;	
+	private final CartaoDebitoService cartaoDebitoService;	
+	private final ContaService contaService;	
 	private final PagamentoRepository pagamentoRepository;
+	private final PagamentoMapper mapper;
 	
 	public PagamentoCartaoDebitoStrategy(ClienteService clienteService,CartaoDebitoService cartaoDebitoService,
-			ContaService contaService, PagamentoRepository pagamentoRepository) {
+			ContaService contaService, PagamentoRepository pagamentoRepository, PagamentoMapper mapper) {
 		this.clienteService = clienteService;
 		this.cartaoDebitoService = cartaoDebitoService;
 		this.contaService = contaService;
 		this.pagamentoRepository = pagamentoRepository;
+		this.mapper = mapper;
 	}
 	
 
@@ -40,7 +40,7 @@ public class PagamentoCartaoDebitoStrategy implements PagamentoStrategy{
 		PagamentoDebito pagamento = new PagamentoDebito(cartao, pagamentoReq);
 		pagamentoRepository.save(pagamento);
 
-		return new PagamentoDto(pagamento);
+		return mapper.toPagamentoDto(pagamento);
 	}
 
 }

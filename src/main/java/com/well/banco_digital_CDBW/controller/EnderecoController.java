@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.dto.Complete;
+import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.EnderecoDto;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
 import com.well.banco_digital_CDBW.dto.View;
@@ -57,7 +57,7 @@ public class EnderecoController {
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<EnderecoDto> cadastrarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoReq, 
+	public ResponseEntity<EnderecoDto> cadastrarEndereco(@RequestBody @Validated(Creat.class) EnderecoDto enderecoReq, 
 			@AuthenticationPrincipal Cliente clienteLogado) {
 		return ResponseEntity.created(null).body(enderecoService.cadastrarCliente(enderecoReq, clienteLogado));
 	}
@@ -87,7 +87,7 @@ public class EnderecoController {
 	@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<EnderecoDto> atualizarEndereco(@RequestBody @Validated(Complete.class) EnderecoDto enderecoAtualizar,
+	public ResponseEntity<EnderecoDto> atualizarEndereco(@RequestBody @Validated(Creat.class) EnderecoDto enderecoAtualizar,
 			@AuthenticationPrincipal Cliente clienteLogado){
 		
 		return ResponseEntity.ok(enderecoService.atualizarEndereco(clienteLogado, enderecoAtualizar));

@@ -18,11 +18,11 @@ public record CartaoDto(
 		Long id,
 		
 		@JsonView(View.Persistir.class)
-		@NotBlank(groups = Complete.class, message = "A bandeira do cartão é obrigatoria escolha MasterCard ou Visa.")
+		@NotBlank(groups = Creat.class, message = "A bandeira do cartão é obrigatoria escolha MasterCard ou Visa.")
 		String bandeira,
 		
 		@JsonView(View.Persistir.class)
-		@NotBlank(groups = Complete.class, message = "A senha do cartão é obrigatoria.")
+		@NotBlank(groups = Creat.class, message = "A senha do cartão é obrigatoria.")
 		String senha,
 		
 		@JsonView(View.Detalhar.class)
