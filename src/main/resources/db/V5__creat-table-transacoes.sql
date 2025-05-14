@@ -1,11 +1,12 @@
 CREATE TABLE transacao (
     id SERIAL PRIMARY KEY,
-    conta_destino_id BIGINT NOT NULL,
+    tipo_transacao VARCHAR(31),
+    conta_destino_id BIGINT NOT NULL REFERENCES conta(id),
     nome_destino VARCHAR(255),
-    conta_origem_id  BIGINT NOT NULL,
+    conta_origem_id  BIGINT NOT NULL REFERENCES conta(id),
     nome_origem  VARCHAR(255),
     valor NUMERIC(19, 2),
     data_transacao DATE,
-    horario TIME
+    horario_transacao TIME
 );
 
