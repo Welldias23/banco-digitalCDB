@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("pix")
+@DiscriminatorValue("PIX")
 @Getter
 @Setter
 public class TransferenciaPix extends Transacao{

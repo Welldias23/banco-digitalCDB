@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity(name = "Transacao")
 @Table(name = "transacoes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "tipo_transacao", discriminatorType = DiscriminatorType.STRING)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -43,8 +43,8 @@ public abstract class Transacao {
 	private Conta contaOrigem;
 	private String nomeOrigem;
 	private BigDecimal valor;
-	private LocalDate data;
-	private LocalTime horario;
+	private LocalDate dataTransacao;
+	private LocalTime horarioTransacao;
 
 
 	
@@ -52,8 +52,8 @@ public abstract class Transacao {
 		this.contaOrigem = contaOrigem;
 		this.contaDestino = contaDestino;	
 		this.valor = valor;
-		this.data = LocalDate.now();
-		this.horario = LocalTime.now();
+		this.dataTransacao = LocalDate.now();
+		this.horarioTransacao = LocalTime.now();
 		
 	}
 

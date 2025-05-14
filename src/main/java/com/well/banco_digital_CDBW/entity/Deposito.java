@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("deposito")
+@DiscriminatorValue("DEPOSITO")
 @Getter
 @Setter
 public class Deposito extends Transacao{

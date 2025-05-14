@@ -62,7 +62,7 @@ public class ContaController {
 		return ResponseEntity.ok(contaService.criarConta(clienteLogado.getId(), contaAAbrir));	
 	}
 	
-	@PostMapping("/{idConta}/pix")
+	@PostMapping("/{idConta}/pix/cadastrar")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar chave pix na conta", description = "Cadastrar chave pix e valida se ela é unica")
 	@ApiResponse(responseCode = "201", 

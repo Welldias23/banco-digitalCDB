@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("Conta Corrente")
+@DiscriminatorValue("CORRENTE")
 @Getter
 @Setter
 public class ContaCorrente extends Conta{

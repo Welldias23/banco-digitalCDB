@@ -28,7 +28,7 @@ import lombok.Setter;
 @Entity(name = "Conta")
 @Table(name = "contas")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "tipo_conta", discriminatorType = DiscriminatorType.STRING)
 public abstract class Conta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
