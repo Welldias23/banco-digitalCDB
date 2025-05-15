@@ -80,7 +80,7 @@ public class CartaoService {
 	}
 
 	private CartaoDto verificarTipoDoCartao(Cartao cartao) {
-		//desacolplar esse codigo
+		//desacoplar esse codigo
 		cartao = (Cartao) Hibernate.unproxy(cartao);
 		//
 		if(cartao instanceof CartaoDebito cartaoDebito) {

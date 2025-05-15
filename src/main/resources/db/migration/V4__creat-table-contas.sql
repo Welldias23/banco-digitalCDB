@@ -1,4 +1,4 @@
-CREATE TABLE conta (
+CREATE TABLE contas (
     id SERIAL PRIMARY KEY,
     tipo_conta VARCHAR(31),
     agencia BIGINT,
@@ -7,6 +7,6 @@ CREATE TABLE conta (
     ativa BOOLEAN,
     data_criacao DATE,
     chave_pix VARCHAR(255),
-    cliente_id BIGINT NOT NULL REFERENCES cliente(id),
+    cliente_id BIGINT NOT NULL REFERENCES clientes(id),
     rendimento FLOAT
 );

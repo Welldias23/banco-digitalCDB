@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.well.banco_digital_CDBW.dto.CartaoDto;
+import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
@@ -12,6 +13,8 @@ import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.mapper.CartaoMapper;
 import com.well.banco_digital_CDBW.repository.CartaoDebitoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
+
+import jakarta.validation.constraints.NotBlank;
 
 @Service
 public class CartaoDebitoService {
@@ -41,9 +44,9 @@ public class CartaoDebitoService {
 	}
 	
 	//implementar a criçao do cartao de debito no ato da criaçao da conta
-	public void criarCartaoDebito(Conta conta) {
-		String numeroCartao = geraNumero.criarNumeroCartao("masterCard");
-		CartaoDebito cartao = new CartaoDebito(conta, numeroCartao); 
+	public void criarCartaoDebito(Conta conta, CartaoDto cartaoDto) {
+		String numeroCartao = geraNumero.criarNumeroCartao(cartaoDto.bandeira());
+		CartaoDebito cartao = new CartaoDebito(conta, cartaoDto.senha(),numeroCartao); 
 		
 		cartaoDebitoRepository.save(cartao);
 	}

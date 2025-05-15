@@ -54,15 +54,7 @@ public abstract class Cartao {
 		this.ativo = true;
 		this.conta = (Conta) conta; 
 	}
-
-	public Cartao(Conta conta, String numeroCartao) {
-		this.numeroCartao = numeroCartao;
-		this.dataCriacao = LocalDate.now();
-		this.horaCriacao = LocalTime.now();
-		this.ativo = true;
-		this.conta = (Conta) conta;
-	}
-
+	
 	public void ativarStatus() {
 		this.ativo = true;
 		

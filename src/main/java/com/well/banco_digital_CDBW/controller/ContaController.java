@@ -56,7 +56,7 @@ public class ContaController {
 	@ApiResponse(responseCode = "422", description = "Cliente menor de idade", 
 			content = @Content(schema = @Schema(implementation = RespostaDeErros.class))
 	)
-	public ResponseEntity<ContaDto> cadastrarConta( @RequestBody @Validated ContaDto contaAAbrir, 
+	public ResponseEntity<ContaDto> criarConta( @RequestBody @Validated ContaDto contaAAbrir, 
 			@AuthenticationPrincipal Cliente clienteLogado){
 		
 		return ResponseEntity.ok(contaService.criarConta(clienteLogado.getId(), contaAAbrir));	

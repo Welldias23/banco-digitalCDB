@@ -5,9 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.entity.Cartao;
-import com.well.banco_digital_CDBW.entity.CartaoCredito;
-import com.well.banco_digital_CDBW.entity.CartaoDebito;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -53,44 +50,6 @@ public record CartaoDto(
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Boolean ativo) {
 
-	public CartaoDto(CartaoCredito cartao) {
-		this(cartao.getId(), 
-				null,
-				null,
-				cartao.getNumeroCartao(), 
-				null,
-				cartao.getLimiteCreditoTotal(),
-				cartao.getLimiteCreditoUsado(),
-				cartao.getDataCriacao(), 
-				cartao.getHoraCriacao(), 
-				cartao.getAtivo());
-	}
-	
-	public CartaoDto(CartaoDebito cartao) {
-		this(cartao.getId(), 
-				null,
-				null,
-				cartao.getNumeroCartao(), 
-				cartao.getLimiteDiario(),
-				null, 
-				null,
-				cartao.getDataCriacao(), 
-				cartao.getHoraCriacao(), 
-				cartao.getAtivo());
-	}
-
-	public CartaoDto(Cartao cartao) {
-		this(cartao.getId(), 
-				null,
-				null,
-				cartao.getNumeroCartao(), 
-				null,
-				null, 
-				null,
-				cartao.getDataCriacao(), 
-				cartao.getHoraCriacao(), 
-				cartao.getAtivo());
-	}
 
 
 }

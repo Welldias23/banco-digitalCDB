@@ -61,6 +61,7 @@ public class ClienteService {
 		cliente.atualizarCliente(mapper.toCliente(clienteAtualizar));
 		cliente.definirCategoria(clienteAtualizar);
 		cliente.setSenha(passwordEncoder.encode(cliente.getPassword()));
+		clienteRepository.save(cliente);
 		
 		return mapper.toClienteDto(cliente);
 	}

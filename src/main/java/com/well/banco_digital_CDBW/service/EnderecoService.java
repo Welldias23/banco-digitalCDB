@@ -44,6 +44,7 @@ public class EnderecoService {
 
 	public EnderecoDto detalharEndereco(Cliente clienteLogado) {
 		Endereco endereco = buscarEnderecoPorCliente(clienteLogado);
+		
 		return mapper.toEnderecoDto(endereco);
 	}
 
@@ -52,6 +53,7 @@ public class EnderecoService {
 		Endereco endereco = buscarEnderecoPorCliente(clienteLogado);
 		endereco.atualizarCliente(mapper.toEndereco(enderecoAtualizar));
 		enderecoRepository.save(endereco);
+		
 		return mapper.toEnderecoDto(endereco);
 	}
 

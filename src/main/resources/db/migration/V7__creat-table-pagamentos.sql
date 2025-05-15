@@ -1,4 +1,4 @@
-CREATE TABLE pagamento (
+CREATE TABLE pagamentos (
 	 id SERIAL PRIMARY KEY,
 	 tipo_pagamento VARCHAR(31),
 	 data_pagamento DATE NOT NULL,
@@ -6,6 +6,6 @@ CREATE TABLE pagamento (
 	 nome_estabelecimento VARCHAR(255),
 	 nome_objeto VARCHAR(255),
 	 valor NUMERIC(19, 2),
-	 cartao_credito_id BIGINT NOT NULL REFERENCES cartao(id),
-	 cartao_debito_id BIGINT NOT NULL REFERENCES cartao(id)
+	 cartao_credito_id BIGINT NOT NULL REFERENCES cartoes(id),
+	 cartao_debito_id BIGINT NOT NULL REFERENCES cartoes(id)
 );

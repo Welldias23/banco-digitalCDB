@@ -42,7 +42,7 @@ public abstract class Conta {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
-    @OneToMany
+    @OneToMany(mappedBy = "conta")
     private List<Cartao> cartoes;
     @OneToMany(mappedBy = "contaOrigem")
     private List<Transferencia> transferenciasEnviadas;   

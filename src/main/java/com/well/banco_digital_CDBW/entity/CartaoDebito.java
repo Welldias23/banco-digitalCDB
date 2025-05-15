@@ -25,8 +25,8 @@ public class CartaoDebito extends Cartao{
 	private List<PagamentoDebito> compras;
 	
 
-	public CartaoDebito(Conta conta, String numeroCartao) {
-		super(conta, numeroCartao);
+	public CartaoDebito(Conta conta, String senha, String numeroCartao) {
+		super(conta, senha, numeroCartao);
 		this.limiteDiario = new BigDecimal("200.00");
 	}
 

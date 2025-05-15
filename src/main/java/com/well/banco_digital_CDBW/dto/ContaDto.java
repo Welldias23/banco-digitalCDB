@@ -3,15 +3,19 @@ package com.well.banco_digital_CDBW.dto;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.entity.Conta;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record ContaDto(
 		@JsonView(View.Persistir.class)
 		@NotBlank(groups = Creat.class, message = "Você deve informar o tipo da: conta corrente ou conta poupança")
 		String tipoConta,
+
+		@JsonView(View.Persistir.class)
+		@NotNull(groups = Creat.class, message = "Você deve informar a bandeira e a senha do cartao")
+		CartaoDto cartao,
 		
 		@JsonView(View.Detalhar.class)
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
@@ -37,15 +41,5 @@ public record ContaDto(
 		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Boolean ativa
 		) {
-
-	public ContaDto(Conta conta) {
-		this(conta.getClass().getSimpleName(), 
-				conta.getId(), 
-				conta.getAgencia(), 				
-				conta.getNumeroConta(), 
-				conta.getSaldo(), 
-				conta.getChavePix(), 
-				conta.getAtiva());
-	}
 
 }
