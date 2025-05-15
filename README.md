@@ -14,6 +14,34 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
+## 🐳 Docker
+
+Este projeto utiliza Docker e Docker Compose para facilitar o setup do ambiente de desenvolvimento, especialmente o banco de dados PostgreSQL.
+
+### 📦 Subindo o ambiente
+
+Certifique-se de ter o [Docker](https://www.docker.com/) e o [Docker Compose](https://docs.docker.com/compose/) instalados.
+
+Para subir os containers, execute o comando abaixo na raiz do projeto (onde está o `docker-compose.yml`):
+
+```bash
+docker compose up -d
+```
+
+### 📂 Configurações do banco de dados
+| Chave          | Valor          |
+| -------------- | -------------- |
+| Host           | `localhost`    |
+| Porta          | `5432`         |
+| Banco de Dados | `bancodigital` |
+| Usuário        | `postgres`     |
+| Senha          | `postgres`     |
+
+
+Os dados do banco serão persistidos no volume Docker postgres-data.
+
+---
+
 ## 🛠️ Tecnologias Utilizadas
 
 - Java 17+
@@ -27,6 +55,7 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 - Lombok
 - Swagger (SpringDoc OpenAPI)
 - Maven
+- MapStruct
 
 ---
 
