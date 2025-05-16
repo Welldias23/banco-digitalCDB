@@ -104,7 +104,7 @@ public class CartaoCreditoController {
 		return ResponseEntity.ok(cartaoCreditoService.consultarFatura(idCartao, clienteLogado));
 	}
 	
-	@PostMapping("/{idCartao}/fatura/pagamento")
+	@PostMapping("/{idCartao}/fatura/pagar")
 	@Operation(summary = "Paga a fatura do cartao de credito", description = "Paga a fatura do cartao de credito pelo id")
 	@ApiResponse(responseCode = "200", 
 			description = "Fatura paga",

@@ -3,11 +3,11 @@ package com.well.banco_digital_CDBW.mapper;
 import org.mapstruct.Mapper;
 
 import com.well.banco_digital_CDBW.dto.CartaoDto;
-import com.well.banco_digital_CDBW.entity.Cartao;
+import com.well.banco_digital_CDBW.entity.CartaoDebito;
 
 @Mapper(componentModel = "spring")
-public interface CartaoMapper {
+public interface CartaoDebitoMapper {
 	
-	CartaoDto toCartaoDto(Cartao cartao);
+	CartaoDto toCartaoDto(CartaoDebito cartao);
 
 }

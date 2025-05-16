@@ -35,7 +35,7 @@ public class PagamentoCartaoDebitoStrategy implements PagamentoStrategy{
 	@Override
 	public PagamentoDto pagar(Cliente clienteLogado, PagamentoDto pagamentoReq) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
-		CartaoDebito cartao = cartaoDebitoService.buscarPorIdECliente(pagamentoReq.idDaFormaDePagamento(), clienteLogado);
+		CartaoDebito cartao = cartaoDebitoService.buscarPorIdECliente(pagamentoReq.idDoCartao(), clienteLogado);
 		contaService.debitarSaldoConta(cartao.getConta(), pagamentoReq.valor());
 		PagamentoDebito pagamento = new PagamentoDebito(cartao, pagamentoReq);
 		pagamentoRepository.save(pagamento);

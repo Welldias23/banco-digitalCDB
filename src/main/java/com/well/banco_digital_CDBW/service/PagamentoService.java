@@ -29,6 +29,7 @@ public class PagamentoService {
 				.toUpperCase()
 				.replace(" ", "")
 				.replace("É", "E")
+				.replace("Ã", "A")
 		);
 		if(formaPagamento == null) { throw new FormaDePagamentoInvalidaException();}
 		return formaPagamento.pagar(clienteLogado, pagamentoReq);

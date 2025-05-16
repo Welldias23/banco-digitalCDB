@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.well.banco_digital_CDBW.entity.Transferencia;
-import com.well.banco_digital_CDBW.entity.TransferenciaPix;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -29,7 +27,7 @@ public record TransferenciaDto(
 		LocalDate data,
 		
 		@JsonView(View.Detalhar.class)
-		LocalTime horario) {
+		LocalTime hora) {
 
 
 }

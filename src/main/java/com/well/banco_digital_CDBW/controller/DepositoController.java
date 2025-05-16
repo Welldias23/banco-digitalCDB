@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/deposito")
+@RequestMapping("/conta")
 @Tag(name = "deposito", description = "Controlador para efetuar deposito")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class DepositoController {
@@ -36,7 +36,7 @@ public class DepositoController {
 		this.depositoService = depositoService;
 	} 
 	
-	@PostMapping
+	@PostMapping("/deposito")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Depositar em conta", description = "Depositar em uma conta valida")
 	@ApiResponse(responseCode = "201",

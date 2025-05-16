@@ -17,5 +17,5 @@ public record SaqueDto(
 		LocalDate data,
 		
 		@JsonView(View.Detalhar.class)
-		LocalTime horario) {
+		LocalTime hora) {
 }

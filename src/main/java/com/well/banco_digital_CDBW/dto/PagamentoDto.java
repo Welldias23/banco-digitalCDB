@@ -16,12 +16,12 @@ public record PagamentoDto(
 		Long id,
 		
 		@JsonView(View.Persistir.class)
-		@NotBlank(groups = Creat.class, message = "O tipo do pagamento deve ser informado.")
+		@NotBlank(groups = Creat.class, message = "O tipo do pagamento deve ser informado: cartao de debito ou cartao de credito.")
 		String tipoPagamento,
 		
 		@JsonView(View.Persistir.class)
-		@NotNull(groups = Creat.class,message = "O id do cartao ou da conta que sera enviado o pix é obrigatorio.")
-		Long idDaFormaDePagamento,
+		@NotNull(groups = Creat.class,message = "O id do cartao.")
+		Long idDoCartao,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
 		@NotBlank(groups = Creat.class,message = "O nome do estabelecimento deve ser informado no pagamento.")

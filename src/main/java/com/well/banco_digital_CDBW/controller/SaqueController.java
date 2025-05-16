@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/saque")
+@RequestMapping("/conta")
 @Tag(name = "saque", description = "Controlador para efetuar saque de uma conta")
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class SaqueController {
@@ -37,7 +37,7 @@ public class SaqueController {
 		this.saqueService = saqueService;
 	}
 	
-	@PostMapping("/{idConta}")
+	@PostMapping("/{idConta}/saque")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Sacar da conta", description = "Saca da conta desejada do cliente logado")
 	@ApiResponse(responseCode = "201",

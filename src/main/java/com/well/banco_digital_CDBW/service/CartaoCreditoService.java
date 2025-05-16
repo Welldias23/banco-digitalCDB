@@ -15,7 +15,7 @@ import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
 import com.well.banco_digital_CDBW.exception.ContaJaPossuiCartaoDesseTipo;
 import com.well.banco_digital_CDBW.exception.LimiteDeCreditoInsuficiente;
 import com.well.banco_digital_CDBW.exception.ValorMaiorQueFatura;
-import com.well.banco_digital_CDBW.mapper.CartaoMapper;
+import com.well.banco_digital_CDBW.mapper.CartaoCreditoMapper;
 import com.well.banco_digital_CDBW.repository.CartaoCreditoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
@@ -27,13 +27,13 @@ public class CartaoCreditoService {
 	private final ClienteService clienteService;	
 	private final CriarNumeroCartao geraNumero;	
 	private final CartaoCreditoRepository cartaoRepository;
-	private final CartaoMapper mapper;
+	private final CartaoCreditoMapper mapper;
 	
 	public CartaoCreditoService(ContaService contaService,
 			             ClienteService clienteService,
 						 CriarNumeroCartao geraNumero,
 						 CartaoCreditoRepository cartaoRepository,
-						 CartaoMapper mapper) {
+						 CartaoCreditoMapper mapper) {
 		this.contaService = contaService;
 		this.clienteService = clienteService;
 		this.geraNumero = geraNumero;

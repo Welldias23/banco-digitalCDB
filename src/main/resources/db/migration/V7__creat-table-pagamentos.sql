@@ -6,6 +6,6 @@ CREATE TABLE pagamentos (
 	 nome_estabelecimento VARCHAR(255),
 	 nome_objeto VARCHAR(255),
 	 valor NUMERIC(19, 2),
-	 cartao_credito_id BIGINT NOT NULL REFERENCES cartoes(id),
-	 cartao_debito_id BIGINT NOT NULL REFERENCES cartoes(id)
+	 cartao_credito_id BIGINT REFERENCES cartoes(id),
+	 cartao_debito_id BIGINT REFERENCES cartoes(id)
 );

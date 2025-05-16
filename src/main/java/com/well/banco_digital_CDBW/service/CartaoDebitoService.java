@@ -10,7 +10,7 @@ import com.well.banco_digital_CDBW.entity.CartaoDebito;
 import com.well.banco_digital_CDBW.entity.Cliente;
 import com.well.banco_digital_CDBW.entity.Conta;
 import com.well.banco_digital_CDBW.exception.CartaoNaoExisteException;
-import com.well.banco_digital_CDBW.mapper.CartaoMapper;
+import com.well.banco_digital_CDBW.mapper.CartaoDebitoMapper;
 import com.well.banco_digital_CDBW.repository.CartaoDebitoRepository;
 import com.well.banco_digital_CDBW.utils.CriarNumeroCartao;
 
@@ -22,12 +22,12 @@ public class CartaoDebitoService {
 	private final ClienteService clienteService;	
 	private final CartaoDebitoRepository cartaoDebitoRepository; 	
     private final CriarNumeroCartao geraNumero;
-    private final CartaoMapper mapper;
+    private final CartaoDebitoMapper mapper;
 	
 	public CartaoDebitoService(ClienteService clienteService,
 							   CartaoDebitoRepository cartaoDebitoRepository, 
 							   CriarNumeroCartao geraNumero,
-							   CartaoMapper mapper) {
+							   CartaoDebitoMapper mapper) {
 		this.clienteService = clienteService;
 		this.cartaoDebitoRepository = cartaoDebitoRepository;
         this.geraNumero = geraNumero;
