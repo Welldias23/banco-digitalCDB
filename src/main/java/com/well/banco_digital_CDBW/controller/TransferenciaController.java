@@ -20,6 +20,7 @@ import com.well.banco_digital_CDBW.service.TransferenciaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,6 +41,24 @@ public class TransferenciaController {
 	@PostMapping("/{idConta}/transferencia")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Realizar transferencia", description = "Realiza transferencia entre contas")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para realizar transferencia entre contas",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = TransferenciaDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "tranferencia",
+		                summary = "Exemplo para realizar transferencia entre contas com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"idContaDestino\": 3,\n" +
+		                		" \"valor\": 15\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Transferencia relizada",
 		content = @Content(schema = @Schema(implementation = TransferenciaDto.class))		
