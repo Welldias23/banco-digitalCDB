@@ -22,6 +22,7 @@ import com.well.banco_digital_CDBW.service.ContaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,6 +44,27 @@ public class ContaController {
 	@PostMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Criar conta", description = "Cria uma nova conta")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para criação de uma nova conta",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = ContaDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "Conta",
+		                summary = "Exemplo de conta com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"tipoConta\": \"conta corrente\",\n" +
+		                		" \"cartao\": {\n" +
+		                		"   \"bandeira\": \"MasterCard\",\n" +
+		                		"   \"senha\": \"1234\"\n" +
+		                		" }\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Conta criada", 
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
@@ -65,6 +87,23 @@ public class ContaController {
 	@PostMapping("/{idConta}/pix/cadastrar")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar chave pix na conta", description = "Cadastrar chave pix e valida se ela é unica")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para criação de uma nova chave pix na conta",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = ContaDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "Conta",
+		                summary = "Exemplo de chave pix com campos obrigatórios",
+		                value = "{\n" +
+		                		"  \"chavePix\": \"chavePix1234\"\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Pix cadastrado", 
 		content = @Content(schema = @Schema(implementation = ContaDto.class))
