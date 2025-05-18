@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.well.banco_digital_CDBW.dto.ClienteDto;
 import com.well.banco_digital_CDBW.dto.Creat;
 import com.well.banco_digital_CDBW.dto.EnderecoDto;
 import com.well.banco_digital_CDBW.dto.RespostaDeErros;
@@ -23,6 +24,7 @@ import com.well.banco_digital_CDBW.service.EnderecoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -44,6 +46,29 @@ public class EnderecoController {
 	@PostMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar endereco", description = "Cria um novo endereco")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para criação de um novo cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = EnderecoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "Endereco",
+		                summary = "Exemplo de endereco com campos obrigatórios",
+		                value = "{\n" +
+		                        "  \"cep\": \"3989700\",\n" +
+		                        "  \"cidade\": \"Belo Horizonte\",\n" +
+		                        "  \"estado\": \"MG\",\n" +
+		                        "  \"rua\": \"Rua Londrina\",\n" +
+		                        "  \"numero\": 199,\n" +
+		                        "  \"complemento\": \"Casa B\",\n"+
+		                        "  \"bairro\": \"Centro\"\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco cadastrado", 
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
@@ -80,6 +105,29 @@ public class EnderecoController {
 	@PutMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar endereco", description = "Atualiza o endereco do cliente logado")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para atualização completa de um cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = EnderecoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "Endereco",
+		                summary = "Exemplo de endereco para atualizar com campos obrigatórios",
+		                value = "{\n" +
+		                        "  \"cep\": \"3989700\",\n" +
+		                        "  \"cidade\": \"Belo Horizonte\",\n" +
+		                        "  \"estado\": \"MG\",\n" +
+		                        "  \"rua\": \"Rua Londrina\",\n" +
+		                        "  \"numero\": 199,\n" +
+		                        "  \"complemento\": \"Casa B\",\n"+
+		                        "  \"bairro\": \"Centro\"\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco atualizado", 
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
@@ -98,6 +146,29 @@ public class EnderecoController {
 	@Operation(summary = "Atualizar endereco parcialmente", 
 	description = "atualiza o endereco do cliente logado parcialmente"
 	)
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para atualização parcial de um cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = EnderecoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "Endereco",
+		                summary = "Podem ser enviados um por vez",
+		                value = "{\n" +
+		                        "  \"cep\": \"3989700\",\n" +
+		                        "  \"cidade\": \"Belo Horizonte\",\n" +
+		                        "  \"estado\": \"MG\",\n" +
+		                        "  \"rua\": \"Rua Londrina\",\n" +
+		                        "  \"numero\": 199,\n" +
+		                        "  \"complemento\": \"Casa B\",\n"+
+		                        "  \"bairro\": \"Centro\"\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Endereco atualizado", 
 		content = @Content(schema = @Schema(implementation = EnderecoDto.class))
