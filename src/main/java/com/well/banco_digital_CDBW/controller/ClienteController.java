@@ -2,7 +2,6 @@ package com.well.banco_digital_CDBW.controller;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +32,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 
 
 @RestController
@@ -41,12 +41,37 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @SecurityRequirement(name = SecurityConfigurations.SECURITY)
 public class ClienteController {
 	
-	@Autowired
-	private ClienteService clienteService;
+	private final ClienteService clienteService;
+	
+	public ClienteController(ClienteService clienteService) {
+		this.clienteService = clienteService;
+	}
 
 	@PostMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Cadastrar cliente", description = "Cria um novo cliente validando idade mínima, CPF e email")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para criação de um novo cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = ClienteDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "cliente",
+		                summary = "Exemplo de cliente com campos obrigatórios",
+		                value = "{\n" +
+		                        "  \"nome\": \"João Silva\",\n" +
+		                        "  \"cpf\": \"123.456.789-10\",\n" +
+		                        "  \"email\": \"joao@email.com\",\n" +
+		                        "  \"senha\": \"senha123\",\n" +
+		                        "  \"dataNascimento\": \"1990-01-01\",\n" +
+		                        "  \"rendaMensal\": 5000.00\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente cadastrado", 
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
@@ -86,6 +111,28 @@ public class ClienteController {
 	@PutMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Atualizar cliente", description = "Atualiza o cliente logado validando idade mínima, CPF e email")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para atualização de todos os campos obrigatorios de um cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = ClienteDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "cliente",
+		                summary = "Exemplo de cliente com campos obrigatórios",
+		                value = "{\n" +
+		                        "  \"nome\": \"João Silva\",\n" +
+		                        "  \"cpf\": \"123.456.789-10\",\n" +
+		                        "  \"email\": \"joao@email.com\",\n" +
+		                        "  \"senha\": \"senha123\",\n" +
+		                        "  \"dataNascimento\": \"1990-01-01\",\n" +
+		                        "  \"rendaMensal\": 5000.00\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente atualizado", 
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
@@ -109,6 +156,28 @@ public class ClienteController {
 	@Operation(summary = "Atualizar cliente parcialmente", 
 		description = "atualiza o cliente logado parcialmente validando idade mínima, CPF e email"
 	)
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para atualização parcial de um cliente",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = ClienteDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "cliente",
+		                summary = "Pode enviar qualquer um dos dados por vez",
+		                value = "{\n" +
+		                        "  \"nome\": \"João Silva\",\n" +
+		                        "  \"cpf\": \"123.456.789-10\",\n" +
+		                        "  \"email\": \"joao@email.com\",\n" +
+		                        "  \"senha\": \"senha123\",\n" +
+		                        "  \"dataNascimento\": \"1990-01-01\",\n" +
+		                        "  \"rendaMensal\": 5000.00\n" +
+		                        "}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 		description = "Cliente atualizado", 
 		content = @Content(schema = @Schema(implementation = ClienteDto.class))
