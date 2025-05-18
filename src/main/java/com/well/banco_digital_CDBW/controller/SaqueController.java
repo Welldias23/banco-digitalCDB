@@ -20,6 +20,7 @@ import com.well.banco_digital_CDBW.service.SaqueService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,6 +41,23 @@ public class SaqueController {
 	@PostMapping("/{idConta}/saque")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Sacar da conta", description = "Saca da conta desejada do cliente logado")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para realizar saque em conta",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = SaqueDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "saque",
+		                summary = "Exemplo para realizar saque em conta com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"valor\": 15\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201",
 			description = "Saque realizado",
 			content = @Content(schema = @Schema(implementation = SaqueDto.class))
