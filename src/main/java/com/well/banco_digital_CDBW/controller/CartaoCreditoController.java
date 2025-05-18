@@ -24,6 +24,7 @@ import com.well.banco_digital_CDBW.service.CartaoCreditoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -44,7 +45,25 @@ public class CartaoCreditoController {
 	
 	@PostMapping("/{idConta}/emitir")
 	@JsonView(View.Detalhar.class)
-	@Operation(summary = "Criar cartao de credito", description = "Cria um cartao de credito relacionado a conta e valida se ja existe um")
+	@Operation(summary = "Emitir cartao de credito", description = "Cria um cartao de credito relacionado a conta e valida se ja existe um")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para emitir um novo cartao de credito em uma conta",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = CartaoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "cartao",
+		                summary = "Exemplo para emitir cartao de credito com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"bandeira\": \"MasterCard\",\n" +
+		                		" \"senha\": \"1234\"\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201", 
 			description = "Cartao de credito criado",
 			content = @Content(schema = @Schema(implementation = CartaoDto.class))
@@ -106,6 +125,23 @@ public class CartaoCreditoController {
 	
 	@PostMapping("/{idCartao}/fatura/pagar")
 	@Operation(summary = "Paga a fatura do cartao de credito", description = "Paga a fatura do cartao de credito pelo id")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para pagar a fatura de um cartao de credito",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = CartaoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "cartao",
+		                summary = "Exemplo para pagar a fatura do cartao de credito com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"valor\": 900\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "200", 
 			description = "Fatura paga",
 			content = @Content(schema = @Schema(implementation = FaturaDto.class))
