@@ -19,6 +19,7 @@ import com.well.banco_digital_CDBW.service.DepositoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -39,6 +40,24 @@ public class DepositoController {
 	@PostMapping("/deposito")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Depositar em conta", description = "Depositar em uma conta valida")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para fazer um deposito em conta",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = DepositoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "deposito",
+		                summary = "Exemplo de deposito com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"idContaDestino\": 1,\n" +
+		                		" \"valor\": 100\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201",
 		description = "Deposito realizado",
 		content = @Content(schema = @Schema(implementation = DepositoDto.class))
