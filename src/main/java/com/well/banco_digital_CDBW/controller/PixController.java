@@ -19,6 +19,7 @@ import com.well.banco_digital_CDBW.service.PixService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,6 +41,24 @@ public class PixController {
 	@PostMapping("/{idConta}/pix")
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Realiar pix", description = "Realizar pix entre contas")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para pix entre contas",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = TransferenciaDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "pix",
+		                summary = "Exemplo para realizar pix entre contas com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"chavePix\": \"chavePix1234\",\n" +
+		                		" \"valor\": 15\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201",
 		description = "Pix realizado",
 		content = @Content(schema = @Schema(implementation = TransferenciaDto.class))
