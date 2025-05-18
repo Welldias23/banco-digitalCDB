@@ -19,6 +19,7 @@ import com.well.banco_digital_CDBW.service.PagamentoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -39,6 +40,27 @@ public class PagamentoController {
 	@PostMapping
 	@JsonView(View.Detalhar.class)
 	@Operation(summary = "Realiza pagamento", description = "Realiza pagamentos com cartoes do cliente logado")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(
+		    description = "Dados para realizar um pagamento com cartao",
+		    required = true,
+		    content = @Content(
+		        mediaType = "application/json",
+		        schema = @Schema(implementation = PagamentoDto.class),
+		        examples = {
+		            @ExampleObject(
+		                name = "pagamento",
+		                summary = "Exemplo para realizar um pagamento com cartao com campos obrigatórios",
+		                value = "{\n" +
+		                		" \"tipoPagamento\": \"cartao de credito\",\n" +
+		                		" \"idDoCartao\": 3, \n" +
+		                		" \"nomeEstabelecimento\": \"Lojas tem sim\", \n" +
+		                		" \"nomeObjeto\": \"arroz\", \n" +
+		                		" \"valor\": 15\n" +
+		                		"}"
+		            )
+		        }
+		    )
+		)
 	@ApiResponse(responseCode = "201",
 			description = "Pagamento realizado",
 			content = @Content(schema = @Schema(implementation = PagamentoDto.class))
