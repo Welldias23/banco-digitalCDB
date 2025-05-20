@@ -61,18 +61,6 @@ Após subir a aplicação, você pode acessar os endpoints da API via:
 http://localhost:8080
 ```
 
-### 📂 Configurações do banco de dados
-| Chave          | Valor          |
-| -------------- | -------------- |
-| Host           | `localhost`    |
-| Porta          | `5432`         |
-| Banco de Dados | `bancodigital` |
-| Usuário        | `postgres`     |
-| Senha          | `postgres`     |
-
-
-Os dados do banco serão persistidos no volume Docker postgres-data.
-
 ---
 
 ## 🛠️ Tecnologias Utilizadas
