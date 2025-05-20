@@ -25,5 +25,7 @@ public class Transferencia extends Transacao{
 		
 	}
 	
+	public Transferencia() {}
+	
 	
 }
