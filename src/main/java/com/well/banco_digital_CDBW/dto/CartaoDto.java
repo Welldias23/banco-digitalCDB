@@ -6,12 +6,10 @@ import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record CartaoDto(	
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
 		@JsonView(View.Persistir.class)
@@ -23,31 +21,24 @@ public record CartaoDto(
 		String senha,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		String numeroCartao,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteDiario,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteCredito,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		BigDecimal limiteCreditoUsado,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalDate dataCriacao,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalTime horaCriacao,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Boolean ativo) {
 
 

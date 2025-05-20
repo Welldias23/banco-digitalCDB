@@ -6,13 +6,11 @@ import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record PagamentoDto(
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
 		@JsonView(View.Persistir.class)
@@ -35,10 +33,8 @@ public record PagamentoDto(
 		BigDecimal valor,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalDate data,
 		
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		LocalTime hora) {
 }

@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +16,6 @@ import jakarta.validation.constraints.Size;
 
 public record ClienteDto(
 		@JsonView(View.Detalhar.class)
-		@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 		Long id,
 		
 		@JsonView({View.Detalhar.class, View.Persistir.class})
