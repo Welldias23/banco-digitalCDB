@@ -39,6 +39,9 @@ git clone https://git@github.com:Welldias23/banco-digitalCDB.git
 # Acesse o diretório
 cd banco-digitalCDB
 
+# Instale as dependências
+./mvnw clean install
+
 # Execute o projeto
 ./mvnw spring-boot:run
 ```
@@ -49,19 +52,14 @@ A aplicação estará disponível em:
 
 ---
 
-
 ## 🐳 Executando o Projeto com Docker
 
 Este projeto usa Docker e Docker Compose para facilitar a execução da aplicação e do banco de dados Postgres em containers.
-
----
 
 ### ✅ Pré-requisitos
 
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-
----
 
 ### 📦 Build e execução dos containers
 
@@ -70,28 +68,30 @@ No terminal, execute o seguinte comando na raiz do projeto (onde está o `docker
 ```bash
 docker compose up --build
 ```
+
 Este comando irá:
 
-Construir a imagem da API usando o Dockerfile do projeto.
-
-Subir o banco de dados Postgres e a API da aplicação em containers separados.
+- Construir a imagem da API usando o Dockerfile do projeto.
+- Subir o banco de dados Postgres e a API da aplicação em containers separados.
 
 A API será acessível na porta 8080.
 
-🛑 Parar os containers
+### 🛑 Parar os containers
+
 Para parar os containers, pressione CTRL+C no terminal ou execute:
 
 ```bash
 docker compose down
 ```
 
-🔁 Executar novamente sem rebuild (caso a imagem já esteja criada)
+### 🔁 Executar novamente sem rebuild (caso a imagem já esteja criada)
 
 ```bash
 docker compose up
 ```
 
-🌐 Endpoints
+### 🌐 Endpoints
+
 Após subir a aplicação, você pode acessar os endpoints da API via:
 
 ```arduino
@@ -99,8 +99,6 @@ http://localhost:8080
 ```
 
 ---
-
-
 
 ## 📟 Documentação da API
 
@@ -118,58 +116,52 @@ Essa interface permite testar os endpoints, visualizar schemas e entender o func
 
 ### Clientes
 - `POST /clientes` — Criar um cliente
-- - `POST /login` — Login de um cliente
+- `POST /login` — Login de um cliente
 - `GET /clientes` — Buscar cliente logado
 - `PUT /clientes` — Atualizar dados do cliente logado
 - `PATCH /clientes` — Atualizar dados do cliente logado parcialmente
 - `DELETE /clientes` — Remover cliente logado
 
-
 ### Endereços
-- `POST /endeco` — Criar endeço para cliente logado
-- `GET /endeco` — Detalhes do endeço do cliente logado
-- `PUT /endeco` — Atualiza totalmente endereço do cliente logado
-- `PATCH /endeco` — Atualiza parcialmente endereço do cliente logado
-- `DELETE /endeco` — Remove endereço
-
+- `POST /endereco` — Criar endereço para cliente logado
+- `GET /endereco` — Detalhes do endereço do cliente logado
+- `PUT /endereco` — Atualiza totalmente o endereço do cliente logado
+- `PATCH /endereco` — Atualiza parcialmente o endereço do cliente logado
+- `DELETE /endereco` — Remove endereço
 
 ### Contas
-- `POST /contas` — Criar conta e cartao de debito
+- `POST /contas` — Criar conta e cartão de débito
 - `GET /conta/{id}` — Detalhes da conta
-- `POST /conta/{id}/pix/cadastrar` — Cadastra uma chave pix na conta
+- `POST /conta/{id}/pix/cadastrar` — Cadastrar uma chave Pix na conta
 - `POST /conta/{id}/transferencia` — Transferência entre contas
 - `GET /conta/{id}/saldo` — Consultar saldo
-- `POST /conta/{id}/pix` — Pagamento/transferencia via Pix
+- `POST /conta/{id}/pix` — Pagamento/transferência via Pix
 - `POST /conta/{id}/deposito` — Realizar depósito
 - `POST /conta/{id}/saque` — Realizar saque
 
 ### Cartões
-- `POST /cartao` — Emitir cartão de credito
+- `POST /cartao` — Emitir cartão de crédito
 - `GET /cartao/{id}` — Detalhes do cartão
 - `POST /cartao/pagamento` — Pagamento com cartão
 - `PUT /cartao/{id}/limite` — Alterar limite
 - `PUT /cartao/{id}/ativar` — Ativar cartão
--  `PUT /cartao/{id}/desativar` — desativar cartão
+- `PUT /cartao/{id}/desativar` — Desativar cartão
 - `PUT /cartao/{id}/senha` — Alterar senha
 - `GET /cartao/{id}/fatura` — Consultar fatura
 - `POST /cartao/{id}/fatura/pagar` — Pagar fatura
 - `PUT /cartao/{id}/limite-diario` — Alterar limite diário
-- 
+
 ---
 
 ## 🔒 Funcionalidades Avançadas
 
 - **Autenticação e Autorização** via Spring Security + JWT
 - Validação de CPF
-- Controle de acesso baseado em perfil (em desenvolvimento)
+- Suporte a múltiplos perfis de usuário (em desenvolvimento)
 
 ---
-
-
 
 ## ✍️ Autor
 
 Feito com ❤️ por **Wellington Ribeiro Dias**  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/wellington-ribeiro-dias-dev-backend/)
-
-
