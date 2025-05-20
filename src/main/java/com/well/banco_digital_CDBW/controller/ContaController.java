@@ -56,7 +56,7 @@ public class ContaController {
 		                summary = "Exemplo de conta com campos obrigatórios",
 		                value = "{\n" +
 		                		" \"tipoConta\": \"conta corrente\",\n" +
-		                		" \"cartao\": {\n" +
+		                		" \"cartaoDebito\": {\n" +
 		                		"   \"bandeira\": \"MasterCard\",\n" +
 		                		"   \"senha\": \"1234\"\n" +
 		                		" }\n" +
@@ -152,7 +152,6 @@ public class ContaController {
 		
 		return ResponseEntity.ok(contaService.buscarSaldoConta(idConta, clienteLogado.getId()));
 	}
-	
 	
 }
 

@@ -1,5 +1,7 @@
 package com.well.banco_digital_CDBW.strategy;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.well.banco_digital_CDBW.dto.PagamentoDto;
@@ -41,6 +43,11 @@ public class PagamentoCartaoDebitoStrategy implements PagamentoStrategy{
 		pagamentoRepository.save(pagamento);
 
 		return mapper.toPagamentoDto(pagamento);
+	}
+
+
+	public List<PagamentoDebito> buscarPagamentoPorIdCartao(Long id) {	
+		return pagamentoRepository.findAllById(id);
 	}
 
 }

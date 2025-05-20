@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,9 +45,9 @@ public abstract class Conta {
     private Cliente cliente;
     @OneToMany(mappedBy = "conta")
     private List<Cartao> cartoes;
-    @OneToMany(mappedBy = "contaOrigem")
+    @OneToMany(mappedBy = "contaOrigem", fetch = FetchType.LAZY)
     private List<Transferencia> transferenciasEnviadas;   
-    @OneToMany(mappedBy = "contaDestino")
+    @OneToMany(mappedBy = "contaDestino", fetch = FetchType.LAZY)
     private List<Transferencia> transferenciasRecebidas;
 
 	

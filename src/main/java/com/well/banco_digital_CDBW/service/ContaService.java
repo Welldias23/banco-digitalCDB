@@ -45,7 +45,7 @@ public class ContaService {
 		conta = contaRepository.save(conta);
 		conta.gerarNumeroConta(conta.getId());
 		contaRepository.save(conta);
-		cartaoDebitoService.criarCartaoDebito(conta, contaAbrir.cartao());
+		cartaoDebitoService.criarCartaoDebito(conta, contaAbrir.cartaoDebito());
 		
 		return mapper.toContaDto(conta);
 	}
@@ -127,6 +127,4 @@ public class ContaService {
 	}
 
 	
-	
-
 }

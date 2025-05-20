@@ -70,14 +70,13 @@ public class CartaoCreditoService {
 	public FaturaDto consultarFatura(Long idCartao, Cliente clienteLogado) {
 		clienteService.buscarclientePorId(clienteLogado.getId());
 		CartaoCredito cartao = buscarCartaoCreditoPorIdECliente(idCartao, clienteLogado);
-		FaturaDto fatura = new FaturaDto(
+		
+		return new FaturaDto(
 				cartao.getLimiteCreditoUsado(), 
 				null, 
 				cartao.getLimiteCreditoTotal().subtract(cartao.getLimiteCreditoUsado()),
 				null,
 				cartao.getFatura());
-		
-		return fatura;
 	}
 
 	public FaturaDto pagarFatura(Long idCartao, Cliente clienteLogado, FaturaDto pagamentoFatura) {
