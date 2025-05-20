@@ -14,20 +14,25 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 ---
 
 ## 🐳 Executando o Projeto com Docker
+
 Este projeto usa Docker e Docker Compose para facilitar a execução da aplicação e do banco de dados Postgres em containers.
 
-✅ Pré-requisitos
-Docker
+---
 
-Docker Compose
+### ✅ Pré-requisitos
 
-📦 Build e execução dos containers
-No terminal, execute o seguinte comando na raiz do projeto (onde está o docker-compose.yml):
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-bash
-Copiar
-Editar
+---
+
+### 📦 Build e execução dos containers
+
+No terminal, execute o seguinte comando na raiz do projeto (onde está o `docker-compose.yml`):
+
+```bash
 docker compose up --build
+```
 Este comando irá:
 
 Construir a imagem da API usando o Dockerfile do projeto.
@@ -37,25 +42,24 @@ Subir o banco de dados Postgres e a API da aplicação em containers separados.
 A API será acessível na porta 8080.
 
 🛑 Parar os containers
-Para parar os containers, pressione CTRL+C no terminal que está rodando ou execute:
+Para parar os containers, pressione CTRL+C no terminal ou execute:
 
-bash
-Copiar
-Editar
+```bash
 docker compose down
+```
+
 🔁 Executar novamente sem rebuild (caso a imagem já esteja criada)
-bash
-Copiar
-Editar
+
+```bash
 docker compose up
+```
+
 🌐 Endpoints
 Após subir a aplicação, você pode acessar os endpoints da API via:
 
-arduino
-Copiar
-Editar
+```arduino
 http://localhost:8080
-
+```
 
 ### 📂 Configurações do banco de dados
 | Chave          | Valor          |
