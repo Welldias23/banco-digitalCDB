@@ -13,6 +13,28 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
+---
+
+## ⚙️ Como Executar Localmente
+
+```bash
+# Clone o repositório
+git clone https://git@github.com:Welldias23/banco-digitalCDB.git
+
+# Acesse o diretório
+cd banco-digitalCDB
+
+# Execute o projeto
+./mvnw spring-boot:run
+```
+
+A aplicação estará disponível em:
+
+> http://localhost:8080
+
+---
+
+
 ## 🐳 Executando o Projeto com Docker
 
 Este projeto usa Docker e Docker Compose para facilitar a execução da aplicação e do banco de dados Postgres em containers.
@@ -80,53 +102,6 @@ http://localhost:8080
 
 ---
 
-## 🔗 Funcionalidades da API
-
-### Clientes
-- `POST /clientes` — Criar um cliente
-- `GET /clientes/{id}` — Buscar cliente por ID
-- `PUT /clientes/{id}` — Atualizar dados do cliente
-- `DELETE /clientes/{id}` — Remover cliente
-- `GET /clientes` — Listar todos os clientes
-
-### Contas
-- `POST /contas` — Criar conta
-- `GET /contas/{id}` — Detalhes da conta
-- `POST /contas/{id}/transferencia` — Transferência entre contas
-- `GET /contas/{id}/saldo` — Consultar saldo
-- `POST /contas/{id}/pix` — Pagamento via Pix
-- `POST /contas/{id}/deposito` — Realizar depósito
-- `POST /contas/{id}/saque` — Realizar saque
-- `PUT /contas/{id}/manutencao` — Aplicar taxa de manutenção (conta corrente)
-- `PUT /contas/{id}/rendimentos` — Aplicar rendimentos (poupança)
-
-### Cartões
-- `POST /cartoes` — Emitir cartão
-- `GET /cartoes/{id}` — Detalhes do cartão
-- `POST /cartoes/{id}/pagamento` — Pagamento com cartão
-- `PUT /cartoes/{id}/limite` — Alterar limite
-- `PUT /cartoes/{id}/status` — Ativar/desativar cartão
-- `PUT /cartoes/{id}/senha` — Alterar senha
-- `GET /cartoes/{id}/fatura` — Consultar fatura
-- `POST /cartoes/{id}/fatura/pagamento` — Pagar fatura
-- `PUT /cartoes/{id}/limite-diario` — Alterar limite diário
-
-### Seguros (opcional)
-- `POST /seguros` — Contratar seguro
-- `GET /seguros/{id}` — Ver apólice
-- `GET /seguros` — Listar seguros
-- `PUT /seguros/{id}/cancelar` — Cancelar seguro
-
----
-
-## 🔒 Funcionalidades Avançadas
-
-- **Autenticação e Autorização** via Spring Security + JWT
-- Validação de CPF
-- Controle de acesso baseado em perfil (em desenvolvimento)
-
----
-
 ## 📟 Documentação da API
 
 A documentação dos endpoints está disponível via **Swagger UI** utilizando **SpringDoc OpenAPI 3**.
@@ -139,54 +114,58 @@ Essa interface permite testar os endpoints, visualizar schemas e entender o func
 
 ---
 
-## ⚙️ Como Executar Localmente
+## 🔗 Funcionalidades da API
 
-```bash
-# Clone o repositório
-git clone https://git@github.com:Welldias23/banco-digitalCDB.git
+### Clientes
+- `POST /clientes` — Criar um cliente
+- - `POST /login` — Login de um cliente
+- `GET /clientes` — Buscar cliente logado
+- `PUT /clientes` — Atualizar dados do cliente logado
+- `PATCH /clientes` — Atualizar dados do cliente logado parcialmente
+- `DELETE /clientes` — Remover cliente logado
 
-# Acesse o diretório
-cd banco-digitalCDB
 
-# Execute o projeto
-./mvnw spring-boot:run
-```
+### Endereços
+- `POST /endeco` — Criar endeço para cliente logado
+- `GET /endeco` — Detalhes do endeço do cliente logado
+- `PUT /endeco` — Atualiza totalmente endereço do cliente logado
+- `PATCH /endeco` — Atualiza parcialmente endereço do cliente logado
+- `DELETE /endeco` — Remove endereço
 
-A aplicação estará disponível em:
 
-> http://localhost:8080
+### Contas
+- `POST /contas` — Criar conta e cartao de debito
+- `GET /conta/{id}` — Detalhes da conta
+- `POST /conta/{id}/pix/cadastrar` — Cadastra uma chave pix na conta
+- `POST /conta/{id}/transferencia` — Transferência entre contas
+- `GET /conta/{id}/saldo` — Consultar saldo
+- `POST /conta/{id}/pix` — Pagamento/transferencia via Pix
+- `POST /conta/{id}/deposito` — Realizar depósito
+- `POST /conta/{id}/saque` — Realizar saque
+
+### Cartões
+- `POST /cartao` — Emitir cartão de credito
+- `GET /cartao/{id}` — Detalhes do cartão
+- `POST /cartao/pagamento` — Pagamento com cartão
+- `PUT /cartao/{id}/limite` — Alterar limite
+- `PUT /cartao/{id}/ativar` — Ativar cartão
+-  `PUT /cartao/{id}/desativar` — desativar cartão
+- `PUT /cartao/{id}/senha` — Alterar senha
+- `GET /cartao/{id}/fatura` — Consultar fatura
+- `POST /cartao/{id}/fatura/pagar` — Pagar fatura
+- `PUT /cartao/{id}/limite-diario` — Alterar limite diário
+- 
+---
+
+## 🔒 Funcionalidades Avançadas
+
+- **Autenticação e Autorização** via Spring Security + JWT
+- Validação de CPF
+- Controle de acesso baseado em perfil (em desenvolvimento)
 
 ---
 
-## 📂 Estrutura do Projeto
 
-```bash
-src/
- ├── main/
- │    ├── java/
- │    │    └── com/
- │    │         └── seuusuario/
- │    │              └── bancodigital/
- │    │                   ├── controllers/
- │    │                   ├── services/
- │    │                   ├── models/
- │    │                   ├── repositories/
- │    │                   ├── dtos/
- │    │                   └── config/
- │    └── resources/
- │         ├── application.properties
- │         └── static/
- └── test/
-```
-
----
-<!--
-## 📄 Licença
-
-Este projeto está licenciado sob a licença **MIT**.  
-Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
--->
----
 
 ## ✍️ Autor
 
