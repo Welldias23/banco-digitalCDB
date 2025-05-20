@@ -13,6 +13,21 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
+## 🛠️ Tecnologias Utilizadas
+
+- Java 17+
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Spring Security + JWT
+- Bean Validation (Hibernate Validator)
+- PostgreSQL
+- Flyway (migração de banco de dados)
+- Lombok
+- Swagger (SpringDoc OpenAPI)
+- Maven
+- MapStruct
+
 ---
 
 ## ⚙️ Como Executar Localmente
@@ -85,22 +100,7 @@ http://localhost:8080
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
 
-- Java 17+
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Spring Security + JWT
-- Bean Validation (Hibernate Validator)
-- PostgreSQL
-- Flyway (migração de banco de dados)
-- Lombok
-- Swagger (SpringDoc OpenAPI)
-- Maven
-- MapStruct
-
----
 
 ## 📟 Documentação da API
 
