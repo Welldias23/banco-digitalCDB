@@ -45,32 +45,52 @@ class ClienteServiceTest {
 		@Test
 		@DisplayName("Deve criar um cliente com sucesso")
 		void deveCadastrarUmClienteComSucesso() {
-			
-			//Arrang
-			ClienteDto clienteDto = new ClienteDto(
-					null,
-					"Wellington",
-					"13063918652",
-					"well@gmail.com",
-					"senha123",
-					LocalDate.of(1995, 04, 10),
-					new BigDecimal("3000")
-			);
-			
-			Cliente cliente = new Cliente(mapper.toCliente(clienteDto));
-			cliente.setSenha("senhaCriptografada");
 
+			// Arrange
+			ClienteDto clienteDto = new ClienteDto(
+				null,
+				"Wellington",
+				"53896527037",
+				"well@gmail.com",
+				"senha123",
+				LocalDate.of(1995, 4, 10),
+				new BigDecimal("3000")
+			);
+
+			Cliente cliente = new Cliente();
+			cliente.setNome("Wellington");
+			cliente.setCpf("53896527037");
+			cliente.setEmail("well@gmail.com");
+			cliente.setSenha("senha123");
+			cliente.setDataNascimento(LocalDate.of(1995, 4, 10));
+			cliente.setRendaMensal(new BigDecimal("3000"));
+
+			ClienteDto clienteDtoResultado = new ClienteDto(
+				1L,
+				"Wellington",
+				"53896527037",
+				"well@gmail.com",
+				null,
+				LocalDate.of(1995, 4, 10),
+				new BigDecimal("3000")
+			);
+
+			when(mapper.toCliente(clienteDto)).thenReturn(cliente);
 			when(passwordEncoder.encode("senha123")).thenReturn("senhaCriptografada");
-			when(clienteRepository.save(any(Cliente.class))).thenAnswer(i -> i.getArgument(0));
-			
-			//Act
+			when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+			when(mapper.toClienteDto(any(Cliente.class))).thenReturn(clienteDtoResultado); // <-- ESSENCIAL
+
+			// Act
 			ClienteDto resultado = clienteService.cadastrarCliente(clienteDto);
-			//Assert
+
+			// Assert
 			assertNotNull(resultado);
 			assertEquals("Wellington", resultado.nome());
 			verify(passwordEncoder).encode("senha123");
 			verify(clienteRepository).save(any(Cliente.class));
+			verify(mapper).toClienteDto(any(Cliente.class));
 		}
+
 		
 	}
 
