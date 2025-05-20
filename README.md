@@ -4,7 +4,6 @@
 [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 ---
 
@@ -14,19 +13,49 @@ Este projeto é uma **API RESTful** que simula as principais operações de um *
 
 ---
 
-## 🐳 Docker
+## 🐳 Executando o Projeto com Docker
+Este projeto usa Docker e Docker Compose para facilitar a execução da aplicação e do banco de dados Postgres em containers.
 
-Este projeto utiliza Docker e Docker Compose para facilitar o setup do ambiente de desenvolvimento, especialmente o banco de dados PostgreSQL.
+✅ Pré-requisitos
+Docker
 
-### 📦 Subindo o ambiente
+Docker Compose
 
-Certifique-se de ter o [Docker](https://www.docker.com/) e o [Docker Compose](https://docs.docker.com/compose/) instalados.
+📦 Build e execução dos containers
+No terminal, execute o seguinte comando na raiz do projeto (onde está o docker-compose.yml):
 
-Para subir os containers, execute o comando abaixo na raiz do projeto (onde está o `docker-compose.yml`):
+bash
+Copiar
+Editar
+docker compose up --build
+Este comando irá:
 
-```bash
-docker compose up -d
-```
+Construir a imagem da API usando o Dockerfile do projeto.
+
+Subir o banco de dados Postgres e a API da aplicação em containers separados.
+
+A API será acessível na porta 8080.
+
+🛑 Parar os containers
+Para parar os containers, pressione CTRL+C no terminal que está rodando ou execute:
+
+bash
+Copiar
+Editar
+docker compose down
+🔁 Executar novamente sem rebuild (caso a imagem já esteja criada)
+bash
+Copiar
+Editar
+docker compose up
+🌐 Endpoints
+Após subir a aplicação, você pode acessar os endpoints da API via:
+
+arduino
+Copiar
+Editar
+http://localhost:8080
+
 
 ### 📂 Configurações do banco de dados
 | Chave          | Valor          |
