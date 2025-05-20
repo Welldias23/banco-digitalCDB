@@ -106,7 +106,7 @@ A documentação dos endpoints está disponível via **Swagger UI** utilizando *
 
 Após iniciar a aplicação, acesse:
 
-> 📌 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+> 📌 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui/index.html)
 
 Essa interface permite testar os endpoints, visualizar schemas e entender o funcionamento da API de forma interativa.
 
